@@ -38,18 +38,20 @@ Na revisão da T0.4c, o revisor mostrou que `domain/y.mjs` com `export * from ".
 - os globais `module` e `exports`;
 - `Function(...)` sem `new`;
 - `(...).constructor(...)`;
-- `import.meta`;
+- `import.meta` (o seletor `MetaProperty` também barra `new.target`);
 - `import("...")` em posição de tipo. A mensagem é própria: use `import type`.
 
 **Regra de manutenção:** os blocos de `domain/` ficam por último no `eslint.config.mjs` (antes do `prettier`), para nenhum bloco posterior sobrepor as regras.
 
-**Riscos residuais aceitos:** `import fs = globalThis.process` e outras formas exóticas que o lint não pega. A revisão de diff e a proibição de pacotes de fora cobrem o caso real.
+**Riscos residuais aceitos:** `import fs = globalThis.process` (o `globalThis` só é barrado em posição de expressão) e outras formas exóticas que o lint não pega. A revisão de diff e a proibição de pacotes de fora cobrem o caso real.
 
 ## Emenda 2: limite do lint (15/10/2026)
 
 Na reverificação do PR #7, o QA mostrou que `Function.call(null, "return process.getBuiltinModule('fs')")()` chega no `fs` sem nenhum `import`. O motivo é que o código fica dentro de um texto, e texto o lint não analisa. Existem infinitas variações desse truque.
 
 **Decisão (aprovada pelo dono):**
-- O lint barra também o global `Function` e o acesso a `.constructor` em `domain/`, o que fecha as formas comuns (T0.4d).
+- O lint barra também o global `Function` e o acesso a `.constructor` por ponto (`x.constructor`, `x?.constructor`) em `domain/`. Isso fecha **as formas comuns** (T0.4d), mas não todas: `x["constructor"]`, `Reflect.get(x, "constructor")`, desestruturação `{ constructor: k }` com cast e `setTimeout("texto")` continuam passando e ficam com a revisão de diff.
+- Efeito aceito: `this.constructor.name` e `new.target` também ficam barrados. Uma classe de erro de domínio usa nome literal (`this.name = "MeuErro"`).
+- Alguns seletores ficaram redundantes de propósito (`Function(...)`, `new Function(...)` e `.constructor(...)` já são cobertos pelo global e pelo `MemberExpression`). É defesa em profundidade, não um erro.
 - **O lint é uma trava contra acidente, não contra sabotagem.** Código que esconde I/O de propósito (dentro de texto, por reflexão ou de forma ofuscada) é responsabilidade da revisão de diff. Por isso o `revisor` é obrigatório em toda tarefa que toca `domain/`.
 - O revisor rejeita qualquer texto passado para execução dinâmica em `domain/`.
