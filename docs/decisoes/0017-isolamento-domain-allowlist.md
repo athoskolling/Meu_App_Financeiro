@@ -1,6 +1,6 @@
 # 0017: Isolamento de `domain/` por lista de permitidos
 
-- **Status:** aceita (CTO, 15/10/2026, a partir do parecer do revisor na T0.4r). O dono aprova junto com o gate E0.
+- **Status:** aceita (CTO, 15/10/2026, a partir do parecer do revisor na T0.4r); emenda 1 (15/10/2026). O dono aprova junto com o gate E0.
 - **Estágio:** E0
 - **Substitui:** a forma de lista de proibidos da T0.2 (o objetivo do item 6 da ADR-0016 continua o mesmo)
 
@@ -27,3 +27,20 @@ A T0.2 isolou `domain/` com uma lista de **proibidos** (módulos nativos, Drizzl
 - Mudanças em `.github/**`, `eslint.config.mjs`, `tests/lint/**`, `.gitignore` ou nos scripts do `package.json` passam a exigir o `revisor`, porque são as travas do projeto e um PR pode editá-las.
 - Não determinismo (`Date.now()`, `new Date()` sem argumento, `Math.random`) não é I/O e não é barrado pelo lint. A regra fica nos casos de teste do E1: funções de domínio recebem a data de referência por parâmetro.
 - Fica como risco registrado: globais de outros ambientes (`Deno`, `Bun`, `navigator`, `document`, `localStorage`).
+
+## Emenda 1: `domain/` aceita só `.ts` (15/10/2026)
+
+Na revisão da T0.4c, o revisor mostrou que `domain/y.mjs` com `export * from "../lib/io.mjs"` passava no lint e nos testes, porque o teste de import relativo olhava só arquivos TypeScript. Também mostrou que `domain/*.jsx` não recebia nenhuma regra.
+
+**Decisão:** `domain/` contém só arquivos `.ts` (inclusive `.d.ts` e `.test.ts`), além de `.gitkeep`. Um teste em `tests/lint/` falha se aparecer qualquer outro arquivo. É a forma literal do que o `CLAUDE.md` já dizia ("`domain/` é TypeScript puro"). Como defesa em profundidade, o lint e o teste de import relativo continuam cobrindo também `js`, `jsx`, `mjs`, `cjs`, `tsx`, `mts` e `cts`.
+
+**Também barrados em `domain/`:**
+- os globais `module` e `exports`;
+- `Function(...)` sem `new`;
+- `(...).constructor(...)`;
+- `import.meta`;
+- `import("...")` em posição de tipo. A mensagem é própria: use `import type`.
+
+**Regra de manutenção:** os blocos de `domain/` ficam por último no `eslint.config.mjs` (antes do `prettier`), para nenhum bloco posterior sobrepor as regras.
+
+**Riscos residuais aceitos:** `import fs = globalThis.process` e outras formas exóticas que o lint não pega. A revisão de diff e a proibição de pacotes de fora cobrem o caso real.
