@@ -7,7 +7,10 @@
     "node": ">=24"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p domain",
     "lint": "eslint . --max-warnings=0",
     "test": "vitest run",
     "format": "prettier --write .",
@@ -15,12 +18,22 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.9.10",
+    "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.71.2",
     "vitest": "^5.0.4"
+  },
+  "dependencies": {
+    "next": "^16.4.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zod": "^4.6.7"
   }
 }

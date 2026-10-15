@@ -46,7 +46,9 @@ const importsDomain = (permitidosExtras = []) => [
 ];
 
 export default tseslint.config(
-  { ignores: ['node_modules', 'coverage', 'dist', '.next', '.claude/worktrees/**'] },
+  {
+    ignores: ['node_modules', 'coverage', 'dist', '.next', 'next-env.d.ts', '.claude/worktrees/**'],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
