@@ -14,22 +14,19 @@ private/
 secrets/
 credentials.json
 
-# Dados financeiros, extratos, dumps e prints: nunca no Git
-*.csv
-*.xlsx
-*.xls
-*.ofx
-*.pdf
-*.sql
-*.dump
-*.png
-*.jpg
-*.jpeg
-*.heic
-*.webp
-
-# Exceção única: fixtures fictícias
-!tests/fixtures/**
+# Dados financeiros, extratos, dumps e prints: nunca no Git (classes [xX] = sem diferenciar maiúsculas, mesmo com core.ignorecase=false)
+*.[cC][sS][vV]
+*.[xX][lL][sS][xX]
+*.[xX][lL][sS]
+*.[oO][fF][xX]
+*.[pP][dD][fF]
+*.[sS][qQ][lL]
+*.[dD][uU][mM][pP]
+*.[pP][nN][gG]
+*.[jJ][pP][gG]
+*.[jJ][pP][eE][gG]
+*.[hH][eE][iI][cC]
+*.[wW][eE][bB][pP]
 
 # Sistema operacional
 .DS_Store
