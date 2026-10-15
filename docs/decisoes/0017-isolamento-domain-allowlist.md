@@ -1,6 +1,6 @@
 # 0017: Isolamento de `domain/` por lista de permitidos
 
-- **Status:** aceita (CTO, 15/10/2026, a partir do parecer do revisor na T0.4r); emenda 1 (15/10/2026). O dono aprova junto com o gate E0.
+- **Status:** aceita (CTO, 15/10/2026, a partir do parecer do revisor na T0.4r); emendas 1 e 2 (15/10/2026). O dono aprova junto com o gate E0.
 - **Estágio:** E0
 - **Substitui:** a forma de lista de proibidos da T0.2 (o objetivo do item 6 da ADR-0016 continua o mesmo)
 
@@ -44,3 +44,12 @@ Na revisão da T0.4c, o revisor mostrou que `domain/y.mjs` com `export * from ".
 **Regra de manutenção:** os blocos de `domain/` ficam por último no `eslint.config.mjs` (antes do `prettier`), para nenhum bloco posterior sobrepor as regras.
 
 **Riscos residuais aceitos:** `import fs = globalThis.process` e outras formas exóticas que o lint não pega. A revisão de diff e a proibição de pacotes de fora cobrem o caso real.
+
+## Emenda 2: limite do lint (15/10/2026)
+
+Na reverificação do PR #7, o QA mostrou que `Function.call(null, "return process.getBuiltinModule('fs')")()` chega no `fs` sem nenhum `import`. O motivo é que o código fica dentro de um texto, e texto o lint não analisa. Existem infinitas variações desse truque.
+
+**Decisão (aprovada pelo dono):**
+- O lint barra também o global `Function` e o acesso a `.constructor` em `domain/`, o que fecha as formas comuns (T0.4d).
+- **O lint é uma trava contra acidente, não contra sabotagem.** Código que esconde I/O de propósito (dentro de texto, por reflexão ou de forma ofuscada) é responsabilidade da revisão de diff. Por isso o `revisor` é obrigatório em toda tarefa que toca `domain/`.
+- O revisor rejeita qualquer texto passado para execução dinâmica em `domain/`.
