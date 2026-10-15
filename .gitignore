@@ -34,3 +34,11 @@ Thumbs.db
 
 # Worktrees dos agentes (.claude/agents/ continua versionado)
 .claude/worktrees/
+
+# Saídas temporárias e exportações (podem conter dados reais)
+tmp/
+.tmp/
+exports/
+dumps/
+*.raw.json
+*.private.json
