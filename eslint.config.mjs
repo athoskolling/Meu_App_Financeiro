@@ -38,7 +38,16 @@ export default tseslint.config(
           ].map((name) => ({ name, message: MENSAGEM_DOMAIN })),
           patterns: [
             {
-              group: ['node:*', 'drizzle-orm/*', '@supabase/*', 'next/*', 'react/*', 'react-dom/*'],
+              group: [
+                'node:*',
+                'drizzle-orm/*',
+                '@supabase/*',
+                'next/*',
+                'react/*',
+                'react-dom/*',
+                'pg/*',
+                'postgres/*',
+              ],
               message: MENSAGEM_DOMAIN,
             },
           ],
@@ -56,6 +65,7 @@ export default tseslint.config(
           'global',
           'window',
           'self',
+          'eval',
         ].map((name) => ({
           name,
           message: MENSAGEM_DOMAIN,
@@ -63,7 +73,11 @@ export default tseslint.config(
       ],
       // import() dinâmico: não é coberto por no-restricted-imports. Barra qualquer
       // import() em domain/ (módulo proibido ou caminho não literal, que não dá para checar).
-      'no-restricted-syntax': ['error', { selector: 'ImportExpression', message: MENSAGEM_DOMAIN }],
+      'no-restricted-syntax': [
+        'error',
+        { selector: 'ImportExpression', message: MENSAGEM_DOMAIN },
+        { selector: "NewExpression[callee.name='Function']", message: MENSAGEM_DOMAIN },
+      ],
     },
   },
   prettier,
