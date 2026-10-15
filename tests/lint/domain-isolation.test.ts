@@ -70,6 +70,11 @@ const barradosAdr17: [string, string, string][] = [
   ['Function() sem new', 'export const f = Function("return 1");', P],
   ['.constructor()', 'export const g = (() => 0).constructor("return 1");', P],
   ['import.meta', 'export const u = import.meta.url;', P],
+  ['Function.call', 'export const a = Function.call(null, "return 1");', P],
+  ['alias de Function', 'const F = Function; export const b = F("return 1");', P],
+  ['Reflect.construct', 'export const c = Reflect.construct(Function, ["return 1"]);', P],
+  ['(0, Function)', 'export const d = (0, Function)("return 1");', P],
+  ['.constructor por alias', 'const k = (() => 0).constructor; export const e = k;', P],
   ['vitest fora de teste', 'import { describe } from "vitest";', P],
 ];
 
@@ -84,6 +89,7 @@ const permitidosAdr17: [string, string, string][] = [
 const permitidos: [string, string, string][] = [
   ['import type relativo', 'import type { Foo } from "./foo";', P],
   ['import relativo', 'import { z } from "./local";', P],
+  ['soma tipada', 'export const soma = (a: number, b: number): number => a + b;', P],
   ['codigo puro', 'export const soma = (a: number, b: number) => a + b;', P],
 ];
 

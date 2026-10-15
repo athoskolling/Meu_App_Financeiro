@@ -97,6 +97,7 @@ export default tseslint.config(
           'eval',
           'module',
           'exports',
+          'Function',
         ].map((name) => ({
           name,
           message: MENSAGEM_DOMAIN,
@@ -114,6 +115,7 @@ export default tseslint.config(
           selector: "CallExpression[callee.property.name='constructor']",
           message: MENSAGEM_DOMAIN,
         },
+        { selector: "MemberExpression[property.name='constructor']", message: MENSAGEM_DOMAIN },
         // import.meta
         { selector: 'MetaProperty', message: MENSAGEM_DOMAIN },
         { selector: "NewExpression[callee.name='Function']", message: MENSAGEM_DOMAIN },
