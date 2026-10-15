@@ -1,3 +1,4 @@
+import { builtinModules } from 'node:module';
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
@@ -20,24 +21,14 @@ export default tseslint.config(
   },
   // T0.2: isolamento de domain/ (TypeScript puro: sem I/O, framework ou banco)
   {
-    files: ['domain/**/*.ts'],
+    files: ['domain/**/*.{ts,tsx,mts,cts}'],
     rules: {
-      'no-restricted-imports': [
+      'no-restricted-imports': 'off',
+      '@typescript-eslint/no-restricted-imports': [
         'error',
         {
           paths: [
-            'fs',
-            'fs/promises',
-            'path',
-            'os',
-            'child_process',
-            'http',
-            'https',
-            'net',
-            'crypto',
-            'stream',
-            'worker_threads',
-            'process',
+            ...builtinModules,
             'drizzle-orm',
             'pg',
             'postgres',
@@ -55,7 +46,17 @@ export default tseslint.config(
       ],
       'no-restricted-globals': [
         'error',
-        ...['fetch', 'process', 'require', 'XMLHttpRequest', 'WebSocket'].map((name) => ({
+        ...[
+          'fetch',
+          'process',
+          'require',
+          'XMLHttpRequest',
+          'WebSocket',
+          'globalThis',
+          'global',
+          'window',
+          'self',
+        ].map((name) => ({
           name,
           message: MENSAGEM_DOMAIN,
         })),

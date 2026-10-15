@@ -18,38 +18,52 @@ async function mensagens(codigo: string, filePath: string) {
   return resultado?.messages ?? [];
 }
 
-const barrados: [string, string][] = [
-  ['fs', 'import { readFileSync } from "fs";'],
-  ['node:fs/promises', 'import { readFile } from "node:fs/promises";'],
-  ['path', 'import path from "path";'],
-  ['drizzle-orm/postgres-js', 'import { drizzle } from "drizzle-orm/postgres-js";'],
-  ['@supabase/supabase-js', 'import { createClient } from "@supabase/supabase-js";'],
-  ['next/server', 'import { NextResponse } from "next/server";'],
-  ['fetch global', 'export const f = () => fetch("x");'],
-  ['process global', 'export const e = process.env.X;'],
-  ['import() dinamico', 'export const x = await import("node:fs");'],
+const P = 'domain/__probe__.ts';
+const FS = 'import { readFileSync } from "fs";';
+
+// [nome, código, filePath]
+const barrados: [string, string, string][] = [
+  ['fs', FS, P],
+  ['node:fs/promises', 'import { readFile } from "node:fs/promises";', P],
+  ['path', 'import path from "path";', P],
+  ['drizzle-orm/postgres-js', 'import { drizzle } from "drizzle-orm/postgres-js";', P],
+  ['@supabase/supabase-js', 'import { createClient } from "@supabase/supabase-js";', P],
+  ['next/server', 'import { NextResponse } from "next/server";', P],
+  ['fetch global', 'export const f = () => fetch("x");', P],
+  ['process global', 'export const e = process.env.X;', P],
+  ['import() dinamico', 'export const x = await import("node:fs");', P],
+  ['buffer', 'import { Buffer } from "buffer";', P],
+  ['url', 'import { URL } from "url";', P],
+  ['export * from fs', 'export * from "fs";', P],
+  ['export from node:fs', 'export { readFileSync } from "node:fs";', P],
+  ['import = require', 'import fs = require("fs");', P],
+  ['globalThis.fetch', 'export const f = () => globalThis.fetch("x");', P],
+  ['subpasta domain/a/b/c.ts', FS, 'domain/a/b/c.ts'],
+  ['extensao .mts', FS, 'domain/__probe__.mts'],
+  ['extensao .tsx', FS, 'domain/__probe__.tsx'],
 ];
 
-const permitidos: [string, string][] = [
-  ['import type relativo', 'import type { Foo } from "./foo";'],
-  ['import relativo', 'import { z } from "./local";'],
+const permitidos: [string, string, string][] = [
+  ['import type relativo', 'import type { Foo } from "./foo";', P],
+  ['import relativo', 'import { z } from "./local";', P],
+  ['codigo puro', 'export const soma = (a: number, b: number) => a + b;', P],
 ];
 
 describe('isolamento de domain/', () => {
-  it.each(barrados)('barra em domain/: %s', async (_nome, codigo) => {
-    const msgs = await mensagens(codigo, 'domain/__probe__.ts');
+  it.each(barrados)('barra em domain/: %s', async (_nome, codigo, filePath) => {
+    const msgs = await mensagens(codigo, filePath);
     expect(msgs.filter((m) => m.fatal)).toEqual([]);
     expect(msgs.filter((m) => m.message.includes(MENSAGEM)).length).toBeGreaterThan(0);
   });
 
-  it.each(permitidos)('permite em domain/: %s', async (_nome, codigo) => {
-    const msgs = await mensagens(codigo, 'domain/__probe__.ts');
+  it.each(permitidos)('permite em domain/: %s', async (_nome, codigo, filePath) => {
+    const msgs = await mensagens(codigo, filePath);
     expect(msgs.filter((m) => m.fatal)).toEqual([]);
     expect(msgs.filter((m) => m.message.includes(MENSAGEM))).toEqual([]);
   });
 
   it('controle: fora de domain/ a regra nao vale', async () => {
-    const msgs = await mensagens('import { readFileSync } from "fs";', 'lib/__probe__.ts');
+    const msgs = await mensagens(FS, 'lib/__probe__.ts');
     expect(msgs.filter((m) => m.fatal)).toEqual([]);
     expect(msgs.filter((m) => m.message.includes(MENSAGEM))).toEqual([]);
   });
