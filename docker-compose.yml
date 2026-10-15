@@ -1,0 +1,23 @@
+# Postgres LOCAL para desenvolvimento e testes de integração (ADR-0019).
+# As credenciais abaixo só valem para a máquina local: a porta é presa a 127.0.0.1
+# e nada aqui se conecta ao banco real do Supabase.
+services:
+  postgres:
+    image: postgres:17.11
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-meu_financeiro}
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
