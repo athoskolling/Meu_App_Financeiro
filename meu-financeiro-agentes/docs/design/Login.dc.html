@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Entrar no Meu Financeiro</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+button{font-family:inherit}
+:focus-visible{outline:2px solid #2A3FB5;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 100vh; box-sizing: border-box; background: #F1F2EC; color: #1B2624; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.5; padding: 40px; display: flex; flex-direction: column">
+
+<div style="display: flex; align-items: center; gap: 10px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 21px; letter-spacing: -0.01em">
+<svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="1.5" width="23" height="23" rx="5" fill="none" stroke="#2A3FB5" stroke-width="2"/><path d="M6.5 9h13M6.5 13h13M6.5 17h7" stroke="#2A3FB5" stroke-width="2" stroke-linecap="round"/></svg>
+Meu Financeiro
+</div>
+
+<div style="flex: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 48px 96px; max-width: 1100px; width: 100%; margin: 0 auto; padding: 40px 0">
+
+<div style="flex: 1 1 420px; max-width: 560px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 68px; line-height: 1.02; letter-spacing: -0.03em">Suas contas, conferidas.</h1>
+<p style="margin: 24px 0 0; max-width: 46ch; font-size: 18px; color: #3C4A47">Santander, Nubank e Caju num só lugar. Cada saldo bate com o do banco, ou o app avisa que não bate.</p>
+<span style="display: inline-block; margin-top: 28px; transform: rotate(-3deg); padding: 4px 16px; border: 2px solid #0E6B57; border-radius: 6px; color: #0E6B57; font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 700">Confere</span>
+</div>
+
+<section aria-labelledby="entrar" style="flex: 1 1 320px; max-width: 400px; background: #FAFAF7; border: 1px solid #D3D8CE; border-radius: 14px; padding: 32px">
+<h2 id="entrar" style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 26px">Entrar</h2>
+<button type="button" style="width: 100%; min-height: 48px; margin-top: 20px; border: 0; background: #2A3FB5; color: #FFFFFF; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer">Entrar com Google</button>
+<p style="margin: 18px 0 0; font-size: 14px; color: #5A6763">Só o e-mail do dono do app tem acesso. Qualquer outra conta Google é recusada.</p>
+</section>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

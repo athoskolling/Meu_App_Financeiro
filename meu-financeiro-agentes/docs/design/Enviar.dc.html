@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Enviar print do Caju</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+:focus-visible{outline:2px solid #2A3FB5;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #F1F2EC; color: #1B2624; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+
+<div style="flex: 1; min-height: 0; padding: 28px 20px 16px; display: flex; flex-direction: column; overflow: hidden">
+<div style="display: flex; align-items: center; gap: 8px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 17px">
+<svg width="22" height="22" viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="1.5" width="23" height="23" rx="5" fill="none" stroke="#2A3FB5" stroke-width="2"/><path d="M6.5 9h13M6.5 13h13M6.5 17h7" stroke="#2A3FB5" stroke-width="2" stroke-linecap="round"/></svg>
+Meu Financeiro
+</div>
+
+<h1 style="margin: 20px 0 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 34px; line-height: 1.08; letter-spacing: -0.02em">Enviar print do Caju</h1>
+<p style="margin: 8px 0 0; color: #3C4A47">Último print: 12 out, cobre 6 a 12 out. O próximo precisa chegar até 19 out.</p>
+
+<ol style="margin: 16px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px">
+<li>Abra o extrato no app do Caju e tire o print.</li>
+<li>Escolha o print aqui e ajuste o recorte.</li>
+<li>Revise as linhas lidas antes de confirmar.</li>
+</ol>
+
+<div role="img" aria-label="Área de recorte: arraste os cantos para deixar só a lista de lançamentos" style="position: relative; flex: 1; min-height: 140px; margin-top: 18px; border-radius: 12px; background: #E4E7DF; border: 1px solid #D3D8CE">
+<div style="position: absolute; left: 24px; right: 24px; top: 22px; bottom: 22px; border: 2px dashed #2A3FB5; border-radius: 6px"></div>
+<div style="position: absolute; left: 18px; top: 16px; width: 14px; height: 14px; background: #2A3FB5; border-radius: 3px"></div>
+<div style="position: absolute; right: 18px; top: 16px; width: 14px; height: 14px; background: #2A3FB5; border-radius: 3px"></div>
+<div style="position: absolute; left: 18px; bottom: 16px; width: 14px; height: 14px; background: #2A3FB5; border-radius: 3px"></div>
+<div style="position: absolute; right: 18px; bottom: 16px; width: 14px; height: 14px; background: #2A3FB5; border-radius: 3px"></div>
+</div>
+<p style="margin: 10px 0 0; font-size: 13px; color: #5A6763">Deixe nome e número do cartão fora do recorte. A imagem não é guardada.</p>
+
+<a href="Revisar.dc.html" style="display: flex; align-items: center; justify-content: center; min-height: 52px; margin-top: 14px; border-radius: 10px; background: #2A3FB5; color: #FFFFFF; font-size: 16px; font-weight: 600; text-decoration: none">Escolher print</a>
+</div>
+
+<nav aria-label="Principal" style="display: flex; border-top: 1px solid #D3D8CE; background: #FAFAF7">
+<a href="Main.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 56px; text-decoration: none; font-size: 14px; font-weight: 500; color: #5A6763">Painel</a>
+<a href="Transacoes.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 56px; text-decoration: none; font-size: 14px; font-weight: 500; color: #5A6763">Transações</a>
+<a href="Contas.dc.html" style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 56px; text-decoration: none; font-size: 14px; font-weight: 500; color: #5A6763">Contas</a>
+<a href="Enviar.dc.html" aria-current="page" style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 56px; text-decoration: none; font-size: 14px; font-weight: 600; color: #1B2624; box-shadow: inset 0 3px 0 #2A3FB5">Importar</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

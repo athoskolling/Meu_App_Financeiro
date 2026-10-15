@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Transações de outubro</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+button,input,select{font-family:inherit}
+:focus-visible{outline:2px solid #2A3FB5;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F1F2EC; color: #1B2624; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 40px; padding: 14px 40px; border-bottom: 1px solid #D3D8CE">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B2624; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 21px; letter-spacing: -0.01em">
+<svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="1.5" width="23" height="23" rx="5" fill="none" stroke="#2A3FB5" stroke-width="2"/><path d="M6.5 9h13M6.5 13h13M6.5 17h7" stroke="#2A3FB5" stroke-width="2" stroke-linecap="round"/></svg>
+Meu Financeiro
+</a>
+<nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 0 28px; flex: 1">
+<a href="Main.dc.html" style="padding: 12px 0; text-decoration: none; font-weight: 500; color: #5A6763; border-bottom: 2px solid transparent">Painel</a>
+<a href="Transacoes.dc.html" aria-current="page" style="padding: 12px 0; text-decoration: none; font-weight: 600; color: #1B2624; border-bottom: 2px solid #2A3FB5">Transações</a>
+<a href="Contas.dc.html" style="padding: 12px 0; text-decoration: none; font-weight: 500; color: #5A6763; border-bottom: 2px solid transparent">Contas</a>
+<a href="Revisar.dc.html" style="padding: 12px 0; text-decoration: none; font-weight: 500; color: #5A6763; border-bottom: 2px solid transparent">Importar</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px">
+<span style="font-size: 13px; color: #5A6763">Sincronizado hoje, 06:12</span>
+<button type="button" style="min-height: 44px; padding: 0 18px; border: 1.5px solid #2A3FB5; background: transparent; color: #2A3FB5; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">Sincronizar agora</button>
+</div>
+</header>
+
+<main style="max-width: 1200px; margin: 0 auto; padding: 40px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 44px; line-height: 1.1; letter-spacing: -0.02em">Transações</h1>
+<p style="margin: 0; color: #5A6763">Outubro de 2026</p>
+</div>
+
+<div style="margin-top: 24px; padding: 14px 18px; background: #FBEBCB; border-radius: 10px; color: #5A3600; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px">
+<span>Nubank conta: a soma dos lançamentos está R$ 23,90 diferente do saldo do banco. O banco pode não ter enviado tudo.</span>
+<button type="button" onClick="{{showNubank}}" style="min-height: 44px; padding: 0 16px; border: 1.5px solid #5A3600; background: transparent; color: #5A3600; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">Filtrar Nubank conta</button>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; margin-top: 28px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<label for="f-conta" style="font-size: 14px; color: #5A6763">Conta</label>
+<select id="f-conta" value="{{acct}}" onChange="{{onAcct}}" style="min-height: 44px; min-width: 180px; padding: 0 12px; border: 1px solid #B9C0B4; border-radius: 8px; background: #FAFAF7; color: #1B2624; font-size: 15px">
+<option value="Todas">Todas</option>
+<option value="Santander">Santander</option>
+<option value="Nubank conta">Nubank conta</option>
+<option value="Nubank cartão">Nubank cartão</option>
+<option value="Caju">Caju</option>
+</select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<label for="f-cat" style="font-size: 14px; color: #5A6763">Categoria</label>
+<select id="f-cat" value="{{cat}}" onChange="{{onCat}}" style="min-height: 44px; min-width: 200px; padding: 0 12px; border: 1px solid #B9C0B4; border-radius: 8px; background: #FAFAF7; color: #1B2624; font-size: 15px">
+<option value="Todas">Todas</option>
+<option value="Mercado">Mercado</option>
+<option value="Alimentação fora">Alimentação fora</option>
+<option value="Transporte">Transporte</option>
+<option value="Assinaturas">Assinaturas</option>
+<option value="Lazer">Lazer</option>
+<option value="Outros">Outros</option>
+<option value="Receita">Receita</option>
+<option value="Guardado">Guardado</option>
+<option value="Fatura">Fatura</option>
+</select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; flex: 1 1 240px">
+<label for="f-busca" style="font-size: 14px; color: #5A6763">Buscar na descrição</label>
+<input id="f-busca" type="search" value="{{q}}" onInput="{{onQ}}" placeholder="Zaffari, Uber, Spotify" style="min-height: 44px; padding: 0 12px; border: 1px solid #B9C0B4; border-radius: 8px; background: #FAFAF7; color: #1B2624; font-size: 15px">
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 24px; margin-top: 28px; padding-bottom: 10px; border-bottom: 2px solid #1B2624">
+<span style="font-weight: 600">{{count}}</span>
+<span>Gastos neste filtro: <strong style="font-weight: 600">{{spent}}</strong> <span style="color: #5A6763">(guardado e pagamento de fatura ficam de fora)</span></span>
+</div>
+
+<div style="overflow-x: auto">
+<table style="width: 100%; min-width: 760px; border-collapse: collapse">
+<thead>
+<tr style="text-align: left; font-size: 14px; color: #5A6763">
+<th scope="col" style="font-weight: 500; padding: 12px 12px 12px 0; width: 72px">Data</th>
+<th scope="col" style="font-weight: 500; padding: 12px">Descrição</th>
+<th scope="col" style="font-weight: 500; padding: 12px">Categoria</th>
+<th scope="col" style="font-weight: 500; padding: 12px">Conta</th>
+<th scope="col" style="font-weight: 500; padding: 12px 0 12px 12px; text-align: right">Valor</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+<tr style="border-top: 1px solid #D3D8CE">
+<td style="padding: 14px 12px 14px 0; color: #5A6763; white-space: nowrap; vertical-align: top">{{r.d}}</td>
+<td style="padding: 14px 12px; vertical-align: top">
+<span style="display: block; font-weight: 500">{{r.desc}}</span>
+<sc-if value="{{r.hasTag}}" hint-placeholder-val="{{ false }}"><span style="display: inline-block; margin-top: 4px; padding: 1px 8px; font-size: 12px; font-weight: 600; color: #2A3FB5; background: #E3E7F7; border-radius: 4px">{{r.tag}}</span></sc-if>
+</td>
+<td style="padding: 14px 12px; vertical-align: top">{{r.cat}}</td>
+<td style="padding: 14px 12px; vertical-align: top">{{r.acct}}</td>
+<td style="padding: 14px 0 14px 12px; vertical-align: top; text-align: right; font-weight: 600; white-space: nowrap; color: {{r.color}}">{{r.amount}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+
+<sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 40px 0; border-top: 1px solid #D3D8CE">
+<p style="margin: 0; font-weight: 500">Nenhum lançamento com esses filtros.</p>
+<p style="margin: 4px 0 16px; color: #5A6763">Apague a busca ou escolha outra conta ou categoria.</p>
+<button type="button" onClick="{{reset}}" style="min-height: 44px; padding: 0 18px; border: 1.5px solid #2A3FB5; background: transparent; color: #2A3FB5; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">Limpar filtros</button>
+</div>
+</sc-if>
+
+<div style="display: flex; justify-content: center; padding: 28px 0 8px; border-top: 1px solid #D3D8CE">
+<button type="button" style="min-height: 44px; padding: 0 24px; border: 1.5px solid #1B2624; background: transparent; color: #1B2624; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">Carregar lançamentos de setembro</button>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const acct = st.acct || 'Todas';
+    const cat = st.cat || 'Todas';
+    const q = st.q || '';
+    const all = [
+      { d: '13 out', desc: 'Zaffari Supermercados', cat: 'Mercado', acct: 'Nubank cartão', c: -18742, type: 'expense', tag: 'Na fatura aberta' },
+      { d: '13 out', desc: 'Uber', cat: 'Transporte', acct: 'Nubank cartão', c: -2490, type: 'expense', tag: 'Na fatura aberta' },
+      { d: '12 out', desc: 'Padaria Pão Quente', cat: 'Alimentação fora', acct: 'Caju', c: -1280, type: 'expense', tag: '' },
+      { d: '12 out', desc: 'Restaurante Central', cat: 'Alimentação fora', acct: 'Caju', c: -3150, type: 'expense', tag: '' },
+      { d: '11 out', desc: 'Para a caixinha Viagem', cat: 'Guardado', acct: 'Nubank conta', c: -40000, type: 'saved', tag: 'Guardado, fora dos gastos' },
+      { d: '10 out', desc: 'Spotify', cat: 'Assinaturas', acct: 'Santander', c: -2190, type: 'expense', tag: '' },
+      { d: '9 out', desc: 'Fone Bluetooth', cat: 'Outros', acct: 'Nubank cartão', c: -5990, type: 'expense', tag: 'Parcela 1 de 3' },
+      { d: '8 out', desc: 'Cinemark', cat: 'Lazer', acct: 'Nubank cartão', c: -7490, type: 'expense', tag: 'Na fatura aberta' },
+      { d: '5 out', desc: 'Pix recebido', cat: 'Receita', acct: 'Santander', c: 320000, type: 'income', tag: '' },
+      { d: '3 out', desc: 'Pagamento da fatura de setembro', cat: 'Fatura', acct: 'Nubank conta', c: -53820, type: 'bill', tag: 'Pagamento de fatura, fora dos gastos' }
+    ];
+    const fmt = (v, sign) => {
+      const a = Math.abs(v);
+      const reais = String(Math.floor(a / 100)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      const cents = String(a % 100).padStart(2, '0');
+      return (v < 0 ? '−' : (sign && v > 0 ? '+' : '')) + 'R$ ' + reais + ',' + cents;
+    };
+    const needle = q.trim().toLowerCase();
+    const shown = all.filter((r) =>
+      (acct === 'Todas' || r.acct === acct) &&
+      (cat === 'Todas' || r.cat === cat) &&
+      (!needle || r.desc.toLowerCase().includes(needle))
+    );
+    const spentCents = shown.filter((r) => r.type === 'expense').reduce((s, r) => s + r.c, 0);
+    const rows = shown.map((r) => ({
+      d: r.d, desc: r.desc, cat: r.cat, acct: r.acct,
+      amount: fmt(r.c, true),
+      color: r.type === 'income' ? '#0E6B57' : (r.type === 'expense' ? '#1B2624' : '#5A6763'),
+      tag: r.tag, hasTag: r.tag !== ''
+    }));
+    return {
+      acct, cat, q, rows,
+      empty: rows.length === 0,
+      count: rows.length === 1 ? '1 lançamento' : rows.length + ' lançamentos',
+      spent: fmt(spentCents, false),
+      onAcct: (e) => this.setState({ acct: e.target.value }),
+      onCat: (e) => this.setState({ cat: e.target.value }),
+      onQ: (e) => this.setState({ q: e.target.value }),
+      showNubank: () => this.setState({ acct: 'Nubank conta', cat: 'Todas', q: '' }),
+      reset: () => this.setState({ acct: 'Todas', cat: 'Todas', q: '' })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Painel de outubro</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+button{font-family:inherit}
+:focus-visible{outline:2px solid #2A3FB5;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F1F2EC; color: #1B2624; font-family: 'IBM Plex Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.5">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 40px; padding: 14px 40px; border-bottom: 1px solid #D3D8CE">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #1B2624; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 21px; letter-spacing: -0.01em">
+<svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1.5" y="1.5" width="23" height="23" rx="5" fill="none" stroke="#2A3FB5" stroke-width="2"/><path d="M6.5 9h13M6.5 13h13M6.5 17h7" stroke="#2A3FB5" stroke-width="2" stroke-linecap="round"/></svg>
+Meu Financeiro
+</a>
+<nav aria-label="Principal" style="display: flex; flex-wrap: wrap; gap: 0 28px; flex: 1">
+<a href="Main.dc.html" aria-current="page" style="padding: 12px 0; text-decoration: none; font-weight: 600; color: #1B2624; border-bottom: 2px solid #2A3FB5">Painel</a>
+<a href="Transacoes.dc.html" style="padding: 12px 0; text-decoration: none; font-weight: 500; color: #5A6763; border-bottom: 2px solid transparent">Transações</a>
+<a href="Contas.dc.html" style="padding: 12px 0; text-decoration: none; font-weight: 500; color: #5A6763; border-bottom: 2px solid transparent">Contas</a>
+<a href="Revisar.dc.html" style="padding: 12px 0; text-decoration: none; font-weight: 500; color: #5A6763; border-bottom: 2px solid transparent">Importar</a>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px">
+<span style="font-size: 13px; color: #5A6763">Sincronizado hoje, 06:12</span>
+<button type="button" style="min-height: 44px; padding: 0 18px; border: 1.5px solid #2A3FB5; background: transparent; color: #2A3FB5; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer">Sincronizar agora</button>
+</div>
+</header>
+
+<div style="max-width: 1200px; margin: 0 auto; padding: 40px; display: flex; flex-wrap: wrap; gap: 48px">
+
+<main style="flex: 999 1 620px; min-width: 0">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px">
+<h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 56px; line-height: 1.05; letter-spacing: -0.02em">Outubro de 2026</h1>
+<div style="display: flex; gap: 4px">
+<button type="button" aria-label="Mês anterior" style="width: 44px; height: 44px; border: 1px solid #D3D8CE; background: #FAFAF7; border-radius: 8px; cursor: pointer"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3 5 9l6 6" fill="none" stroke="#1B2624" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<button type="button" aria-label="Próximo mês" disabled style="width: 44px; height: 44px; border: 1px solid #D3D8CE; background: transparent; border-radius: 8px; opacity: 0.45"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="m7 3 6 6-6 6" fill="none" stroke="#1B2624" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
+</div>
+<p style="margin: 6px 0 0; color: #5A6763">Dia 14 de 31. Valores de todas as contas, já conferidos.</p>
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 20px 56px; margin-top: 36px">
+<div>
+<div style="font-size: 14px; color: #5A6763">Sobrou até agora</div>
+<div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 52px; line-height: 1.1; letter-spacing: -0.02em">R$ 1.325,48</div>
+</div>
+<div>
+<div style="font-size: 14px; color: #5A6763">Entrou</div>
+<div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 30px; line-height: 1.2; color: #0E6B57">+R$ 3.200,00</div>
+</div>
+<div>
+<div style="font-size: 14px; color: #5A6763">Saiu</div>
+<div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 30px; line-height: 1.2">−R$ 1.874,52</div>
+</div>
+</div>
+<p style="margin: 18px 0 0; max-width: 62ch">Você guardou R$ 400,00 em caixinhas neste mês. Esse valor não entra nos gastos. <a href="Contas.dc.html" style="color: #2A3FB5; font-weight: 500">Ver caixinhas</a></p>
+
+<section style="margin-top: 56px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 24px">Gasto por dia</h2>
+<span style="font-size: 14px; color: #5A6763">Maior gasto: dia 7, R$ 412,00</span>
+</div>
+<div role="img" aria-label="Gasto por dia em outubro. O maior gasto foi no dia 7, R$ 412,00. Os dias 15 a 31 ainda não aconteceram." style="display: flex; align-items: flex-end; gap: 5px; height: 120px; margin-top: 20px; border-bottom: 2px solid #1B2624">
+<sc-for list="{{days}}" as="d" hint-placeholder-count="31">
+<div style="flex: 1; min-width: 0; height: {{d.h}}px; background: {{d.c}}"></div>
+</sc-for>
+</div>
+<div aria-hidden="true" style="display: flex; gap: 5px; margin-top: 6px; font-size: 12px; color: #5A6763">
+<sc-for list="{{days}}" as="d" hint-placeholder-count="31">
+<div style="flex: 1; min-width: 0; white-space: nowrap">{{d.label}}</div>
+</sc-for>
+</div>
+</section>
+
+<section style="margin-top: 56px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 24px">Para onde foi</h2>
+<ul style="list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px">
+<sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+<li style="display: grid; grid-template-columns: minmax(110px, 190px) 1fr auto; gap: 16px; align-items: center">
+<span>{{c.name}}</span>
+<span style="display: block; height: 8px; background: #DDE1D6; border-radius: 4px"><span style="display: block; height: 8px; border-radius: 4px; background: #2A3FB5; width: {{c.w}}"></span></span>
+<span style="text-align: right; font-weight: 500">{{c.value}}</span>
+</li>
+</sc-for>
+</ul>
+</section>
+
+<section style="margin-top: 56px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 24px">Últimas movimentações</h2>
+<a href="Transacoes.dc.html" style="color: #2A3FB5; font-weight: 500">Ver todas</a>
+</div>
+<ul style="list-style: none; margin: 12px 0 0; padding: 0">
+<sc-for list="{{recent}}" as="r" hint-placeholder-count="6">
+<li style="display: grid; grid-template-columns: 56px 1fr auto; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #D3D8CE">
+<span style="font-size: 14px; color: #5A6763">{{r.date}}</span>
+<span>
+<span style="display: block; font-weight: 500">{{r.desc}}</span>
+<span style="display: block; font-size: 13px; color: #5A6763">{{r.meta}}</span>
+<sc-if value="{{r.saved}}" hint-placeholder-val="{{ false }}"><span style="display: inline-block; margin-top: 4px; padding: 1px 8px; font-size: 12px; font-weight: 600; color: #2A3FB5; background: #E3E7F7; border-radius: 4px">Guardado, fora dos gastos</span></sc-if>
+</span>
+<span style="font-weight: 600; text-align: right; color: {{r.color}}">{{r.amount}}</span>
+</li>
+</sc-for>
+</ul>
+</section>
+</main>
+
+<aside aria-label="Conferência das contas" style="flex: 1 1 320px; max-width: 420px; align-self: flex-start; background: #FAFAF7; border: 1px solid #D3D8CE; border-radius: 14px; padding: 28px">
+<h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 24px">Contas conferidas</h2>
+<p style="margin: 4px 0 0; font-size: 14px; color: #5A6763">A soma dos lançamentos precisa bater com o saldo do banco.</p>
+<ul style="list-style: none; margin: 16px 0 0; padding: 0">
+<sc-for list="{{accounts}}" as="a" hint-placeholder-count="4">
+<li style="padding: 16px 0; border-top: 1px solid #D3D8CE">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+<div>
+<div style="font-weight: 600">{{a.name}}</div>
+<div style="font-size: 13px; color: #5A6763">{{a.kind}}</div>
+</div>
+<sc-if value="{{a.ok}}" hint-placeholder-val="{{ true }}"><span style="display: inline-block; transform: rotate(-3deg); padding: 2px 10px; border: 1.5px solid #0E6B57; border-radius: 4px; color: #0E6B57; font-size: 13px; font-weight: 600">Confere</span></sc-if>
+<sc-if value="{{a.warn}}" hint-placeholder-val="{{ false }}"><span style="display: inline-block; transform: rotate(-3deg); padding: 2px 10px; border: 1.5px solid #8A4F00; border-radius: 4px; background: #FBEBCB; color: #8A4F00; font-size: 13px; font-weight: 600">Verificar</span></sc-if>
+</div>
+<div style="margin-top: 6px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 24px">{{a.value}}</div>
+<div style="font-size: 13px; color: #5A6763">{{a.note}}</div>
+</li>
+</sc-for>
+</ul>
+
+<h3 style="margin: 12px 0 0; padding-top: 20px; border-top: 2px solid #1B2624; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 19px">Precisa de você</h3>
+<ul style="list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+<li style="padding: 12px 14px; background: #FBEBCB; border-radius: 8px; color: #5A3600">
+Nubank conta: diferença de R$ 23,90 desde 9 out.
+<a href="Transacoes.dc.html" style="display: block; margin-top: 2px; color: #5A3600; font-weight: 600">Ver lançamentos do período</a>
+</li>
+<li style="padding: 12px 14px; background: #EEF0EA; border: 1px solid #D3D8CE; border-radius: 8px">
+Envie o próximo print do Caju até 19 out.
+<a href="Enviar.dc.html" style="display: block; margin-top: 2px; color: #2A3FB5; font-weight: 600">Enviar print</a>
+</li>
+</ul>
+</aside>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const spend = [118.40, 0, 246.90, 63.20, 31.00, 187.50, 412.00, 74.90, 0, 139.60, 98.00, 0, 301.22, 201.80];
+    const labels = { 1: '1', 7: '7', 14: 'hoje', 21: '21', 28: '28' };
+    const days = [];
+    for (let d = 1; d <= 31; d++) {
+      const past = d <= 14;
+      const v = past ? spend[d - 1] : 0;
+      days.push({
+        h: past && v > 0 ? Math.max(4, Math.round(v / 412 * 112)) : 3,
+        c: d === 14 ? '#1B2624' : (past ? '#2A3FB5' : '#C4CABF'),
+        label: labels[d] || ''
+      });
+    }
+    const catRows = [
+      ['Mercado', 612.40, 'R$ 612,40'],
+      ['Alimentação fora', 401.15, 'R$ 401,15'],
+      ['Lazer', 247.27, 'R$ 247,27'],
+      ['Transporte', 238.00, 'R$ 238,00'],
+      ['Assinaturas', 189.70, 'R$ 189,70'],
+      ['Outros', 186.00, 'R$ 186,00']
+    ];
+    const cats = catRows.map(([name, n, value]) => ({ name, value, w: (n / 612.40 * 100).toFixed(1) + '%' }));
+    const recent = [
+      { date: '13 out', desc: 'Zaffari Supermercados', meta: 'Mercado · Nubank cartão', amount: '−R$ 187,42', color: '#1B2624', saved: false },
+      { date: '13 out', desc: 'Uber', meta: 'Transporte · Nubank cartão', amount: '−R$ 24,90', color: '#1B2624', saved: false },
+      { date: '12 out', desc: 'Padaria Pão Quente', meta: 'Alimentação fora · Caju', amount: '−R$ 12,80', color: '#1B2624', saved: false },
+      { date: '11 out', desc: 'Para a caixinha Viagem', meta: 'Nubank conta', amount: '−R$ 400,00', color: '#5A6763', saved: true },
+      { date: '10 out', desc: 'Spotify', meta: 'Assinaturas · Santander', amount: '−R$ 21,90', color: '#1B2624', saved: false },
+      { date: '8 out', desc: 'Cinemark', meta: 'Lazer · Nubank cartão', amount: '−R$ 74,90', color: '#1B2624', saved: false }
+    ];
+    const accounts = [
+      { name: 'Santander', kind: 'Conta corrente', value: 'R$ 1.284,07', ok: true, warn: false, note: 'Atualizada hoje, 06:12' },
+      { name: 'Nubank', kind: 'Conta', value: 'R$ 2.016,33', ok: false, warn: true, note: 'Diferença de R$ 23,90: dados possivelmente incompletos' },
+      { name: 'Nubank', kind: 'Cartão, fatura aberta', value: 'R$ 612,30', ok: true, warn: false, note: 'Fecha em 20 out' },
+      { name: 'Caju', kind: 'Benefício', value: 'R$ 438,10', ok: true, warn: false, note: 'Último print em 12 out' }
+    ];
+    return { days, cats, recent, accounts };
+  }
+}
+</script>
+</body>
+</html>
