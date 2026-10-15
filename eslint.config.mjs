@@ -10,6 +10,8 @@ const MENSAGEM_PERMITIDOS = 'domain/ só importa arquivos do próprio domain/ (A
 // reabre só os relativos. NÃO usar `regex`: falha em silêncio para fs, pg e @/lib/io.
 // Docs: https://eslint.org/docs/latest/rules/no-restricted-imports (patterns/group, negação com "!")
 //       https://typescript-eslint.io/rules/no-restricted-imports/
+const MENSAGEM_TIPO =
+  "Em domain/, use `import type { X } from './arquivo'` em vez de `import('...')` em posição de tipo (ADR-0017).";
 const RELATIVOS = ['**', '!./**', '!../**', '!.', '!..'];
 
 const importsDomain = (permitidosExtras = []) => [
@@ -71,9 +73,10 @@ export default tseslint.config(
       },
     },
   },
+  // Os blocos de domain/ devem ficar por último (antes de prettier) para nenhum bloco posterior sobrepor as regras (ADR-0017).
   // T0.2: isolamento de domain/ (TypeScript puro: sem I/O, framework ou banco)
   {
-    files: ['domain/**/*.{ts,tsx,mts,cts,js,mjs,cjs}'],
+    files: ['domain/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}'],
     // Comentários eslint-disable não valem em domain/ (ADR-0017).
     linterOptions: { noInlineConfig: true, reportUnusedDisableDirectives: 'error' },
     rules: {
@@ -92,6 +95,8 @@ export default tseslint.config(
           'window',
           'self',
           'eval',
+          'module',
+          'exports',
         ].map((name) => ({
           name,
           message: MENSAGEM_DOMAIN,
@@ -103,7 +108,14 @@ export default tseslint.config(
         'error',
         { selector: 'ImportExpression', message: MENSAGEM_DOMAIN },
         // import("x") em posição de tipo (inclui typeof import("x")): use `import type` normal.
-        { selector: 'TSImportType', message: MENSAGEM_PERMITIDOS },
+        { selector: 'TSImportType', message: MENSAGEM_TIPO },
+        { selector: "CallExpression[callee.name='Function']", message: MENSAGEM_DOMAIN },
+        {
+          selector: "CallExpression[callee.property.name='constructor']",
+          message: MENSAGEM_DOMAIN,
+        },
+        // import.meta
+        { selector: 'MetaProperty', message: MENSAGEM_DOMAIN },
         { selector: "NewExpression[callee.name='Function']", message: MENSAGEM_DOMAIN },
       ],
     },

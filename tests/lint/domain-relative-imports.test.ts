@@ -59,7 +59,7 @@ export function relativosForaDoDomain(codigo: string, arquivo: string): string[]
 function arquivosDoDomain(): string[] {
   return readdirSync(`${RAIZ}domain`, { recursive: true, encoding: 'utf8' })
     .map((p) => p.replaceAll('\\', '/'))
-    .filter((p) => /\.(ts|tsx|mts|cts)$/.test(p))
+    .filter((p) => /\.(ts|tsx|mts|cts|js|jsx|mjs|cjs)$/.test(p))
     .map((p) => `domain/${p}`);
 }
 
@@ -74,6 +74,7 @@ describe('imports relativos de domain/ não saem de domain/', () => {
     ['domain/a.ts', 'export type K = typeof import("../lib/k");', '../lib/k', false],
     ['domain/a.ts', 'export const m = () => import("../lib/m");', '../lib/m', false],
     ['domain/a.ts', 'export type L = import("./l").L;', './l', true],
+    ['domain/a.mjs', 'export * from "../lib/io";', '../lib/io', false],
     ['domain/sub/a.ts', 'export { b } from "..";', '..', true],
     ['domain/a.ts', 'import { x } from "../domain-outro/x";', '../domain-outro/x', false],
   ];

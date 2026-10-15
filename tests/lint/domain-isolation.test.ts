@@ -20,7 +20,6 @@ async function mensagens(codigo: string, filePath: string) {
 
 const P = 'domain/__probe__.ts';
 const FS = 'import { readFileSync } from "fs";';
-const PERMITIDOS = 'domain/ só importa arquivos do próprio domain/ (ADR-0017).';
 
 // [nome, código, filePath]
 const barrados: [string, string, string][] = [
@@ -67,6 +66,10 @@ const barradosAdr17: [string, string, string][] = [
   ['import type fs', 'export type Stat = import("fs").Stats;', P],
   ['typeof import relativo', 'export type K = typeof import("./a");', P],
   ['require em .cjs', 'const fs = require("fs");', 'domain/x.cjs'],
+  ['module.require', 'export const r = module.require("fs");', P],
+  ['Function() sem new', 'export const f = Function("return 1");', P],
+  ['.constructor()', 'export const g = (() => 0).constructor("return 1");', P],
+  ['import.meta', 'export const u = import.meta.url;', P],
   ['vitest fora de teste', 'import { describe } from "vitest";', P],
 ];
 
@@ -101,9 +104,8 @@ describe('isolamento de domain/', () => {
     const msgs = await mensagens(codigo, filePath);
     expect(msgs.filter((m) => m.fatal)).toEqual([]);
     expect(
-      msgs.filter(
-        (m) => m.severity === 2 && (m.message.includes(PERMITIDOS) || m.message.includes(MENSAGEM)),
-      ).length,
+      msgs.filter((m) => m.severity === 2 && /domain\/.*(ADR-0017|CLAUDE\.md)/.test(m.message))
+        .length,
     ).toBeGreaterThan(0);
   });
 
