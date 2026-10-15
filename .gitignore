@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.*
+!.env.example
+private/
+secrets/
+coverage/
+dist/
+.claude/worktrees/
