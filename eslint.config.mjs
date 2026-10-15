@@ -4,6 +4,8 @@ import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
 
 const MENSAGEM_DOMAIN = 'domain/ é TypeScript puro: sem I/O, framework ou banco (ver CLAUDE.md).';
+const MENSAGEM_REFLEXAO =
+  "domain/ não usa reflexão (.constructor, new.target). Em classe de erro, use nome literal: this.name = 'MeuErro' (ADR-0017).";
 const MENSAGEM_PERMITIDOS = 'domain/ só importa arquivos do próprio domain/ (ADR-0017).';
 
 // ADR-0017: lista de permitidos na forma `group` (gitignore-style): barra tudo ('**') e
@@ -105,6 +107,9 @@ export default tseslint.config(
       ],
       // import() dinâmico: não é coberto por no-restricted-imports. Barra qualquer
       // import() em domain/ (módulo proibido ou caminho não literal, que não dá para checar).
+      // Redundância de propósito (defesa em profundidade, ADR-0017, emenda 2): `Function(...)`,
+      // `new Function(...)` e `.constructor(...)` já são cobertos pelo global `Function` e pelo
+      // seletor de `MemberExpression`. Não remover os seletores "repetidos".
       'no-restricted-syntax': [
         'error',
         { selector: 'ImportExpression', message: MENSAGEM_DOMAIN },
@@ -113,11 +118,13 @@ export default tseslint.config(
         { selector: "CallExpression[callee.name='Function']", message: MENSAGEM_DOMAIN },
         {
           selector: "CallExpression[callee.property.name='constructor']",
-          message: MENSAGEM_DOMAIN,
+          message: MENSAGEM_REFLEXAO,
         },
-        { selector: "MemberExpression[property.name='constructor']", message: MENSAGEM_DOMAIN },
+        { selector: "MemberExpression[property.name='constructor']", message: MENSAGEM_REFLEXAO },
         // import.meta
-        { selector: 'MetaProperty', message: MENSAGEM_DOMAIN },
+        { selector: "MetaProperty[meta.name='import']", message: MENSAGEM_DOMAIN },
+        // new.target
+        { selector: "MetaProperty[meta.name='new']", message: MENSAGEM_REFLEXAO },
         { selector: "NewExpression[callee.name='Function']", message: MENSAGEM_DOMAIN },
       ],
     },

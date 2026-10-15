@@ -10,6 +10,29 @@ export function arquivosNaoTs(caminhos: string[]): string[] {
   return caminhos.filter((c) => !c.endsWith('.ts') && !/(^|\/)\.gitkeep$/.test(c));
 }
 
+/** Entrada mínima: caminho e `isDirectory()` (como o Dirent de readdirSync). */
+export interface EntradaDir {
+  caminho: string;
+  isDirectory(): boolean;
+}
+
+/** Tudo o que não é diretório (arquivo, link simbólico etc.) conta como arquivo de domain/. */
+export function caminhosConsiderados(entradas: EntradaDir[]): string[] {
+  return entradas.filter((e) => !e.isDirectory()).map((e) => e.caminho);
+}
+
+describe('caminhosConsiderados', () => {
+  it('inclui arquivo e link simbólico; exclui diretório', () => {
+    expect(
+      caminhosConsiderados([
+        { caminho: 'a.ts', isDirectory: () => false },
+        { caminho: 'sub', isDirectory: () => true },
+        { caminho: 'l.ts', isDirectory: () => false },
+      ]),
+    ).toEqual(['a.ts', 'l.ts']);
+  });
+});
+
 describe('domain/ só aceita arquivos .ts', () => {
   it('aceita .gitkeep, .ts, .test.ts e .d.ts', () => {
     expect(
@@ -25,9 +48,12 @@ describe('domain/ só aceita arquivos .ts', () => {
   );
 
   it('domain/ real só tem .ts', () => {
-    const todos = readdirSync(`${RAIZ}domain`, { recursive: true, withFileTypes: true })
-      .filter((e) => e.isFile())
-      .map((e) => relative(RAIZ, `${e.parentPath}/${e.name}`).replaceAll('\\', '/'));
+    const todos = caminhosConsiderados(
+      readdirSync(`${RAIZ}domain`, { recursive: true, withFileTypes: true }).map((e) => ({
+        caminho: relative(RAIZ, `${e.parentPath}/${e.name}`).replaceAll('\\', '/'),
+        isDirectory: () => e.isDirectory(),
+      })),
+    );
     expect(arquivosNaoTs(todos)).toEqual([]);
   });
 });

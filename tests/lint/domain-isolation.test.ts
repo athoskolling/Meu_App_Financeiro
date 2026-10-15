@@ -18,6 +18,9 @@ async function mensagens(codigo: string, filePath: string) {
   return resultado?.messages ?? [];
 }
 
+const MENSAGEM_REFLEXAO =
+  "domain/ não usa reflexão (.constructor, new.target). Em classe de erro, use nome literal: this.name = 'MeuErro' (ADR-0017).";
+
 const P = 'domain/__probe__.ts';
 const FS = 'import { readFileSync } from "fs";';
 
@@ -92,6 +95,39 @@ const permitidos: [string, string, string][] = [
   ['soma tipada', 'export const soma = (a: number, b: number): number => a + b;', P],
   ['codigo puro', 'export const soma = (a: number, b: number) => a + b;', P],
 ];
+
+// T1.0a: reflexão tem mensagem própria; import.meta continua com a mensagem de I/O.
+const reflexao: [string, string][] = [
+  [
+    'this.constructor.name',
+    'export class E extends Error { constructor() { super(); this.name = this.constructor.name; } }',
+  ],
+  ['.constructor por alias', 'export const k = (() => 0).constructor;'],
+  ['new.target', 'export function F() { return new.target; }'],
+];
+
+describe('mensagens de reflexão (T1.0a)', () => {
+  it.each(reflexao)('reflexão usa MENSAGEM_REFLEXAO: %s', async (_nome, codigo) => {
+    const msgs = await mensagens(codigo, P);
+    expect(msgs.filter((m) => m.fatal)).toEqual([]);
+    expect(msgs.filter((m) => m.message === MENSAGEM_REFLEXAO).length).toBeGreaterThan(0);
+  });
+
+  it('import.meta continua com MENSAGEM_DOMAIN', async () => {
+    const msgs = await mensagens('export const u = import.meta.url;', P);
+    expect(msgs.filter((m) => m.message === MENSAGEM).length).toBeGreaterThan(0);
+    expect(msgs.filter((m) => m.message === MENSAGEM_REFLEXAO)).toEqual([]);
+  });
+
+  it('classe de erro com nome literal passa', async () => {
+    const msgs = await mensagens(
+      "export class E extends Error { constructor() { super(); this.name = 'E'; } }",
+      P,
+    );
+    expect(msgs.filter((m) => m.fatal)).toEqual([]);
+    expect(msgs.filter((m) => m.ruleId?.includes('restricted'))).toEqual([]);
+  });
+});
 
 describe('isolamento de domain/', () => {
   it.each(barrados)('barra em domain/: %s', async (_nome, codigo, filePath) => {
