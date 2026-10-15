@@ -19,4 +19,4 @@ E0, fundação.
 - CI no GitHub Actions: typecheck, lint, testes, formatação e gitleaks (histórico inteiro, binário com checksum) em todo PR e push na `main`. As actions estão fixadas por SHA.
 - `.gitignore` que barra segredos, extratos, dumps, imagens e saídas temporárias, sem diferenciar maiúsculas; `.env.example` com os nomes das 8 variáveis, sem valores.
 - Estrutura de `docs/` (spec, decisões, gates e cartões de tarefa) e `CLAUDE.md`.
-- `main` protegida: PR obrigatório, checks `check` e `gitleaks` obrigatórios e branch atualizada; *secret scanning* e *push protection* ligados.
+- `main` protegida: PR obrigatório, checks `check` e `gitleaks` obrigatórios e branch atualizada; _secret scanning_ e _push protection_ ligados.
