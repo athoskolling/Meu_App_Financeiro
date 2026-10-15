@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "types": [],
+    "plugins": []
+  },
+  "include": ["**/*.ts", "../node_modules/typescript/lib/lib.es2023.d.ts"],
+  "exclude": ["**/*.test.ts"]
+}

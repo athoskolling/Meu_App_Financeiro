@@ -5,9 +5,14 @@ import { describe, expect, it } from 'vitest';
 
 const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
 
-/** Caminhos de domain/ que não são `.ts` (ADR-0017, emenda 1). `.gitkeep` é tolerado. */
+/**
+ * Caminhos de domain/ que não são `.ts` (ADR-0017, emenda 1). `.gitkeep` é tolerado, e o
+ * caminho exato `domain/tsconfig.json` também (ADR-0019); qualquer outro `.json` é rejeitado.
+ */
 export function arquivosNaoTs(caminhos: string[]): string[] {
-  return caminhos.filter((c) => !c.endsWith('.ts') && !/(^|\/)\.gitkeep$/.test(c));
+  return caminhos.filter(
+    (c) => !c.endsWith('.ts') && !/(^|\/)\.gitkeep$/.test(c) && c !== 'domain/tsconfig.json',
+  );
 }
 
 /** Entrada mínima: caminho e `isDirectory()` (como o Dirent de readdirSync). */
@@ -38,6 +43,14 @@ describe('domain/ só aceita arquivos .ts', () => {
     expect(
       arquivosNaoTs(['domain/.gitkeep', 'domain/a.ts', 'domain/sub/b.test.ts', 'domain/c.d.ts']),
     ).toEqual([]);
+  });
+
+  it('aceita o caminho exato domain/tsconfig.json (ADR-0019)', () => {
+    expect(arquivosNaoTs(['domain/tsconfig.json'])).toEqual([]);
+  });
+
+  it.each(['sub/tsconfig.json', 'x.json'])('continua rejeitando domain/%s', (nome) => {
+    expect(arquivosNaoTs([`domain/${nome}`])).toEqual([`domain/${nome}`]);
   });
 
   it.each(['y.mjs', 'w.js', 'p.cjs', 'b.jsx', 'c.tsx', 'd.mts', 'e.json'])(
