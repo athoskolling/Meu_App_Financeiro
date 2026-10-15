@@ -3,7 +3,7 @@ import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
-  { ignores: ['node_modules', 'coverage', 'dist', '.next'] },
+  { ignores: ['node_modules', 'coverage', 'dist', '.next', '.claude'] },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
