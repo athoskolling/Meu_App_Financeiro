@@ -1,9 +1,39 @@
+# Dependências e build
 node_modules/
+coverage/
+dist/
+.next/
+.vercel/
+*.log
+
+# Segredos e credenciais (o repositório é público)
 .env
 .env.*
 !.env.example
 private/
 secrets/
-coverage/
-dist/
+credentials.json
+
+# Dados financeiros, extratos, dumps e prints: nunca no Git
+*.csv
+*.xlsx
+*.xls
+*.ofx
+*.pdf
+*.sql
+*.dump
+*.png
+*.jpg
+*.jpeg
+*.heic
+*.webp
+
+# Exceção única: fixtures fictícias
+!tests/fixtures/**
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Worktrees dos agentes (.claude/agents/ continua versionado)
 .claude/worktrees/
