@@ -57,6 +57,20 @@ export default tseslint.config(
   },
   // ADR-0017: .js/.mjs/.cjs não passam pelo type-check (o project service não os cobre).
   { files: ['**/*.{js,mjs,cjs}'], ...tseslint.configs.disableTypeChecked },
+  // .cjs: globais do CommonJS declarados à mão (o pacote "globals" seria dependência nova).
+  {
+    files: ['**/*.cjs'],
+    languageOptions: {
+      sourceType: 'commonjs',
+      globals: {
+        module: 'readonly',
+        exports: 'writable',
+        require: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+      },
+    },
+  },
   // T0.2: isolamento de domain/ (TypeScript puro: sem I/O, framework ou banco)
   {
     files: ['domain/**/*.{ts,tsx,mts,cts,js,mjs,cjs}'],
@@ -88,6 +102,8 @@ export default tseslint.config(
       'no-restricted-syntax': [
         'error',
         { selector: 'ImportExpression', message: MENSAGEM_DOMAIN },
+        // import("x") em posição de tipo (inclui typeof import("x")): use `import type` normal.
+        { selector: 'TSImportType', message: MENSAGEM_PERMITIDOS },
         { selector: "NewExpression[callee.name='Function']", message: MENSAGEM_DOMAIN },
       ],
     },

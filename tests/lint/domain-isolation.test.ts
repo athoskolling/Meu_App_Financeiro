@@ -64,6 +64,9 @@ const barradosAdr17: [string, string, string][] = [
   ['zod (lista vazia)', 'import { z } from "zod";', P],
   ['fs em .js', 'import fs from "fs";', 'domain/__probe__.js'],
   ['fs em .mjs', 'import fs from "fs";', 'domain/__probe__.mjs'],
+  ['import type fs', 'export type Stat = import("fs").Stats;', P],
+  ['typeof import relativo', 'export type K = typeof import("./a");', P],
+  ['require em .cjs', 'const fs = require("fs");', 'domain/x.cjs'],
   ['vitest fora de teste', 'import { describe } from "vitest";', P],
 ];
 
@@ -108,6 +111,11 @@ describe('isolamento de domain/', () => {
     const msgs = await mensagens(codigo, filePath);
     expect(msgs.filter((m) => m.fatal)).toEqual([]);
     expect(msgs.filter((m) => m.ruleId?.includes('restricted'))).toEqual([]);
+  });
+
+  it('.cjs fora de domain/ não quebra o lint (module.exports)', async () => {
+    const msgs = await mensagens('module.exports = {};', 'lib/__probe__.cjs');
+    expect(msgs.filter((m) => m.fatal || m.severity === 2)).toEqual([]);
   });
 
   it('JS fora de domain/ não quebra o lint', async () => {

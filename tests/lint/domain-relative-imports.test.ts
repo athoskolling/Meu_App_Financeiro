@@ -10,7 +10,7 @@ const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
 function especificadores(codigo: string, arquivo: string): string[] {
   const fonte = ts.createSourceFile(arquivo, codigo, ts.ScriptTarget.Latest, true);
   const lista: string[] = [];
-  for (const no of fonte.statements) {
+  const visitar = (no: ts.Node): void => {
     if (
       (ts.isImportDeclaration(no) || ts.isExportDeclaration(no)) &&
       no.moduleSpecifier &&
@@ -23,8 +23,23 @@ function especificadores(codigo: string, arquivo: string): string[] {
       ts.isStringLiteral(no.moduleReference.expression)
     ) {
       lista.push(no.moduleReference.expression.text);
+    } else if (
+      ts.isImportTypeNode(no) &&
+      ts.isLiteralTypeNode(no.argument) &&
+      ts.isStringLiteral(no.argument.literal)
+    ) {
+      lista.push(no.argument.literal.text);
+    } else if (
+      ts.isCallExpression(no) &&
+      no.expression.kind === ts.SyntaxKind.ImportKeyword &&
+      no.arguments[0] &&
+      ts.isStringLiteralLike(no.arguments[0])
+    ) {
+      lista.push(no.arguments[0].text);
     }
-  }
+    ts.forEachChild(no, visitar);
+  };
+  visitar(fonte);
   return lista;
 }
 
@@ -56,6 +71,9 @@ describe('imports relativos de domain/ não saem de domain/', () => {
     ['domain/a.ts', 'import { io } from "../lib/io";', '../lib/io', false],
     ['domain/a.ts', 'export * from "../tests/x";', '../tests/x', false],
     ['domain/a.ts', 'import x = require("../lib/x");', '../lib/x', false],
+    ['domain/a.ts', 'export type K = typeof import("../lib/k");', '../lib/k', false],
+    ['domain/a.ts', 'export const m = () => import("../lib/m");', '../lib/m', false],
+    ['domain/a.ts', 'export type L = import("./l").L;', './l', true],
     ['domain/sub/a.ts', 'export { b } from "..";', '..', true],
     ['domain/a.ts', 'import { x } from "../domain-outro/x";', '../domain-outro/x', false],
   ];
