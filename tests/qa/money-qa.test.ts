@@ -2,9 +2,11 @@
 // Sem fast-check (não é dependência do projeto): gerador determinístico (mulberry32, semente fixa)
 // e referências em BigInt, que são exatas para inteiros.
 //
-// Achados marcados com `it.fails`: o teste descreve o comportamento ESPERADO e falha hoje, então
-// o suite segue verde e o bug fica registrado. Quando o dev corrigir, o teste passa a falhar:
+// Histórico: BUG-1 e BUG-2 foram corrigidos na T1.1b e agora são `it` (asserção direta).
+// Achado novo (BUG-4, negate sem validação) segue como `it.fails`: o teste descreve o comportamento
+// ESPERADO e falha hoje, então o suite segue verde. Quando for corrigido, o teste passa a falhar:
 // nesse momento, troque `it.fails` por `it`.
+// Desde a T1.1b há uma seção de ataque a tipos estranhos (add, sum, parseBRL, fromDb, formatBRL, cents).
 import { describe, expect, it } from 'vitest';
 import {
   MoneyError,
@@ -569,25 +571,346 @@ describe('decisões do dev (Riscos e dúvidas do T1.1): comportamento atual, a c
   });
 });
 
-describe('achados de QA (it.fails: comportamento esperado que hoje NÃO ocorre)', () => {
-  it.fails(
-    'BUG-1 (baixa): T1.0 diz que toda falha lança MoneyError; entrada não-string lança TypeError',
-    () => {
-      expect(captured(() => parseBRL(undefined as unknown as string))).toBeInstanceOf(MoneyError);
-    },
-  );
+describe('T1.1b: correções dos achados do QA (antes it.fails, agora asserções diretas)', () => {
+  it('BUG-1 (corrigido): entrada não-string em parseBRL lança MoneyError invalid_format, não TypeError', () => {
+    expectCode(() => parseBRL(undefined as unknown as string), 'invalid_format');
+  });
+
+  it('BUG-2 (corrigido): add e sum validam os operandos; 0,5 + 0,5 com cast lança not_integer', () => {
+    expectCode(() => add(0.5 as Cents, 0.5 as Cents), 'not_integer');
+    expectCode(() => sum([0.5 as Cents, 0.5 as Cents]), 'not_integer');
+  });
+});
+
+describe('T1.1b: decisão do dono sobre espaços (DESVIO-3 virou caracterização)', () => {
+  // Decisão do dono: a gramática mantém "zero ou mais" espaços depois do sinal e de R$.
+  // Registrado no cartão T1.1b (seção "Decisão pendente do dono"). Se o dono mudar para "no máximo um",
+  // estes dois testes passam a esperar invalid_format e entram casos novos.
+  it('"R$  12,30" (dois espaços depois de R$) vale 1230', () => {
+    expect(parseBRL('R$  12,30')).toBe(1230);
+  });
+
+  it('"-   12,30" (três espaços depois do sinal) vale -1230', () => {
+    expect(parseBRL('-   12,30')).toBe(-1230);
+  });
+});
+
+describe('T1.1b (QA): trim() e comentário de parseBRL', () => {
+  it('trim remove tab, quebra de linha e BOM nas pontas, como o comentário diz', () => {
+    expect(parseBRL('\t12,30\n')).toBe(1230);
+    expect(parseBRL('﻿12,30')).toBe(1230);
+  });
+
+  it('espaço de largura zero (U+200B) não é removido pelo trim e é recusado', () => {
+    expectCode(() => parseBRL('12,30​'), 'invalid_format');
+  });
+});
+
+/** Valores que não são número nem texto legítimo. Cada um deve virar MoneyError, nunca TypeError. */
+const STRANGE: ReadonlyArray<readonly [string, unknown]> = [
+  ['Symbol', Symbol('x')],
+  ['função', () => 12],
+  ['array com texto', ['12,30']],
+  ['array com número', [12]],
+  ['array vazio', []],
+  ['Date', new Date(0)],
+  ['objeto com valueOf e toString', { valueOf: () => 12, toString: () => '12,30' }],
+  ['objeto só com toString', { toString: () => '12' }],
+  ['objeto com Symbol.toPrimitive', { [Symbol.toPrimitive]: () => 12 }],
+  ['String de objeto', new String('12,30')],
+  ['Number de objeto', new Number(12)],
+  ['Set', new Set([12])],
+  ['Map', new Map()],
+  [
+    'Proxy com traps que lançam',
+    new Proxy(
+      {},
+      {
+        get: () => {
+          throw new Error('trap');
+        },
+      },
+    ),
+  ],
+  ['NaN', NaN],
+  ['Infinity', Infinity],
+  ['-Infinity', -Infinity],
+  ['bigint 0', 0n],
+  ['bigint 10', 10n],
+  ['bigint -10', -10n],
+  ['true', true],
+  ['false', false],
+  ['null', null],
+  ['undefined', undefined],
+  ['texto numérico', '12'],
+  ['texto com centavos', '12,30'],
+  ['texto vazio', ''],
+  ['número 0,5', 0.5],
+  ['número 2 ** 53', 2 ** 53],
+  ['número 2 ** 60', 2 ** 60],
+];
+
+const NON_TEXT = STRANGE.filter(([, v]) => typeof v !== 'string');
+const NOT_STR_NUM_BIG = STRANGE.filter(
+  ([, v]) => !['string', 'number', 'bigint'].includes(typeof v),
+);
+const NOT_NUMBER = STRANGE.filter(([, v]) => typeof v !== 'number');
+const NON_ARRAY = STRANGE.filter(([, v]) => !Array.isArray(v));
+
+describe('T1.1b (QA): ataque a tipos estranhos, sempre MoneyError com código e sem dígitos', () => {
+  for (const [label, value] of NON_TEXT) {
+    it(`parseBRL(${label}) lança invalid_format`, () => {
+      expectCode(() => parseBRL(value as never), 'invalid_format');
+    });
+  }
+
+  for (const [label, value] of NOT_STR_NUM_BIG) {
+    it(`fromDb(${label}) lança invalid_format`, () => {
+      expectCode(() => fromDb(value as never), 'invalid_format');
+    });
+  }
+
+  for (const [label, value] of NON_ARRAY) {
+    it(`sum(${label}) (não é array) lança invalid_format`, () => {
+      expectCode(() => sum(value as never), 'invalid_format');
+    });
+  }
+
+  for (const [label, value] of NOT_NUMBER) {
+    it(`cents(${label}) lança not_integer`, () => {
+      expectCode(() => cents(value as never), 'not_integer');
+    });
+
+    it(`formatBRL(${label}) lança not_integer`, () => {
+      expectCode(() => formatBRL(value as never), 'not_integer');
+    });
+
+    it(`add(${label}, 1) lança not_integer (operando a)`, () => {
+      expectCode(() => add(value as never, asCents(1)), 'not_integer');
+    });
+
+    it(`add(1, ${label}) lança not_integer (operando b)`, () => {
+      expectCode(() => add(asCents(1), value as never), 'not_integer');
+    });
+
+    it(`sum([${label}]) lança not_integer`, () => {
+      expectCode(() => sum([value as never]), 'not_integer');
+    });
+  }
+
+  it('string numérica em add: add("12", 1) e add(1, "12") lançam not_integer', () => {
+    expectCode(() => add('12' as never, asCents(1)), 'not_integer');
+    expectCode(() => add(asCents(1), '12' as never), 'not_integer');
+  });
+
+  it('sum de Set, Map, string e gerador (iteráveis que não são array) lançam invalid_format, sem iterar', () => {
+    let pulled = 0;
+    const gen = (function* (): Generator<number> {
+      pulled += 1;
+      yield 1;
+    })();
+    for (const value of [new Set([1]), new Map(), '12', gen]) {
+      expectCode(() => sum(value as never), 'invalid_format');
+    }
+    expect(pulled).toBe(0);
+  });
+
+  it('sum com array de Proxy (Array.isArray verdadeiro) soma normalmente', () => {
+    expect(sum(new Proxy([asCents(2), asCents(3)], {}))).toBe(5);
+  });
+
+  it('sum com buraco no array (holes) lança not_integer, não TypeError', () => {
+    const holes: Cents[] = new Array<Cents>(2);
+    holes[1] = asCents(1);
+    expectCode(() => sum(holes), 'not_integer');
+  });
+
+  it('nenhuma função coage o argumento: valueOf, toString e Symbol.toPrimitive nunca são chamados', () => {
+    let calls = 0;
+    const spy = {
+      valueOf: (): number => {
+        calls += 1;
+        return 12;
+      },
+      toString: (): string => {
+        calls += 1;
+        return '12';
+      },
+      [Symbol.toPrimitive]: (): number => {
+        calls += 1;
+        return 12;
+      },
+    };
+    const attempts: Array<() => unknown> = [
+      () => parseBRL(spy as never),
+      () => fromDb(spy as never),
+      () => cents(spy as never),
+      () => formatBRL(spy as never),
+      () => add(spy as never, asCents(1)),
+      () => add(asCents(1), spy as never),
+      () => sum([spy as never]),
+      () => sum(spy as never),
+    ];
+    for (const attempt of attempts) {
+      expect(captured(attempt)).toBeInstanceOf(MoneyError);
+    }
+    expect(calls).toBe(0);
+  });
+
+  it('zeros vindos de tipos novos saem como +0 (Object.is)', () => {
+    expect(Object.is(add(-0 as Cents, -0 as Cents), 0)).toBe(true);
+    expect(Object.is(sum([-0 as Cents]), 0)).toBe(true);
+    expect(Object.is(fromDb(-0), 0)).toBe(true);
+    expect(Object.is(fromDb(0n), 0)).toBe(true);
+    expect(formatBRL(-0 as Cents)).toBe('R$ 0,00');
+  });
+});
+
+describe('T1.1b (QA): fuzz determinístico de add e sum contra modelo exato em BigInt', () => {
+  // Modelo: o primeiro operando/elemento inválido define o erro; depois, a faixa é checada a cada passo.
+  // O código esperado é o mesmo que a especificação da T1.0 pede (not_integer, out_of_range).
+  const POOL: unknown[] = [
+    0.5,
+    -0.5,
+    NaN,
+    Infinity,
+    -Infinity,
+    -0,
+    2 ** 53,
+    -(2 ** 53),
+    2 ** 60,
+    1e21,
+    MAX,
+    -MAX,
+    1,
+    -1,
+    12,
+    '12',
+    null,
+    true,
+    1n,
+    () => 1,
+  ];
+
+  /** Código esperado para um valor isolado (cents), ou null se for inteiro seguro. */
+  function codeFor(v: unknown): MoneyErrorCode | null {
+    if (typeof v !== 'number' || !Number.isInteger(v)) return 'not_integer';
+    if (!Number.isSafeInteger(v)) return 'out_of_range';
+    return null;
+  }
+
+  /** Modelo de sum: ou o total exato em BigInt, ou o código do primeiro erro. */
+  function modelSum(list: unknown[]): { total: bigint } | { code: MoneyErrorCode } {
+    let total = 0n;
+    for (const v of list) {
+      const bad = codeFor(v);
+      if (bad !== null) return { code: bad };
+      total += BigInt(v as number);
+      if (total > MAX_BIG || total < -MAX_BIG) return { code: 'out_of_range' };
+    }
+    return { total };
+  }
+
+  it('sum: 4000 listas mistas batem com o modelo (valor exato ou código exato)', () => {
+    const rng = mulberry32(8080);
+    const problems: string[] = [];
+    for (let i = 0; i < 4000; i += 1) {
+      const len = Math.floor(rng() * 6);
+      const list: unknown[] = [];
+      for (let j = 0; j < len; j += 1) {
+        list.push(rng() < 0.5 ? pick(rng, POOL) : Number(randomSafe(rng)));
+      }
+      const expected = modelSum(list);
+      const e = captured(() => sum(list as never));
+      if ('total' in expected) {
+        if (e !== undefined || !Object.is(sum(list as never), Number(expected.total))) {
+          problems.push(`sum(${i}) deveria dar ${String(expected.total)}`);
+        }
+      } else {
+        if (!(e instanceof MoneyError) || e.code !== expected.code || /\d/.test(e.message)) {
+          problems.push(`sum(${i}) deveria dar ${expected.code}`);
+        }
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+
+  it('add: 4000 pares mistos batem com o modelo, operando a antes de b', () => {
+    const rng = mulberry32(7373);
+    const problems: string[] = [];
+    for (let i = 0; i < 4000; i += 1) {
+      const a = rng() < 0.5 ? pick(rng, POOL) : Number(randomSafe(rng));
+      const b = rng() < 0.5 ? pick(rng, POOL) : Number(randomSafe(rng));
+      const bad = codeFor(a) ?? codeFor(b);
+      const exact = bad === null ? BigInt(a as number) + BigInt(b as number) : null;
+      const outside = exact !== null && (exact > MAX_BIG || exact < -MAX_BIG);
+      const expectedCode: MoneyErrorCode | null = bad ?? (outside ? 'out_of_range' : null);
+      const e = captured(() => add(a as never, b as never));
+      if (expectedCode === null) {
+        if (e !== undefined || !Object.is(add(a as never, b as never), Number(exact))) {
+          problems.push(`add(${i}) deveria dar valor exato`);
+        }
+      } else if (!(e instanceof MoneyError) || e.code !== expectedCode) {
+        problems.push(`add(${i}) deveria dar ${expectedCode}`);
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+
+  it('fromDb: 4000 valores de tipos mistos: só string, number ou bigint passam; o resto é invalid_format', () => {
+    const rng = mulberry32(6464);
+    const problems: string[] = [];
+    for (let i = 0; i < 4000; i += 1) {
+      const v = pick(rng, [...POOL, '9007199254740991', '-12', '12.5', 9007199254740993n]);
+      const isTextual = typeof v === 'string' || typeof v === 'number' || typeof v === 'bigint';
+      let result: number | undefined;
+      const e = captured(() => {
+        result = fromDb(v as never);
+      });
+      if (!isTextual) {
+        if (!(e instanceof MoneyError) || e.code !== 'invalid_format') {
+          problems.push(`fromDb(${i}) deveria dar invalid_format`);
+        }
+      } else if (e !== undefined) {
+        if (!(e instanceof MoneyError) || /\d/.test(e.message)) problems.push(`fromDb(${i}) vazou`);
+      } else if (!Number.isSafeInteger(result) || Object.is(result, -0)) {
+        problems.push(`fromDb(${i}) aceitou valor fora de Cents`);
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+});
+
+describe('T1.1b (QA): fromDb e add com -0 e fronteira, sem mudança de sinal', () => {
+  it('-0 em add com operando de cast volta como +0 em qualquer ordem', () => {
+    expect(Object.is(add(asCents(0), -0 as Cents), 0)).toBe(true);
+    expect(Object.is(add(-0 as Cents, asCents(0)), 0)).toBe(true);
+  });
+
+  it('bigint e number na fronteira exata passam, MAX+1 é out_of_range pelas duas portas', () => {
+    expect(fromDb(MAX_BIG)).toBe(MAX);
+    expect(fromDb(-MAX_BIG)).toBe(-MAX);
+    expectCode(() => fromDb(MAX_BIG + 1n), 'out_of_range');
+    expectCode(() => fromDb(-MAX_BIG - 1n), 'out_of_range');
+    expectCode(() => fromDb(MAX + 2), 'out_of_range');
+  });
+});
+
+describe('achado novo do QA (BUG-4, it.fails): negate não valida o operando', () => {
+  // negate faz `0 - value`, então coage tipos estranhos sem erro. A T1.1b corrigiu add e sum,
+  // mas não negate. Mesma classe do BUG-2. Gravidade: baixa, porque só aparece com cast.
+  it.fails('BUG-4a (baixa): negate(null) devolve 0; deveria lançar not_integer', () => {
+    expectCode(() => negate(null as never), 'not_integer');
+  });
+
+  it.fails('BUG-4b (baixa): negate("12") devolve -12; deveria lançar not_integer', () => {
+    expectCode(() => negate('12' as never), 'not_integer');
+  });
 
   it.fails(
-    'BUG-2 (baixa): add e sum não validam os operandos; add(0.5, 0.5) devolve 1 em vez de not_integer',
+    'BUG-4c (baixa): negate(10n) lança TypeError; deveria lançar MoneyError not_integer',
     () => {
-      expectCode(() => add(0.5 as Cents, 0.5 as Cents), 'not_integer');
-    },
-  );
-
-  it.fails(
-    'DESVIO-3 (baixa): T1.0 A.2 aceita "com ou sem espaço" (um espaço); "R$  12,30" com dois espaços é aceito',
-    () => {
-      expectCode(() => parseBRL('R$  12,30'), 'invalid_format');
+      expectCode(() => negate(10n as never), 'not_integer');
     },
   );
 });
