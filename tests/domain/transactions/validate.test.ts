@@ -23,7 +23,7 @@ const base: NormalizedTransaction = {
 
 /** Cada caso muda só o que diz, em cima da base válida. */
 function make(over: Record<string, unknown>): NormalizedTransaction {
-  return { ...base, ...over } as NormalizedTransaction;
+  return { ...base, ...over };
 }
 
 function codes(t: NormalizedTransaction): ProblemCode[] {
@@ -215,7 +215,12 @@ describe('validateTransaction: campos de texto e enumerações', () => {
 
 describe('validateTransaction: vários problemas e ordem', () => {
   it('devolve todos os problemas na ordem dos campos do contrato', () => {
-    const t = make({ type: 'expense', amount: asCents(830), date: '2026-02-30', description: '  ' });
+    const t = make({
+      type: 'expense',
+      amount: asCents(830),
+      date: '2026-02-30',
+      description: '  ',
+    });
     expect(codes(t)).toEqual(['invalid_date', 'empty_description', 'sign_mismatch']);
   });
 
