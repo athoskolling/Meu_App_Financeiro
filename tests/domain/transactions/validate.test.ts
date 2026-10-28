@@ -307,6 +307,23 @@ describe('validateTransaction: entrada que não é objeto (T1.2b)', () => {
       expect(r.problems).toEqual(emptyProblems.problems);
     }
   });
+
+  it('array com os campos de uma transação válida pendurados dá os mesmos problemas de {}', () => {
+    const entrada = Object.assign([], {
+      source: 'manual',
+      accountRef: 'conta-1',
+      date: '2026-10-06',
+      description: 'Padaria Exemplo',
+      amount: -830,
+      currency: 'BRL',
+      type: 'expense',
+      status: 'posted',
+    });
+    expect(() => validateTransaction(entrada as unknown as NormalizedTransaction)).not.toThrow();
+    const r = validateTransaction(entrada as unknown as NormalizedTransaction);
+    expect(r.ok).toBe(false);
+    expect(r.problems).toEqual(emptyProblems.problems);
+  });
 });
 
 describe('validateTransaction: proteção de comportamento existente (T1.2b)', () => {
