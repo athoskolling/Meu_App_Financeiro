@@ -279,3 +279,57 @@ describe('validateTransaction: pureza', () => {
     expect(validateTransaction(base)).toEqual(validateTransaction(base));
   });
 });
+
+describe('validateTransaction: entrada que não é objeto (T1.2b)', () => {
+  const emptyProblems = validateTransaction({} as NormalizedTransaction);
+
+  it('a referência ({}) tem problemas dos campos obrigatórios e não é ok', () => {
+    expect(emptyProblems.ok).toBe(false);
+    expect(emptyProblems.problems.length).toBeGreaterThan(0);
+  });
+
+  it.each<[string, unknown]>([
+    ['null', null],
+    ['undefined', undefined],
+    ['texto', 'x'],
+    ['número', 12],
+  ])('%s não lança e dá os mesmos problemas de {}, na mesma ordem', (_nome, entrada) => {
+    expect(() => validateTransaction(entrada as NormalizedTransaction)).not.toThrow();
+    const r = validateTransaction(entrada as NormalizedTransaction);
+    expect(r.ok).toBe(false);
+    expect(r.problems).toEqual(emptyProblems.problems);
+  });
+
+  it('array e boolean também não lançam e dão ok falso', () => {
+    for (const entrada of [[], [1, 2], true, false]) {
+      const r = validateTransaction(entrada as unknown as NormalizedTransaction);
+      expect(r.ok).toBe(false);
+      expect(r.problems).toEqual(emptyProblems.problems);
+    }
+  });
+});
+
+describe('validateTransaction: proteção de comportamento existente (T1.2b)', () => {
+  it('data com dígitos não ASCII é invalid_date', () => {
+    expect(codes(make({ date: '٢٠٢٦-١٠-٠٦' }))).toEqual(['invalid_date']);
+    expect(codes(make({ date: '２０２６-10-06' }))).toEqual(['invalid_date']);
+  });
+
+  it('quebra de linha no fim da data ou da hora é rejeitada', () => {
+    expect(codes(make({ date: '2026-10-06\n' }))).toEqual(['invalid_date']);
+    expect(codes(make({ time: '10:30\n' }))).toEqual(['invalid_time']);
+  });
+
+  it('ano 0000 é invalid_date', () => {
+    expect(codes(make({ date: '0000-10-06' }))).toEqual(['invalid_date']);
+  });
+
+  it('accountRef só com espaços é empty_account_ref', () => {
+    expect(codes(make({ accountRef: '   ' }))).toEqual(['empty_account_ref']);
+  });
+
+  it('postedAt e time que não são texto são invalid_posted_at e invalid_time', () => {
+    expect(codes(make({ postedAt: 20261006 }))).toEqual(['invalid_posted_at']);
+    expect(codes(make({ time: 1030 }))).toEqual(['invalid_time']);
+  });
+});
