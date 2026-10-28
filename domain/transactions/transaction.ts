@@ -120,11 +120,11 @@ export function validateTransaction(t: NormalizedTransaction): ValidationResult 
     problems.push({ code, field, severity: 'error' });
   };
 
-  // Entrada que não é objeto (null, undefined, texto, número) é tratada como
-  // objeto vazio: não lança e produz os problemas dos campos obrigatórios.
+  // Entrada que não é objeto (null, undefined, texto, número, array) é tratada
+  // como objeto vazio: não lança e produz os problemas dos campos obrigatórios.
   const input: unknown = t;
   const src: Partial<Record<keyof NormalizedTransaction, unknown>> =
-    typeof input === 'object' && input !== null ? input : {};
+    typeof input === 'object' && input !== null && !Array.isArray(input) ? input : {};
 
   // Cada campo é lido uma única vez.
   const source = src.source;
