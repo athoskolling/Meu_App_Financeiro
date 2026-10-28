@@ -74,8 +74,15 @@ function convertBody(body: string): number {
   return digitsToNumber(whole + fraction);
 }
 
-/** Lê um valor em BRL (`1.234,56`, `R$ 12,30`, `-R$ 12,30`, `(12,30)`). */
+/**
+ * Lê um valor em BRL (`1.234,56`, `R$ 12,30`, `-R$ 12,30`, `(12,30)`).
+ * Entrada que não é texto lança `invalid_format`. `trim()` também remove tab, quebra de linha e BOM;
+ * o que sobrar passa pela gramática abaixo, que recusa o que não reconhece.
+ */
 export function parseBRL(input: string): Cents {
+  if (typeof input !== 'string') {
+    throw new MoneyError('invalid_format', 'o valor precisa ser um texto');
+  }
   const text = input.trim();
   if (text === '') {
     throw new MoneyError('empty', 'o valor está vazio');
@@ -117,6 +124,9 @@ export function formatBRL(value: Cents): string {
 
 /** Borda com o driver do banco: texto, bigint ou number viram Cents com checagem de faixa. */
 export function fromDb(value: string | number | bigint): Cents {
+  if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'bigint') {
+    throw new MoneyError('invalid_format', 'o valor do banco precisa ser texto, número ou bigint');
+  }
   if (typeof value === 'number') return cents(value);
 
   if (typeof value === 'bigint') {
@@ -134,13 +144,17 @@ export function fromDb(value: string | number | bigint): Cents {
   return cents(match[1] === '-' ? -magnitude : magnitude);
 }
 
-/** Soma dois valores; fora da faixa lança `out_of_range`. */
+/** Soma dois valores; valida os operandos e o resultado (fora da faixa lança `out_of_range`). */
 export function add(a: Cents, b: Cents): Cents {
-  return cents(a + b);
+  return cents(cents(a) + cents(b));
 }
 
 /** Soma em sequência, checando a faixa a cada passo. */
 export function sum(values: readonly Cents[]): Cents {
+  const list: unknown = values;
+  if (!Array.isArray(list)) {
+    throw new MoneyError('invalid_format', 'a lista de valores precisa ser um array');
+  }
   let total = cents(0);
   for (const value of values) {
     total = add(total, value);

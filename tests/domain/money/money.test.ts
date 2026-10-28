@@ -232,3 +232,43 @@ describe('add, sum e negate', () => {
     expect(negate(asCents(-MAX))).toBe(MAX);
   });
 });
+
+describe('T1.1b: entrada que não é texto', () => {
+  it.each([undefined, null, 12, {}])('parseBRL(%j) com cast é invalid_format', (entrada) => {
+    expectMoneyError(() => parseBRL(entrada as never), 'invalid_format', entrada);
+  });
+
+  it.each([null, undefined, { toString: () => '12' }])(
+    'fromDb com cast (%#) é invalid_format',
+    (entrada) => {
+      expectMoneyError(() => fromDb(entrada as never), 'invalid_format', entrada);
+    },
+  );
+});
+
+describe('T1.1b: add e sum validam os operandos', () => {
+  it('add(0.5, 0.5) com cast é not_integer', () => {
+    expectMoneyError(() => add(asCents(0.5), asCents(0.5)), 'not_integer', 0.5);
+  });
+
+  it.each([
+    [null, 1],
+    [true, 1],
+  ])('add(%j, %j) com cast lança MoneyError', (a, b) => {
+    expect(() => add(a as never, asCents(b))).toThrow(MoneyError);
+  });
+
+  it('add(2**60, -(2**60)) com cast é out_of_range', () => {
+    expectMoneyError(() => add(asCents(2 ** 60), asCents(-(2 ** 60))), 'out_of_range', 2 ** 60);
+  });
+
+  it('sum(null) com cast lança MoneyError', () => {
+    expect(() => sum(null as never)).toThrow(MoneyError);
+  });
+});
+
+describe('T1.1b: parseBRL, caracterização de bordas recusadas', () => {
+  it.each(['(-12,30)', '( 12,30 )', '-R$ -12'])('%j é invalid_format', (entrada) => {
+    expectMoneyError(() => parseBRL(entrada), 'invalid_format', entrada);
+  });
+});
