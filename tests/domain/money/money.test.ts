@@ -272,3 +272,25 @@ describe('T1.1b: parseBRL, caracterização de bordas recusadas', () => {
     expectMoneyError(() => parseBRL(entrada), 'invalid_format', entrada);
   });
 });
+
+describe('T1.1c: negate, add e sum validam o operando', () => {
+  it('negate(null) com cast é not_integer', () => {
+    expectMoneyError(() => negate(null as never), 'not_integer', null);
+  });
+
+  it("negate('12') com cast é not_integer", () => {
+    expectMoneyError(() => negate('12' as never), 'not_integer', '12');
+  });
+
+  it('negate(10n) com cast é not_integer (e não TypeError)', () => {
+    expectMoneyError(() => negate(10n as never), 'not_integer', 10n);
+  });
+
+  it('add(1, null) com cast é not_integer', () => {
+    expectMoneyError(() => add(asCents(1), null as never), 'not_integer', null);
+  });
+
+  it('sum([1, null]) com cast é not_integer', () => {
+    expectMoneyError(() => sum([asCents(1), null as never]), 'not_integer', null);
+  });
+});

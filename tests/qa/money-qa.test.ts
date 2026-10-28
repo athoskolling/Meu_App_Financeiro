@@ -2,11 +2,10 @@
 // Sem fast-check (não é dependência do projeto): gerador determinístico (mulberry32, semente fixa)
 // e referências em BigInt, que são exatas para inteiros.
 //
-// Histórico: BUG-1 e BUG-2 foram corrigidos na T1.1b e agora são `it` (asserção direta).
-// Achado novo (BUG-4, negate sem validação) segue como `it.fails`: o teste descreve o comportamento
-// ESPERADO e falha hoje, então o suite segue verde. Quando for corrigido, o teste passa a falhar:
-// nesse momento, troque `it.fails` por `it`.
-// Desde a T1.1b há uma seção de ataque a tipos estranhos (add, sum, parseBRL, fromDb, formatBRL, cents).
+// Histórico: BUG-1 e BUG-2 foram corrigidos na T1.1b; BUG-4 (negate sem validação) foi corrigido na T1.1c.
+// Os três agora são `it` (asserção direta).
+// Desde a T1.1b há uma seção de ataque a tipos estranhos (add, sum, parseBRL, fromDb, formatBRL, cents);
+// a T1.1c estende esse ataque a negate.
 import { describe, expect, it } from 'vitest';
 import {
   MoneyError,
@@ -896,21 +895,101 @@ describe('T1.1b (QA): fromDb e add com -0 e fronteira, sem mudança de sinal', (
   });
 });
 
-describe('achado novo do QA (BUG-4, it.fails): negate não valida o operando', () => {
-  // negate faz `0 - value`, então coage tipos estranhos sem erro. A T1.1b corrigiu add e sum,
-  // mas não negate. Mesma classe do BUG-2. Gravidade: baixa, porque só aparece com cast.
-  it.fails('BUG-4a (baixa): negate(null) devolve 0; deveria lançar not_integer', () => {
+describe('T1.1c (QA): BUG-4 corrigido, negate valida o operando (antes it.fails, agora asserção direta)', () => {
+  // negate fazia `0 - value`, então coagia tipos estranhos sem erro. Mesma classe do BUG-2.
+  // Gravidade: baixa, porque só aparece com cast.
+  it('BUG-4a (corrigido): negate(null) lança not_integer, não devolve 0', () => {
     expectCode(() => negate(null as never), 'not_integer');
   });
 
-  it.fails('BUG-4b (baixa): negate("12") devolve -12; deveria lançar not_integer', () => {
+  it('BUG-4b (corrigido): negate("12") lança not_integer, não devolve -12', () => {
     expectCode(() => negate('12' as never), 'not_integer');
   });
 
-  it.fails(
-    'BUG-4c (baixa): negate(10n) lança TypeError; deveria lançar MoneyError not_integer',
-    () => {
-      expectCode(() => negate(10n as never), 'not_integer');
-    },
-  );
+  it('BUG-4c (corrigido): negate(10n) lança MoneyError not_integer, não TypeError', () => {
+    expectCode(() => negate(10n as never), 'not_integer');
+  });
+});
+
+/** Código que negate deve lançar para um valor de STRANGE (nenhum deles é inteiro seguro). */
+function expectedNegateCode(v: unknown): MoneyErrorCode {
+  if (typeof v !== 'number' || !Number.isInteger(v)) return 'not_integer';
+  return Number.isSafeInteger(v) ? 'not_integer' : 'out_of_range';
+}
+
+describe('T1.1c (QA): ataque a negate com tipos estranhos', () => {
+  // Todo valor de STRANGE que não é número inteiro seguro vira MoneyError com código certo (não TypeError,
+  // não 0, não string). 2 ** 53 e 2 ** 60 são inteiros, mas fora da faixa: out_of_range.
+  for (const [label, value] of STRANGE) {
+    it(`negate(${label}) lança ${expectedNegateCode(value)}`, () => {
+      expectCode(() => negate(value as never), expectedNegateCode(value));
+    });
+  }
+
+  it('negate não coage: valueOf, toString e Symbol.toPrimitive nunca são chamados', () => {
+    let calls = 0;
+    const spy = {
+      valueOf: (): number => {
+        calls += 1;
+        return 12;
+      },
+      toString: (): string => {
+        calls += 1;
+        return '12';
+      },
+      [Symbol.toPrimitive]: (): number => {
+        calls += 1;
+        return 12;
+      },
+    };
+    expect(captured(() => negate(spy as never))).toBeInstanceOf(MoneyError);
+    expect(calls).toBe(0);
+  });
+
+  it('negate com proxy que lança em qualquer trap: MoneyError, não o erro do trap', () => {
+    const hostile = new Proxy(
+      {},
+      {
+        get: () => {
+          throw new Error('trap');
+        },
+        has: () => {
+          throw new Error('trap');
+        },
+        getPrototypeOf: () => {
+          throw new Error('trap');
+        },
+      },
+    );
+    expectCode(() => negate(hostile as never), 'not_integer');
+  });
+
+  it('negate(-0) e negate(0) devolvem +0 (Object.is)', () => {
+    expect(Object.is(negate(asCents(0)), 0)).toBe(true);
+    expect(Object.is(negate(-0 as Cents), 0)).toBe(true);
+    expect(Object.is(negate(negate(0 as Cents)), 0)).toBe(true);
+  });
+
+  it('negate exaustivo de -1000 a 1000: resultado é -x, e zero sai +0', () => {
+    const bad: number[] = [];
+    for (let n = -1000; n <= 1000; n += 1) {
+      const r = negate(asCents(n));
+      if (!Object.is(r, n === 0 ? 0 : -n)) bad.push(n);
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('negate(negate(x)) === x e negate bate com a referência BigInt, em 5000 valores seguros + EDGE', () => {
+    const rng = mulberry32(1357);
+    const values: bigint[] = [...EDGE];
+    for (let i = 0; i < 5000; i += 1) values.push(randomSafe(rng));
+    for (const n of values) {
+      const x = asCentsBig(n);
+      const r = negate(x);
+      expect(Number.isSafeInteger(r), `valor ${String(n)}`).toBe(true);
+      expect(r, `valor ${String(n)}`).toBe(Number(-n));
+      if (n === 0n) expect(Object.is(r, 0)).toBe(true);
+      expect(negate(r), `valor ${String(n)}`).toBe(Number(n));
+    }
+  });
 });
