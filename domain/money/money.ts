@@ -162,7 +162,7 @@ export function sum(values: readonly Cents[]): Cents {
   return total;
 }
 
-/** Inverte o sinal; `negate(0)` continua `0`. */
+/** Inverte o sinal, validando o operando; `negate(0)` continua `0`. */
 export function negate(value: Cents): Cents {
-  return cents(0 - value);
+  return cents(0 - cents(value));
 }
