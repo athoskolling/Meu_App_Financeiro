@@ -3,7 +3,7 @@
 // BUG-T1.2-01 e 02 (null e undefined) foram corrigidos no T1.2b e agora são testes comuns.
 // BUG-T1.2-03 e 04 (getter e Proxy hostis) estão fora de escopo por decisão do dono
 // (adendo T1.2b, 28/10/2026): ficam como it.fails, que documentam a falha atual sem deixar
-// a suíte vermelha. BUG-T1.2-05 (array com os campos) é novo nesta rodada: também it.fails.
+// a suíte vermelha. BUG-T1.2-05 (array com os campos) foi corrigido no T1.2b e agora é `it`.
 // Não alterar os testes do dev nem o código de domain/ aqui.
 import { describe, expect, it } from 'vitest';
 import type { Cents } from '../../domain/money';
@@ -724,13 +724,42 @@ describe('QA T1.2b: entrada que não é objeto (adendo T1.2b)', () => {
     expect(resultado(Object.assign(Object.create(null), BASE))).toEqual({ ok: true, problems: [] });
   });
 
-  it.fails(
-    'BUG-T1.2-05 (gravidade baixa, achado desta rodada): array com os campos da transação não é tratado como entrada que não é objeto',
-    () => {
-      // Adendo T1.2b, "Mudança": array é entrada que não é objeto e deve dar ok: false.
-      // Hoje Object.assign([], BASE) dá ok: true. it.fails: falha atual documentada;
-      // vira `it` quando o dev corrigir (tratar Array.isArray como {}).
-      expect(resultado(Object.assign([], BASE)).ok).toBe(false);
+  it('BUG-T1.2-05 (corrigido no T1.2b): array com os campos da transação é entrada que não é objeto', () => {
+    // Adendo T1.2b, "Mudança": array é entrada que não é objeto e dá ok: false com os problemas de {}.
+    expect(() => resultado(Object.assign([], BASE))).not.toThrow();
+    expect(resultado(Object.assign([], BASE)).ok).toBe(false);
+    expect(resultado(Object.assign([], BASE))).toEqual(resultado({}));
+  });
+
+  // Variações de array com campos pendurados. Array.isArray é verdadeiro para todas elas.
+  // Não testamos Array.isArray com Proxy de array: fora de escopo, por decisão do dono.
+  class ListaDeTransacoes extends Array {}
+  const ARRAY_COM_CAMPOS: [string, unknown][] = [
+    ['array com campos válidos', Object.assign([], BASE)],
+    [
+      'array com campos inválidos',
+      Object.assign([], { ...BASE, date: '2026-02-30', amount: 830, currency: 'USD', type: 'x' }),
+    ],
+    ['array com campos e elementos', Object.assign([BASE, 1], BASE)],
+    ['subclasse de Array com campos válidos', Object.assign(new ListaDeTransacoes(), BASE)],
+    [
+      'subclasse de Array com campos inválidos',
+      Object.assign(new ListaDeTransacoes(), { ...BASE, amount: 1.5 }),
+    ],
+    ['array congelado com campos válidos', Object.freeze(Object.assign([], BASE))],
+    [
+      'array congelado com campos inválidos',
+      Object.freeze(Object.assign([], { ...BASE, status: 'x' })),
+    ],
+  ];
+
+  it.each(ARRAY_COM_CAMPOS)(
+    '%s: não lança, dá ok falso e os mesmos problemas de {}',
+    (_rotulo, entrada) => {
+      expect(() => resultado(entrada)).not.toThrow();
+      const r = resultado(entrada);
+      expect(r.ok).toBe(false);
+      expect(r).toEqual(resultado({}));
     },
   );
 });
