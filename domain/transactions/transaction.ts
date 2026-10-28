@@ -120,37 +120,53 @@ export function validateTransaction(t: NormalizedTransaction): ValidationResult 
     problems.push({ code, field, severity: 'error' });
   };
 
-  if (!SOURCES.includes(t.source)) error('invalid_source', 'source');
-  if (isBlank(t.accountRef)) error('empty_account_ref', 'accountRef');
-  if (!isCivilDate(t.date)) error('invalid_date', 'date');
-  if (t.time !== undefined && !isTime(t.time)) error('invalid_time', 'time');
-  if (t.postedAt !== undefined && !isCivilDate(t.postedAt)) {
+  // Entrada que não é objeto (null, undefined, texto, número) é tratada como
+  // objeto vazio: não lança e produz os problemas dos campos obrigatórios.
+  const input: unknown = t;
+  const src: Partial<Record<keyof NormalizedTransaction, unknown>> =
+    typeof input === 'object' && input !== null ? input : {};
+
+  // Cada campo é lido uma única vez.
+  const source = src.source;
+  const accountRef = src.accountRef;
+  const date = src.date;
+  const time = src.time;
+  const postedAt = src.postedAt;
+  const description = src.description;
+  const amount = src.amount;
+  const currency = src.currency;
+  const type = src.type;
+  const status = src.status;
+
+  if (!SOURCES.includes(source)) error('invalid_source', 'source');
+  if (isBlank(accountRef)) error('empty_account_ref', 'accountRef');
+  if (!isCivilDate(date)) error('invalid_date', 'date');
+  if (time !== undefined && !isTime(time)) error('invalid_time', 'time');
+  if (postedAt !== undefined && !isCivilDate(postedAt)) {
     error('invalid_posted_at', 'postedAt');
   }
-  if (isBlank(t.description)) error('empty_description', 'description');
+  if (isBlank(description)) error('empty_description', 'description');
 
-  const amount: unknown = t.amount;
   if (typeof amount !== 'number' || !Number.isSafeInteger(amount)) {
     error('invalid_amount', 'amount');
   } else if (amount === 0) {
     problems.push({ code: 'zero_amount', field: 'amount', severity: 'warning' });
   } else {
     const mismatch =
-      (amount > 0 && NEGATIVE_TYPES.includes(t.type)) ||
-      (amount < 0 && POSITIVE_TYPES.includes(t.type));
+      (amount > 0 && NEGATIVE_TYPES.includes(type)) ||
+      (amount < 0 && POSITIVE_TYPES.includes(type));
     if (mismatch) error('sign_mismatch', 'amount');
   }
 
-  const currency: unknown = t.currency;
   if (currency !== 'BRL') error('invalid_currency', 'currency');
   if (
-    !NEGATIVE_TYPES.includes(t.type) &&
-    !POSITIVE_TYPES.includes(t.type) &&
-    !FREE_SIGN_TYPES.includes(t.type)
+    !NEGATIVE_TYPES.includes(type) &&
+    !POSITIVE_TYPES.includes(type) &&
+    !FREE_SIGN_TYPES.includes(type)
   ) {
     error('invalid_type', 'type');
   }
-  if (!STATUSES.includes(t.status)) error('invalid_status', 'status');
+  if (!STATUSES.includes(status)) error('invalid_status', 'status');
 
   return { ok: !problems.some((p) => p.severity === 'error'), problems };
 }
