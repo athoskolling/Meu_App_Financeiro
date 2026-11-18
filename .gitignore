@@ -21,6 +21,8 @@ credentials.json
 *.[oO][fF][xX]
 *.[pP][dD][fF]
 *.[sS][qQ][lL]
+# Exceção (ADR-0021): migrações versionadas do Drizzle. Só arquivos .sql diretamente em drizzle/.
+!/drizzle/*.sql
 *.[dD][uU][mM][pP]
 *.[pP][nN][gG]
 *.[jJ][pP][gG]
