@@ -1,0 +1,1 @@
+ALTER TABLE "transactions" ADD CONSTRAINT "transactions_type_check" CHECK ("type" IN ('income', 'expense', 'transfer', 'credit_card_purchase', 'credit_card_payment', 'refund', 'investment', 'other'));

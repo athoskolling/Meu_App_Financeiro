@@ -289,15 +289,12 @@ describe.skipIf(!url)(
 
       // BUG-T2.2-QA-01: a spec 5.2 enumera os 8 valores de `type`, mas a coluna é text livre
       // (sem CHECK). O dev registrou que "a spec não lista valores", o que não é verdade.
-      it.fails(
-        'BUG-T2.2-QA-01: transactions.type recusa valor fora dos 8 da spec 5.2 (23514)',
-        async () => {
-          const c = await cenario();
-          await expect(
-            inserirTransacao({ ...c, type: 'valor_inventado', identityKey: 'tipo-invalido' }),
-          ).rejects.toMatchObject({ code: '23514' });
-        },
-      );
+      it('BUG-T2.2-QA-01: transactions.type recusa valor fora dos 8 da spec 5.2 (23514)', async () => {
+        const c = await cenario();
+        await expect(
+          inserirTransacao({ ...c, type: 'valor_inventado', identityKey: 'tipo-invalido' }),
+        ).rejects.toMatchObject({ code: '23514' });
+      });
     });
 
     describe('FKs e ON DELETE RESTRICT', () => {

@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { join } from 'node:path';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
@@ -54,9 +55,13 @@ describe.skipIf(!url)('migração em Postgres real (requer TEST_DATABASE_URL)', 
   });
 
   it('segunda transação com mesmo (account_id, identity_key) viola unicidade (23505)', async () => {
-    const [u] = await conexao`INSERT INTO users (email) VALUES ('teste@example.com') RETURNING id`;
+    // Dados únicos por execução: o teste pode rodar de novo no mesmo banco.
+    const sufixo = randomUUID();
+    const email = `teste-${sufixo}@example.com`;
+    const slug = `banco-${sufixo}`;
+    const [u] = await conexao`INSERT INTO users (email) VALUES (${email}) RETURNING id`;
     const [i] = await conexao`
-      INSERT INTO institutions (name, slug) VALUES ('Banco Teste', 'banco-teste') RETURNING id`;
+      INSERT INTO institutions (name, slug) VALUES ('Banco Teste', ${slug}) RETURNING id`;
     const [a] = await conexao`
       INSERT INTO accounts (user_id, institution_id, name, type)
       VALUES (${u!.id as string}, ${i!.id as string}, 'Conta Teste', 'checking') RETURNING id`;
@@ -70,6 +75,6 @@ describe.skipIf(!url)('migração em Postgres real (requer TEST_DATABASE_URL)', 
   it('aplicar de novo não faz nada e não falha', async () => {
     await expect(migrate(drizzle(conexao), { migrationsFolder: pasta })).resolves.toBeUndefined();
     const linhas = await conexao`SELECT id FROM drizzle.__drizzle_migrations`;
-    expect(linhas).toHaveLength(2);
+    expect(linhas).toHaveLength(3);
   });
 });
