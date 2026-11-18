@@ -408,7 +408,7 @@ describe('QA T1.3: normalizeText (propriedades e Unicode)', () => {
     expect(sobra).toEqual([]);
   });
 
-  it.fails('BUG-T1.3-01: U+0085 (NEL) vira espaço comum, como os outros espaços em branco', () => {
+  it('BUG-T1.3-01: U+0085 (NEL) vira espaço comum, como os outros espaços em branco', () => {
     expect(normalizeText('a' + NEL + 'b')).toBe('a b');
   });
 
@@ -636,14 +636,12 @@ describe('QA T1.3: ataques de borda', () => {
     expect(new Set(r.map((x) => x.identityKey)).size).toBe(1000);
   });
 
-  it.fails(
-    'BUG-T1.3-02: ocorrências acima de 2^53 não colidem (identityKey distinta por ocorrência)',
-    () => {
-      // existente = 2^53 - 2; incremental de 3 iguais: ocorrências 2^53-1, 2^53 e 2^53+1 (não exato, vira 2^53).
-      const r = run([BASE, BASE, BASE], new Map([[baseKey(BASE, h), MAX - 1]]), 'incremental');
-      expect(new Set(r.map((x) => x.identityKey)).size).toBe(3);
-    },
-  );
+  it('BUG-T1.3-02: ocorrências acima de 2^53 lançam Error em vez de colidir', () => {
+    // existente = 2^53 - 2; incremental de 3 iguais: ocorrências 2^53-1, 2^53 e 2^53+1 (não exato, vira 2^53).
+    expect(() =>
+      run([BASE, BASE, BASE], new Map([[baseKey(BASE, h), MAX - 1]]), 'incremental'),
+    ).toThrow(Error);
+  });
 
   it('com existente no limite, a primeira ocorrência continua exata', () => {
     const r = run([BASE], new Map([[baseKey(BASE, h), MAX - 1]]), 'incremental');

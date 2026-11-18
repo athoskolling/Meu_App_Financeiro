@@ -14,7 +14,12 @@ export interface IdentifiedTransaction {
 
 /** NFD, sem marcas combinantes, minúsculas, espaços colapsados. A pontuação fica. */
 export function normalizeText(s: string): string {
-  return s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/\s+/gu, ' ').trim();
+  return s
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .replace(/\p{White_Space}+/gu, ' ')
+    .trim();
 }
 
 /** Texto canônico antes do hash. Ficam fora: status, type, postedAt, externalId, merchantName. */
@@ -65,6 +70,9 @@ export function assignIdentities(
     const inBatch = (seen.get(bk) ?? 0) + 1;
     seen.set(bk, inBatch);
     const occurrence = mode === 'complete' ? inBatch : existing + inBatch;
+    if (!Number.isSafeInteger(occurrence)) {
+      throw new Error('assignIdentities: ocorrência fora do intervalo de inteiros seguros');
+    }
     return {
       tx,
       baseKey: bk,
