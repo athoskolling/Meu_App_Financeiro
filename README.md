@@ -36,7 +36,7 @@ Depois preencha o `.env.local`. Nunca commite esse arquivo.
 
 Hoje são obrigatórias estas duas variáveis:
 
-- `DATABASE_URL`: conexão com o Postgres. Com o banco local, o formato é `postgres://postgres:<senha>@127.0.0.1:5432/meu_financeiro`. Use a senha definida em `POSTGRES_PASSWORD` (sem ela, vale o padrão do `docker-compose.yml`, que só existe nesta máquina).
+- `DATABASE_URL`: conexão com o Postgres. Com o banco local, o formato é `postgres://postgres:<senha>@127.0.0.1:5432/meu_financeiro`. Use a senha definida em `POSTGRES_PASSWORD`. Sem ela, vale o padrão `postgres` do `docker-compose.yml` (público, serve só para o banco local).
 - `OWNER_EMAIL`: seu e-mail do Google. Outras contas são recusadas. Substitua o texto pelo seu e-mail.
 
 As outras variáveis do `.env.example` são opcionais por enquanto: `DATABASE_URL_MIGRATIONS`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `CRON_SECRET`, `PLUGGY_CLIENT_ID` e `PLUGGY_CLIENT_SECRET`. Cada uma vira obrigatória no cartão que passar a usá-la. Se você preencher alguma, o app já valida o formato.
@@ -88,6 +88,8 @@ Confere a formatação com Prettier, sem alterar arquivos:
 ```bash
 pnpm format:check
 ```
+
+`pnpm dev` e `pnpm build` podem regenerar `next-env.d.ts`. Se ele aparecer modificado no `git status`, descarte com `git checkout -- next-env.d.ts`.
 
 ## Estrutura de pastas
 
