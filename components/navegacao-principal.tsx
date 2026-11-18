@@ -15,7 +15,7 @@ export function NavegacaoPrincipal() {
   return (
     <nav
       aria-label="Principal"
-      className="flex w-full gap-x-5 overflow-x-auto sm:w-auto sm:flex-1 sm:gap-x-7"
+      className="-m-1 flex w-[calc(100%+0.5rem)] gap-x-4 overflow-x-auto p-1 sm:w-auto sm:flex-1 sm:gap-x-6"
     >
       {itens.map((item) => {
         const ativo = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
@@ -24,7 +24,7 @@ export function NavegacaoPrincipal() {
             key={item.href}
             href={item.href}
             aria-current={ativo ? 'page' : undefined}
-            className={`flex min-h-11 shrink-0 whitespace-nowrap items-center border-b-2 no-underline ${
+            className={`flex min-h-11 min-w-11 shrink-0 items-center justify-center px-1 whitespace-nowrap border-b-2 no-underline ${
               ativo
                 ? 'border-primaria text-texto font-semibold'
                 : 'text-texto-3 border-transparent font-medium'
