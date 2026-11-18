@@ -111,4 +111,20 @@ describe('migrações (estático)', () => {
     expect(fks.length).toBeGreaterThan(0);
     for (const fk of fks) expect(fk).toMatch(/ON DELETE restrict/);
   });
+
+  it.each(['type', 'source', 'status', 'date', 'amount', 'description', 'account_id', 'user_id'])(
+    'transactions.%s é NOT NULL',
+    (c) => {
+      // `type` ficou NOT NULL numa migração posterior (ALTER), as outras já nascem NOT NULL.
+      const alter = `ALTER TABLE "transactions" ALTER COLUMN "${c}" SET NOT NULL`;
+      expect(coluna('transactions', c).includes('NOT NULL') || sql.includes(alter)).toBe(true);
+    },
+  );
+
+  it('transactions.currency é NOT NULL e tem CHECK = BRL', () => {
+    expect(coluna('transactions', 'currency')).toMatch(/NOT NULL/);
+    expect(sql).toMatch(
+      /CONSTRAINT "transactions_currency_check" CHECK \("currency" IN \('BRL'\)\)/,
+    );
+  });
 });

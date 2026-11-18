@@ -15,6 +15,20 @@
       "when": 1795027755708,
       "tag": "0001_rls",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795028724345,
+      "tag": "0002_transactions_type_check",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795029061468,
+      "tag": "0003_transactions_type_currency",
+      "breakpoints": true
     }
   ]
 }

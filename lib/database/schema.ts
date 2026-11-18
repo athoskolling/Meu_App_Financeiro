@@ -153,7 +153,7 @@ export const transactions = pgTable(
     merchantName: text('merchant_name'),
     amount: money('amount').notNull(),
     currency: text('currency').notNull().default('BRL'),
-    type: text('type'),
+    type: text('type').notNull(),
     categoryId: uuid('category_id').references(() => categories.id, { onDelete: 'restrict' }),
     status: text('status').notNull().default('posted'),
     isTransfer: boolean('is_transfer').notNull().default(false),
@@ -165,9 +165,27 @@ export const transactions = pgTable(
     updatedAt: updatedAt(),
   },
   (t) => [
+    // Intencional: linhas com deleted_at continuam ocupando (account_id, identity_key). A contagem
+    // existingCounts inclui as apagadas, para não ressuscitar uma transação excluída.
     uniqueIndex('transactions_account_identity_key_uq').on(t.accountId, t.identityKey),
     check('transactions_source_check', oneOf('source', ['open_finance', 'caju_ocr', 'manual'])),
     check('transactions_status_check', oneOf('status', ['pending', 'posted'])),
+    // MVP só em reais (spec 10).
+    check('transactions_currency_check', oneOf('currency', ['BRL'])),
+    // Os 8 valores da spec 5.2.
+    check(
+      'transactions_type_check',
+      oneOf('type', [
+        'income',
+        'expense',
+        'transfer',
+        'credit_card_purchase',
+        'credit_card_payment',
+        'refund',
+        'investment',
+        'other',
+      ]),
+    ),
     index('transactions_account_id_date_idx').on(t.accountId, t.date),
     index('transactions_user_id_date_idx').on(t.userId, t.date),
     index('transactions_category_id_idx').on(t.categoryId),
