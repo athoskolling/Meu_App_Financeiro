@@ -119,9 +119,7 @@ describe('detectTransfers', () => {
   });
 
   it('valores diferentes não casam', () => {
-    expect(detectTransfers([t(S, 'transfer', -100000), t(N, 'transfer', 99999)], opts)).toEqual(
-      [],
-    );
+    expect(detectTransfers([t(S, 'transfer', -100000), t(N, 'transfer', 99999)], opts)).toEqual([]);
   });
 
   it('valor zero não casa', () => {

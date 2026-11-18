@@ -2,6 +2,7 @@
 // o resultado não depende da ordem de entrada.
 
 import { daysBetween } from '../dates';
+import { negate } from '../money';
 import { baseKeyInput, type NormalizedTransaction, type TransactionType } from '../transactions';
 
 export interface TransferMatch {
@@ -62,7 +63,7 @@ export function detectTransfers(
     if (out.amount >= 0 || !MATCHABLE.includes(out.type)) return;
     txs.forEach((inn, j) => {
       if (inn.amount <= 0 || !MATCHABLE.includes(inn.type)) return;
-      if (out.accountRef === inn.accountRef || out.amount !== -inn.amount) return;
+      if (out.accountRef === inn.accountRef || out.amount !== negate(inn.amount)) return;
       const daysApart = Math.abs(daysBetween(out.date, inn.date));
       if (daysApart > windowDays) return;
       const bothTransfer = out.type === 'transfer' && inn.type === 'transfer';
