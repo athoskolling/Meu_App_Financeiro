@@ -23,6 +23,8 @@ Cada decisão relevante vira um arquivo `NNNN-titulo.md` com contexto, decisão 
 | 0017 | Isolamento de `domain/` por lista de permitidos (só relativos; pacote novo exige ADR), sem `eslint-disable`, imports relativos presos a `domain/`; mudanças nas travas do projeto exigem revisor | `0017-isolamento-domain-allowlist.md` |
 | 0018 | Núcleo E1 parte A: `Cents` como `number` com brand; `parseBRL`/`formatBRL` sem `Intl`; erros com código sem ecoar a entrada; `date` civil; validação devolve todos os problemas; `baseKey` com a descrição normalizada (sem `merchantName`, `status`, `type`, `externalId`), texto canônico em JSON, hash injetado | `0018-nucleo-e1-parte-a.md` |
 | 0019 | Base do app no E2: dependências Next/React/Tailwind/Zod aprovadas; tsconfig próprio de `domain/` sem DOM nem Node; variáveis obrigatórias por etapa; log por lista de permitidos; Postgres local em Docker | `0019-base-do-app-e2.md` |
+| 0020 | Regras do E1 parte B: período fechado de datas civis; `spendingForPeriod` recebe a marca de transferência; estorno subtrai e o total pode ser negativo; `transfer` sem par e `other` em `unclassified`; transferências por desempate guloso de menor diferença de dias; categorizador com tipo primeiro, palavra inteira e padrão mais longo | `0020-regras-e1-parte-b.md` |
+| 0021 | Banco no E2: `drizzle-orm`, `drizzle-kit` e `postgres` (postgres.js) aprovados; migrações SQL versionadas em `drizzle/`; RLS ligado sem políticas em toda tabela | `0021-banco-e2.md` |
 
 ## Adiadas, com prazo
 
