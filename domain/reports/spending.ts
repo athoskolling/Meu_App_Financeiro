@@ -77,6 +77,11 @@ export function spendingForPeriod(items: readonly SpendingItem[], period: Period
         unclassifiedCount += 1;
         unclassifiedTotal = add(unclassifiedTotal, tx.amount);
         break;
+      default: {
+        const unreachable: never = tx.type;
+        void unreachable;
+        throw new Error('tipo de transação desconhecido');
+      }
     }
   }
 
