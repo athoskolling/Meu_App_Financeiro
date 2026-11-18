@@ -1,6 +1,6 @@
 # 0020: Decisões das regras de relatório (E1 parte B)
 
-- **Status:** **proposta** pelo CTO em 18/11/2026. Aguarda aprovação do dono junto com os casos da T1.5 (`docs/tasks/E1/T1.5.md`). Nenhum código da parte B começa antes.
+- **Status:** aceita. Proposta pelo CTO e aprovada pelo dono em 18/11/2026, junto com os casos da T1.5 (`docs/tasks/E1/T1.5.md`).
 - **Estágio:** E1 parte B (T1.6, T1.7, T1.8)
 - **Spec:** 5.3, 5.5, 5.6, 5.7
 
