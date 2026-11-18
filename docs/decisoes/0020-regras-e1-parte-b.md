@@ -47,6 +47,12 @@ O roteiro (Tarefas 5, 6 e 7) deixa escolhas em aberto: o formato do período, o 
 
 18. **`domain/dates/`** ganha `daysInMonth`, `daysBetween` e `monthPeriod`, por aritmética (dias desde uma época civil), sem `Date`. Nasce na T1.6 e é usada pela T1.7.
 
+### Esclarecimentos (18/11/2026, sem mudar caso; levantados pelo QA da T1.8)
+
+19. **Só o espaço é fronteira de palavra.** `UBER*TRIP` (sem espaço) não casa `uber` e cai no próximo nível. Revisto com descrições reais na sondagem (E1b); mudar exige ADR nova e casos novos.
+20. **Não há prioridade entre `description` e `merchantName`.** Os dois textos concorrem juntos, e vence o padrão mais longo (item 16), venha de qual campo vier.
+21. **O `pattern` devolvido é o normalizado**, não o texto gravado na regra. Quem persistir regras (T4.2) não compara por igualdade com `merchant_rules.merchant_pattern`.
+
 ## Consequências
 
 - O painel (T4.1) chama `detectTransfers`, depois `spendingForPeriod`. A interface nunca recalcula.
