@@ -3,7 +3,7 @@
 // Oráculo: regras de elegibilidade escritas aqui (itens 9 e 10), com índices de um calendário
 // de referência construído dia a dia. Lotes com semente fixa (sem Math.random, sem relógio:
 // o limite de tempo do lote grande vai no terceiro argumento do it).
-// Bug conhecido como it.fails:
+// Bug corrigido (ADR-0020 item 22); o teste agora é it normal:
 //   BUG-T1.7-01: o desempate usa baseKeyInput + externalId, que não inclui o tipo. Duas saídas
 //   com o mesmo texto canônico (uma transfer, outra expense) empatam e o índice decide. Resultado
 //   e confiança mudam com a ordem da entrada, contra o item 11 da ADR-0020.
@@ -418,21 +418,18 @@ describe('QA T1.7: ataques de tamanho e tempo (limite de tempo no terceiro argum
 });
 
 describe('QA T1.7: BUG-T1.7-01 (empate do texto canônico com tipos diferentes)', () => {
-  it.fails(
-    'BUG-T1.7-01: duas saídas com o mesmo texto canônico dão o mesmo par, com a mesma confiança, em qualquer ordem',
-    () => {
-      // A: transfer -10000 em S; B: expense -10000 em S. Mesmo texto (o tipo não entra no texto).
-      // Ordem [A, B, entrada]: A casa com alta confiança ("high"). Ordem [B, A, entrada]: B casa, "medium".
-      const A = tx(S, 'transfer', -10000, '2026-10-06');
-      const B = tx(S, 'expense', -10000, '2026-10-06');
-      const E = tx(N, 'transfer', 10000, '2026-10-06');
-      const ordem1 = [A, B, E];
-      const ordem2 = [B, A, E];
-      expect(conteudo(ordem1, detectTransfers(ordem1, opts(0)))).toEqual(
-        conteudo(ordem2, detectTransfers(ordem2, opts(0))),
-      );
-    },
-  );
+  it('BUG-T1.7-01: duas saídas com o mesmo texto canônico dão o mesmo par, com a mesma confiança, em qualquer ordem', () => {
+    // A: transfer -10000 em S; B: expense -10000 em S. Mesmo texto (o tipo não entra no texto).
+    // Ordem [A, B, entrada]: A casa com alta confiança ("high"). Ordem [B, A, entrada]: B casa, "medium".
+    const A = tx(S, 'transfer', -10000, '2026-10-06');
+    const B = tx(S, 'expense', -10000, '2026-10-06');
+    const E = tx(N, 'transfer', 10000, '2026-10-06');
+    const ordem1 = [A, B, E];
+    const ordem2 = [B, A, E];
+    expect(conteudo(ordem1, detectTransfers(ordem1, opts(0)))).toEqual(
+      conteudo(ordem2, detectTransfers(ordem2, opts(0))),
+    );
+  });
 });
 
 describe('QA T1.7: manutenção (validateTransaction com daysInMonth de domain/dates)', () => {

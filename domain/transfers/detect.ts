@@ -24,7 +24,7 @@ interface Candidate {
 }
 
 function canonical(tx: NormalizedTransaction): string {
-  return baseKeyInput(tx) + (tx.externalId ?? '');
+  return JSON.stringify([baseKeyInput(tx), tx.type, tx.externalId ?? '']);
 }
 
 function compareText(a: string, b: string): number {
