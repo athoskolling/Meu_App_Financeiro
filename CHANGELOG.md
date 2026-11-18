@@ -4,6 +4,21 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.1] - a definir (gate E1 parte B)
+
+### Adicionado
+
+- `spendingForPeriod` e datas civis (`daysInMonth`, `daysBetween`, `monthPeriod`): a única resposta para "quanto gastei no período". Pagamento de fatura, caixinha e transferência casada ficam fora; estorno desconta; o que não dá para classificar vai para `unclassified` (ADR-0020).
+- `detectTransfers`: pares de transferência entre contas próprias, com desempate determinístico e confiança `high`/`medium`.
+- `categorize`: tipo, regra do usuário, estabelecimento conhecido, categoria da fonte, heurística e Outros, com o motivo da escolha.
+
+## [0.1] - a definir (gate E1 parte A)
+
+### Adicionado
+
+- Identidade de transação (`baseKey` + ocorrência com `existingCounts`, modos `complete` e `incremental`, hash injetado): reimportar não duplica e compras idênticas legítimas continuam separadas (ADR-0018).
+- Money (`Cents`, `parseBRL`, `formatBRL` sem `Intl`, `fromDb`) e `NormalizedTransaction` com `validateTransaction`.
+
 ## [0.0] - 2026-10-15
 
 E0, fundação.
