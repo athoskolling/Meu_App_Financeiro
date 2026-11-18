@@ -106,7 +106,7 @@ describe.skipIf(!url)(
         date = '2026-01-15',
         source = 'manual',
         status = 'posted',
-        type = null,
+        type = 'other',
       } = c;
       return conexao`
       INSERT INTO transactions

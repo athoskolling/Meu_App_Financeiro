@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
@@ -66,15 +67,29 @@ describe.skipIf(!url)('migração em Postgres real (requer TEST_DATABASE_URL)', 
       INSERT INTO accounts (user_id, institution_id, name, type)
       VALUES (${u!.id as string}, ${i!.id as string}, 'Conta Teste', 'checking') RETURNING id`;
     const inserir = () => conexao`
-      INSERT INTO transactions (user_id, account_id, identity_key, source, date, description, amount)
-      VALUES (${u!.id as string}, ${a!.id as string}, 'chave-1', 'manual', '2026-01-15', 'Teste', -1000)`;
+      INSERT INTO transactions (user_id, account_id, identity_key, source, date, description, amount, type)
+      VALUES (${u!.id as string}, ${a!.id as string}, 'chave-1', 'manual', '2026-01-15', 'Teste', -1000, 'expense')`;
     await inserir();
     await expect(inserir()).rejects.toMatchObject({ code: '23505' });
+
+    // type NULL e currency fora de BRL são recusados.
+    await expect(
+      conexao`INSERT INTO transactions (user_id, account_id, identity_key, source, date, description, amount)
+        VALUES (${u!.id as string}, ${a!.id as string}, 'chave-2', 'manual', '2026-01-15', 'Teste', -1000)`,
+    ).rejects.toMatchObject({ code: '23502' });
+    await expect(
+      conexao`INSERT INTO transactions (user_id, account_id, identity_key, source, date, description, amount, type, currency)
+        VALUES (${u!.id as string}, ${a!.id as string}, 'chave-3', 'manual', '2026-01-15', 'Teste', -1000, 'expense', 'USD')`,
+    ).rejects.toMatchObject({ code: '23514' });
   });
 
   it('aplicar de novo não faz nada e não falha', async () => {
     await expect(migrate(drizzle(conexao), { migrationsFolder: pasta })).resolves.toBeUndefined();
+    const journal = JSON.parse(readFileSync(join(pasta, 'meta', '_journal.json'), 'utf8')) as {
+      entries: unknown[];
+    };
+    const entradas = journal.entries.length;
     const linhas = await conexao`SELECT id FROM drizzle.__drizzle_migrations`;
-    expect(linhas).toHaveLength(3);
+    expect(linhas).toHaveLength(entradas);
   });
 });
