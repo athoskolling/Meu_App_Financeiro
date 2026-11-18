@@ -10,6 +10,7 @@ import {
   type NormalizedTransaction,
 } from '../../../domain/transactions';
 
+const nbsp = String.fromCharCode(0xa0);
 const h = (s: string): string => `h(${s})`;
 const asCents = (n: number): Cents => n as Cents;
 
@@ -38,7 +39,7 @@ describe('normalizeText', () => {
     expect(normalizeText('CAFÉ Ação')).toBe('cafe acao');
   });
   it('troca espaço sem quebra (U+00A0) por espaço comum', () => {
-    expect(normalizeText('a  b\tc')).toBe('a b c');
+    expect(normalizeText(`a${nbsp} ${nbsp}b\tc`)).toBe('a b c');
   });
   it('a pontuação conta', () => {
     expect(normalizeText('Padaria.')).not.toBe(normalizeText('Padaria'));
@@ -100,6 +101,9 @@ describe('baseKeyInput e baseKey', () => {
 });
 
 describe('identityKey', () => {
+  it.each([NaN, Infinity, 0, -1, 1.5])('ocorrência inválida (%s) lança Error', (n) => {
+    expect(() => identityKey('k', n, h)).toThrow(Error);
+  });
   it('é o hash do JSON de [baseKey, ocorrência]', () => {
     expect(identityKey('k', 3, h)).toBe('h(["k",3])');
   });
@@ -203,6 +207,9 @@ describe('assignIdentities', () => {
   });
   it.each([-1, 1.5, NaN])('existingCounts inválido (%s) lança Error', (v) => {
     expect(() => run([A], { [kA]: v }, 'complete')).toThrow(Error);
+  });
+  it('existingCounts fora do inteiro seguro lança Error em complete', () => {
+    expect(() => run([A], { [kA]: 2 ** 60 }, 'complete')).toThrow(Error);
   });
   it('mode inválido lança Error', () => {
     expect(() => run([A], {}, 'x' as Mode)).toThrow(Error);

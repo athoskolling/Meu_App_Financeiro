@@ -39,6 +39,9 @@ export function baseKey(t: NormalizedTransaction, hash: Hash): string {
 }
 
 export function identityKey(bk: string, occurrence: number, hash: Hash): string {
+  if (!Number.isSafeInteger(occurrence) || occurrence < 1) {
+    throw new Error('identityKey: occurrence deve ser inteiro seguro >= 1');
+  }
   return hash(JSON.stringify([bk, occurrence]));
 }
 
@@ -58,7 +61,7 @@ export function assignIdentities(
     throw new Error('assignIdentities: mode inválido');
   }
   for (const count of existingCounts.values()) {
-    if (!Number.isInteger(count) || count < 0) {
+    if (!Number.isSafeInteger(count) || count < 0) {
       throw new Error('assignIdentities: existingCounts deve conter inteiros >= 0');
     }
   }
