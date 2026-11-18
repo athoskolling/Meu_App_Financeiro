@@ -53,7 +53,7 @@ O roteiro (Tarefas 5, 6 e 7) deixa escolhas em aberto: o formato do período, o 
 20. **Não há prioridade entre `description` e `merchantName`.** Os dois textos concorrem juntos, e vence o padrão mais longo (item 16), venha de qual campo vier.
 21. **O `pattern` devolvido é o normalizado**, não o texto gravado na regra. Quem persistir regras (T4.2) não compara por igualdade com `merchant_rules.merchant_pattern`.
 
-22. **Texto canônico do desempate de transferências inclui o `type`** (correção do BUG-T1.7-01, apontado pelo QA): `baseKeyInput(tx)`, depois `type`, depois `externalId ?? ''`. Sem o tipo, duas saídas iguais em tudo menos no tipo empatavam, e o par e a confiança dependiam da ordem de entrada, violando o próprio item 11. Nenhum caso aprovado muda.
+22. **Texto canônico do desempate de transferências inclui o `type`** (correção do BUG-T1.7-01, apontado pelo QA): `baseKeyInput(tx)`, depois `type`, depois `externalId ?? ''`. Sem o tipo, duas saídas iguais em tudo menos no tipo empatavam, e o par e a confiança dependiam da ordem de entrada, violando o próprio item 11. Nenhum caso aprovado muda. O texto é a tupla JSON `[baseKeyInput(tx), type, externalId ?? '']`. Se duas linhas empatarem até nesse texto (diferem só em `status`, `postedAt`, `merchantName` ou caixa da descrição), o índice de entrada desempata: são linhas praticamente iguais, e qual delas fica fora do par é aceito (achado do revisor na T1.7).
 
 ## Consequências
 
