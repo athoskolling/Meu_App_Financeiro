@@ -1,3 +1,4 @@
+import { daysInMonth } from '../dates';
 import type { Cents } from '../money';
 
 export type TransactionSource = 'open_finance' | 'caju_ocr' | 'manual';
@@ -76,15 +77,6 @@ const FREE_SIGN_TYPES: readonly unknown[] = [
 
 const DATE_SHAPE = /^(\d{4})-(\d{2})-(\d{2})$/;
 const TIME_SHAPE = /^(\d{2}):(\d{2})$/;
-
-function isLeapYear(year: number): boolean {
-  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-}
-
-function daysInMonth(year: number, month: number): number {
-  if (month === 2) return isLeapYear(year) ? 29 : 28;
-  return month === 4 || month === 6 || month === 9 || month === 11 ? 30 : 31;
-}
 
 /** Data civil válida "YYYY-MM-DD", por aritmética (sem Date). */
 function isCivilDate(value: unknown): boolean {
