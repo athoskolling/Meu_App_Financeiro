@@ -154,6 +154,32 @@ Comece o E1 parte B, aproveitando a tag arquivo/zen-mayer-E1-E2 conforme a concl
 
 ---
 
+## Daqui até a v1.0
+
+Este arquivo cobre só até o próximo gate. **A cada gate fechado, o `cto` Claude escreve aqui as etapas do estágio seguinte**, no mesmo PR do gate (regra no `.claude/agents/cto.md`). O que vem depois, pela ADR-0023:
+
+| Estágio | Equipe Claude | Equipe Gemini | Você |
+| --- | --- | --- | --- |
+| E1b Sondagem Pluggy | script de sondagem e relatório só de estrutura | — | conta Pluggy, autorizar os bancos, rodar o script |
+| E3 Ingestão Pluggy (v0.3) | adapters, sincronização, mesclagem, conferência de lacunas | telas de contas e de sincronização | conferir os saldos contra o app do banco |
+| E4 Painel e relatórios (v0.4) | serviços de relatório (sem cálculo na tela) | painel, gráficos e transações | conferir um mês fechado ao centavo |
+| E5 Caju por prints (v0.5) | extração, `import_items` e conferência | telas de envio e de revisão dos prints | enviar os prints e revisar |
+| E6 Fechamento (v1.0) | backup, segurança e acabamento do back-end | acabamento das telas | restaurar um backup num banco vazio |
+
+## Rotina para manter as duas equipes no trilho
+
+- **Ao começar o dia,** cole na sessão Claude: `Diga o estado do projeto: estágio, PRs abertos e o que cada um espera, e a próxima etapa do docs/equipes/prompts.md.`
+- **Um PR por vez em cada equipe.** Só mande a próxima tarefa a uma equipe quando o PR anterior dela estiver mergeado ou esperando revisão.
+- **Toda revisão vai como comentário no PR.** Se uma equipe disser "revisei" sem comentário no PR, a revisão não conta.
+- **Sinais de que algo saiu do trilho:** branch fora do padrão `equipe-claude/…` ou `equipe-gemini/…`; um PR que mexe em pasta da outra equipe; QA sem os comandos executados; tarefa sem cartão. Nesses casos, cole na sessão Claude: `Confira o PR #<número> contra a ADR-0023 e me diga o que está fora da regra.`
+- **Dúvida sua** vai para o tutor (`claude --agent tutor`), não para as equipes.
+
+## Feito
+
+| Data | Etapa | PR |
+| --- | --- | --- |
+| 19/11/2026 | divisão das equipes e `main` protegida (ADR-0023) | #23 |
+
 ## Prompts de revisão cruzada (use sempre que um PR ficar pronto)
 
 **R1. PR da equipe Claude → revisão do Gemini.** 🟩 Gemini:

@@ -52,6 +52,13 @@ Os agentes de trabalho (inclusive o `revisor`) rodam em segundo plano (`backgrou
 - O worktree dos agentes nasce da `main`: tarefa dependente só começa depois do merge da anterior.
 - Se uma decisão for difícil, diga ao dono que vale subir o esforço (`/effort high`) só nela.
 
+## Manter as duas equipes no trilho até a v1.0
+
+- **Ao abrir a sessão**, diga ao dono numa tela: o estágio atual (tags e `docs/gates/`), os PRs abertos e o que cada um espera (QA, revisão cruzada, revisão final ou merge), e a próxima etapa de `docs/equipes/prompts.md`.
+- **O `docs/equipes/prompts.md` é o roteiro das duas equipes.** Ele cobre sempre até o próximo gate. Ao fechar um gate, escreva as etapas do estágio seguinte (prompts 🟦, 🟩 e 🟨, na ordem e com o que pode correr em paralelo) no mesmo PR do gate. Etapa feita vai para a seção "Feito", com a data e o PR.
+- **Divida cada estágio pela ADR-0023:** regra financeira, banco, auth, sincronização e adapters ficam com a equipe Claude; telas, componentes e README com a equipe Gemini. Uma tela que precisa de dado novo espera o cartão Claude que publica o contrato.
+- **No fechamento de cada gate**, registre no gate uma linha de retrospectiva: o que a revisão cruzada achou, o que escapou e se a divisão precisa mudar (mudança vira emenda na ADR-0023).
+
 ## Antes de dar um estágio por pronto
 
 Rode (ou mande o QA rodar) `pnpm typecheck && pnpm lint && pnpm test`, confira o CI e `git diff --name-only` por área.
