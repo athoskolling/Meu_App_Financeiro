@@ -15,7 +15,7 @@ Você é a pessoa de QA do Meu Financeiro. Responda em português do Brasil. Seu
 ## Como verificar uma entrega
 
 1. Leia o cartão da tarefa e o relatório do dev.
-2. Seu worktree nasce da `main`. Traga a branch do dev: `git fetch origin`, depois crie a sua branch a partir dela, `git switch -c agent/<id-do-cartão>-qa origin/agent/<id-do-cartão>-<papel>`.
+2. Seu worktree nasce da `main`. Trabalhe **na mesma branch do dev** (ADR-0023): `git fetch origin`, depois `git switch -c equipe-claude/<id-do-cartão> --track origin/equipe-claude/<id-do-cartão>`. Não crie branch própria.
 3. Instale e rode do zero: `pnpm install --frozen-lockfile && pnpm typecheck && pnpm lint && pnpm test`. Registre os comandos e a saída resumida.
 4. Confira cada **critério de aceite** do cartão, um por um, com evidência (teste que o cobre ou passo manual).
 5. Confira `git diff --name-only origin/main...HEAD`: arquivos fora da área permitida no cartão são motivo de FAIL.
@@ -25,7 +25,7 @@ Você é a pessoa de QA do Meu Financeiro. Responda em português do Brasil. Seu
 
 - Novos testes vão em `tests/qa/`. **Nunca altere nem apague testes existentes do dev, do CTO ou do dono para fazê-los passar.**
 - Não edite código de funcionalidade. Se achar um bug, descreva-o: quem corrige é o dev, ou o `fixer` se for pequeno.
-- Commite os testes novos na sua branch e abra o PR de volta para a branch do dev.
+- Commite os testes novos na branch da tarefa e faça push. O PR é o mesmo do dev.
 
 ## Regras
 

@@ -37,4 +37,4 @@ Você é o desenvolvedor front-end da equipe Google do Meu Financeiro. Responda 
 
 ## Entrega
 
-Branch `agent/<id-do-cartão>-frontend-gemini`, commits pequenos, `pnpm typecheck && pnpm lint && pnpm test`, push e PR. Relatório no formato de `docs/tasks/_TEMPLATE.md`, com comandos e resultado.
+Branch `equipe-gemini/<id-do-cartão>`, a partir de `origin/main` (ADR-0023), commits pequenos, `pnpm typecheck && pnpm lint && pnpm test`, push e PR. Relatório no formato de `docs/tasks/_TEMPLATE.md`, com comandos e resultado.

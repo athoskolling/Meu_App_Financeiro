@@ -36,4 +36,4 @@ Você é o desenvolvedor front-end do Meu Financeiro. Responda e documente em po
 
 ## Entrega
 
-Trabalhe na branch `agent/<id-do-cartão>-frontend`, faça commits pequenos, rode `pnpm typecheck && pnpm lint && pnpm test`, faça push e, se `gh` estiver disponível, abra um PR. Termine com o relatório no formato de `docs/tasks/_TEMPLATE.md`, com comandos executados e resultado. Não diga "pronto" sem ter rodado os comandos.
+Por padrão, as telas são da equipe Gemini (ADR-0023): você só trabalha quando o cartão te atribuir. Trabalhe na branch `equipe-claude/<id-do-cartão>`, criada a partir de `origin/main`, faça commits pequenos, rode `pnpm typecheck && pnpm lint && pnpm test`, faça push e, se `gh` estiver disponível, abra um PR. Termine com o relatório no formato de `docs/tasks/_TEMPLATE.md`, com comandos executados e resultado. Não diga "pronto" sem ter rodado os comandos.

@@ -34,6 +34,14 @@ IDs dos modelos (conferidos com `agy models` em 2026-11-19): `gemini-4-neon-low|
 - `flash` se identificou como Gemini 4 Hydrogen num teste. **[VERIFICAR]** a confirmação é só a resposta do próprio modelo.
 - Para fixar um modelo exato num trabalhador, use o swarm: `swarm{action:"add", name:"qa", model:"gemini-4-hydrogen-high", brief:"…"}`. O dono autoriza aqui esse uso de modelos diferentes do seu.
 
+## 2.1 Divisão entre as equipes (ADR-0023, leia antes de tudo)
+
+- **Quem planeja:** só o `cto` Claude escreve cartões, ADRs, casos de teste e gates. O `gemini-cto` executa os cartões da equipe Gemini e não planeja.
+- **Áreas da equipe Gemini:** `app/` (fora de `app/api/`), `components/`, estilos, `public/`, `README.md` e `tests/ui/`. **Áreas da equipe Claude:** `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`. As telas usam o contrato (tipos e rotas) que a equipe Claude publica e nunca calculam regra financeira.
+- **Uma branch por tarefa:** `equipe-gemini/T{nn}`, a partir de `origin/main`. O dev e o QA fazem commit nela. Um PR por tarefa.
+- **Revisão cruzada obrigatória:** toda tarefa Gemini é revisada pelo `revisor` Claude. Toda tarefa Claude é revisada pelo `gemini-revisor`, e é você quem o roda quando o dono indicar o PR. O parecer vai como comentário no PR (`gh pr comment`).
+- **`main` protegida:** só entra por PR com `check` e `gitleaks` verdes. Push direto é recusado.
+
 ## 3. Os agentes Google (`.agents/agents/`)
 
 | Agente                | Modelo                                        | Escreve código?          | Equivale a     | Quando usar                                                                      |
@@ -72,7 +80,7 @@ Cada subagente começa com o contexto **vazio**. O que não estiver no briefing,
 ```
 Cartão: docs/tasks/E{n}/T{nn}.md  (leia inteiro antes de começar)
 Papel: gemini-dev-backend
-Branch: agent/T{nn}-backend-gemini  (criar a partir de origin/main atualizada)
+Branch: equipe-gemini/T{nn}  (criar a partir de origin/main atualizada; o QA usa a mesma)
 Arquivos permitidos: <copiar do cartão>
 Feito quando: <critérios de aceite do cartão> + `pnpm typecheck && pnpm lint && pnpm test` passando
 Não faça: <fora de escopo do cartão>; não leia .env* nem private/; não mude package.json, lockfile, .github/, .claude/, .agents/
@@ -85,21 +93,23 @@ Para o Hydrogen, seja **mais explícito** ainda: diga o arquivo exato, a funçã
 ## 6. Ciclo de uma tarefa
 
 ```
-gemini-cto escreve/lê o cartão ─► dono aprova
+cto Claude escreve o cartão ─► dono aprova e passa ao gemini-cto
    ─► dev (gemini-dev-backend | gemini-dev-frontend | gemini-fixer) ─► relatório
    ─► gemini-qa (não confia no relatório; roda tudo do zero) ─► PASS | FAIL
          └─ FAIL ─► dev corrige (máx. 2 rodadas)
-   ─► gemini-revisor (obrigatório em regra financeira, auth, banco, sync, segurança) ─► APROVADO | ALTERAÇÕES
-   ─► gemini-cto confere o diff contra o cartão e a spec ─► avisa o dono ─► dono faz o merge
+   ─► gemini-cto confere o diff contra o cartão ─► avisa o dono
+   ─► revisor Claude (revisão cruzada, sempre) ─► APROVADO | ALTERAÇÕES
+         └─ e também o gemini-revisor, se tocar regra financeira, auth, banco, sync ou segurança
+   ─► cto Claude (revisão final) ─► dono faz o merge
 ```
 
 Depois de delegar, **espere o resultado** antes de qualquer passo que dependa dele. Ao receber um relatório, confira contra o cartão antes de chamar o próximo agente. Relatório sem comandos executados é devolvido.
 
 ## 7. Trabalhar junto com a equipe Claude (sem atropelar)
 
-- **Um cartão, uma equipe.** O campo "Agente responsável" do cartão diz quem faz, por exemplo `gemini-dev-frontend`. Nunca pegue um cartão atribuído a um agente Claude, nem o contrário.
-- **Branches com sufixo:** `agent/T{nn}-{papel}-gemini`. Assim o dono vê no `git log` quem fez o quê.
-- **Revisão cruzada é bem-vinda.** Um modelo de outra família pega erros diferentes. Se o dono pedir, o `gemini-revisor` pode revisar uma branch da equipe Claude (e o `revisor` do Claude pode revisar uma branch Gemini). O revisor só lê e escreve o parecer; quem corrige é o autor.
+- **Um cartão, uma equipe.** O campo "Equipe e agente responsável" do cartão diz quem faz. Nunca pegue um cartão da equipe Claude, nem o contrário.
+- **Branch da equipe:** `equipe-gemini/T{nn}`. Assim o dono vê no `git log` quem fez o quê.
+- **Revisão cruzada é obrigatória** (ADR-0023). Um modelo de outra família pega erros diferentes: na auditoria da zen-mayer, a equipe Google achou três problemas que a equipe Claude tinha deixado passar. O revisor só lê e comenta no PR; quem corrige é o autor.
 - **Não edite `.claude/`** (configuração da equipe Claude) nem `CLAUDE.md`. Mudança de processo é com o dono.
 - **Antes de começar,** confira o estágio: `git tag` e `docs/gates/`. Não trabalhe em estágio cujo gate anterior não foi fechado.
 - **Espaço de trabalho:** a sessão do `agy` trabalha na pasta onde foi aberta. Se dois agentes forem escrever ao mesmo tempo, cada um precisa da sua cópia (worktree separado ou o modo de workspace `share`/`branch` do Antigravity). Na dúvida, um agente escrevendo por vez.

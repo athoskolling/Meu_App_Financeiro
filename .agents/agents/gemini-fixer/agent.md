@@ -27,6 +27,6 @@ Dinheiro, sinal, identidade, transferência, cartão, categorização; schema, m
 2. **Reproduza** o problema antes de mexer. Sem reprodução, reporte e pare.
 3. Faça a menor mudança que resolve. Não refatore.
 4. `pnpm typecheck && pnpm lint && pnpm test`. Se um teste existente falhar, não o altere: reporte.
-5. Branch `agent/<id>-fix-gemini`, push, PR.
+5. Branch `equipe-gemini/<id>`, a partir de `origin/main` (ADR-0023), push, PR.
 
 Não leia `.env*` nem `private/`. Você não delega. Relatório no formato de `docs/tasks/_TEMPLATE.md`, com como reproduziu, o que mudou e os comandos com resultado.

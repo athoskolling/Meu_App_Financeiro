@@ -2,6 +2,8 @@
 
 Este guia explica como funciona, quem faz o quê e como rodar. O plano de tarefas está em `ROADMAP.md`. As definições dos agentes estão em `.claude/agents/`.
 
+> **Atualização de 19/11/2026 (ADR-0023):** agora há duas equipes, Claude (`.claude/agents/`) e Gemini (`.agents/agents/`, ver `GEMINI.md`), **divididas por área**. Claude: `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`. Gemini: `app/` (fora de `app/api/`), `components/`, estilos, `README.md`. Só o `cto` Claude planeja. Cada tarefa tem **uma branch** (`equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`), onde o dev e o QA fazem commit. A **revisão é cruzada**: a outra equipe sempre revisa, e em regra financeira, banco, auth, sincronização e segurança os dois revisores olham. A `main` é protegida no GitHub. Onde este guia disser outra coisa, vale a ADR-0023.
+
 ## 1. O que é desenvolvimento multiagente
 
 Pense numa equipe pequena: um líder técnico (CTO) que planeja e revisa, dois desenvolvedores, uma pessoa para consertos pequenos, uma pessoa de QA, um segundo revisor de código e um tutor que só explica as coisas a você. No Claude Code, cada "pessoa" é uma instância de modelo com:
@@ -56,10 +58,10 @@ Não há um agente "dono" de segurança: auth, RLS e segredos são sempre revisa
 Todo o código é escrito por `dev-backend`, `dev-frontend` e `fixer`. Cadeia de cada tarefa:
 
 ```
-dev ──► qa ──► revisor ──► cto ──► você (merge)
+dev ──► qa (mesma equipe) ──► revisor da outra equipe ──► [revisor da mesma equipe] ──► cto ──► você (merge)
 ```
 
-- O `revisor` é **obrigatório** em tarefas de regra financeira, auth, RLS, banco e migração, sincronização e segurança. Nas demais, o CTO pode dispensá-lo no cartão, escrevendo o motivo (ex.: ajuste de texto).
+- O revisor da **outra** equipe é obrigatório em toda tarefa (ADR-0023). O revisor da **mesma** equipe também é obrigatório em regra financeira, auth, RLS, banco e migração, sincronização e segurança; nas demais, o CTO pode dispensá-lo no cartão, escrevendo o motivo.
 - Em regra financeira, o CTO escreve os **casos de teste antes**, você os aprova, e só então o dev implementa. Isso substitui o "Modo A" das versões anteriores deste plano, em que você escrevia o núcleo.
 - Como você não digita o código, as perguntas de explicação dos gates continuam: são a prova de que você entende o que está aprovando. Use o tutor para estudar e depois explique com as suas palavras.
 
@@ -102,7 +104,7 @@ Também dá para chamá-lo dentro da sessão do CTO com `@agent-tutor`, mas isso
 ## 6. Ciclo de uma tarefa
 
 ```
-CTO cria cartão ──► dev (worktree, branch agent/T2.4-backend) ──► relatório
+CTO cria cartão ──► dev (worktree, branch equipe-claude/T2.4) ──► relatório
                                                                       │
         ┌─────────────────────────────────────────────────────────────┘
         ▼
@@ -111,7 +113,8 @@ CTO cria cartão ──► dev (worktree, branch agent/T2.4-backend) ──► r
         │
         ├─ FAIL ─► dev corrige (máx. 2 rodadas) ─► QA de novo
         ▼
-   REVISOR (Sonnet, esforço alto) lê o diff: APROVADO ou ALTERAÇÕES
+   REVISOR DA OUTRA EQUIPE (sempre) e, em regra financeira, banco, auth,
+   sync e segurança, também o da mesma equipe: comentam no PR APROVADO ou ALTERAÇÕES
         │
         ├─ ALTERAÇÕES ─► dev corrige (conta na mesma regra de 2 rodadas)
         ▼
@@ -121,7 +124,7 @@ CTO cria cartão ──► dev (worktree, branch agent/T2.4-backend) ──► r
 
 Fato técnico que importa: o worktree de um subagente nasce da **branch padrão** (`main`), não da branch da sessão. Por isso:
 - uma tarefa que depende de outra só começa **depois do merge** da anterior;
-- o `revisor` não precisa de worktree: ele lê a branch do dev com `git fetch` e `git diff origin/main...origin/agent/...`;
+- o `revisor` não precisa de worktree: ele lê a branch da tarefa com `git fetch` e `git diff origin/main...origin/equipe-<equipe>/T{nn}`, e publica o parecer como comentário no PR;
 - o QA, que precisa ver o código do dev, faz `git fetch` e cria a sua branch a partir da branch do dev, e abre o PR de volta para ela.
 
 ### 6.1 Acompanhar cada agente
@@ -133,7 +136,7 @@ Os agentes de trabalho (inclusive o `revisor`) têm `background: true`: rodam en
 - **`Ctrl+B`:** move para o segundo plano algo que está rodando em primeiro plano.
 - **Permissões:** os pedidos de um agente em segundo plano aparecem na sua sessão, com o nome de quem pede. Aprove para continuar; `Esc` nega só aquela chamada.
 - **No disco:** transcrições em `~/.claude/projects/{projeto}/{sessão}/subagents/agent-{id}.jsonl`, apagadas após 30 dias.
-- **Pelo Git:** cada agente trabalha numa branch `agent/...`; `git log agent/T2.4-backend` mostra o que ele fez, e o relatório fica no cartão.
+- **Pelo Git:** cada tarefa tem uma branch `equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`; `git log origin/equipe-claude/T2.4` mostra o que o dev e o QA fizeram, e o relatório fica no cartão.
 - **Limite:** até 20 subagentes ao mesmo tempo por padrão; o projeto limita a 3 escrevendo (ROADMAP). O `revisor` e o `tutor` não escrevem e não contam.
 
 Se o segundo plano atrapalhar (por exemplo, o CTO seguir sem esperar), tire a linha `background: true` do agente: ele passa a rodar em primeiro plano e bloqueia a conversa até terminar.
@@ -148,13 +151,13 @@ Cartões ficam em `docs/tasks/E{n}/T{nn}.md` e são commitados: viram o históri
 
 | Área | Quem edita |
 |---|---|
-| `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/` | dev-backend |
-| `app/` (páginas), `components/`, estilos | dev-frontend |
-| `tests/` | dev (testes da própria tarefa, vindos do cartão); qa (`tests/qa/`, testes adicionais) |
+| `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/` | equipe Claude: dev-backend |
+| `app/` (páginas, fora de `app/api/`), `components/`, estilos, `public/`, `README.md` | equipe Gemini: gemini-dev-frontend (o `dev-frontend` Claude só quando o cartão atribuir) |
+| `tests/` | dev (testes da própria tarefa, na pasta da área); qa da equipe da tarefa (`tests/qa/`, testes adicionais) |
 | `package.json`, `pnpm-lock.yaml`, `.github/`, `.claude/`, `tsconfig`, configs | só o CTO ou o dono; os devs pedem a mudança no relatório, **salvo quando o cartão lista o arquivo** (é o caso das tarefas do E0 e de dependências novas aprovadas) |
 | `docs/` | CTO (cartões, ADRs, gates); fixer para correções de texto |
 | Qualquer outra | fixer só com cartão que a cite |
-| Nada (somente leitura) | revisor e tutor |
+| Nada (somente leitura; só comentam no PR) | revisor, gemini-revisor e os tutores |
 
 O revisor e o CTO conferem `git diff --name-only` em cada PR: arquivo fora da área do agente é motivo de devolução.
 

@@ -1,14 +1,14 @@
 # T{estágio}.{nn} — {título curto}
 
-Copie este arquivo para `docs/tasks/E{n}/T{nn}.md`. O CTO preenche o cartão; o agente preenche o relatório; o QA preenche a seção de QA; o revisor, a dele; o CTO fecha com a revisão final.
+Copie este arquivo para `docs/tasks/E{n}/T{nn}.md`. O CTO preenche o cartão; o agente preenche o relatório; o QA preenche a seção de QA; o líder da equipe autora copia os pareceres dos revisores (publicados como comentário no PR); o CTO fecha com a revisão final. Regras de equipe, branch e revisão: ADR-0023.
 
 ## Cartão (preenchido pelo CTO)
 
 - **Estágio / tarefa:** E{n} / T{nn} (linha correspondente do `ROADMAP.md`)
-- **Agente responsável:** dev-backend | dev-frontend | fixer | qa
-- **Revisor:** obrigatório | dispensado (motivo: …). Obrigatório em regra financeira, auth, RLS, banco, migração, sincronização e segurança
+- **Equipe e agente responsável:** claude: dev-backend | dev-frontend | fixer, ou gemini: gemini-dev-frontend | gemini-fixer | gemini-dev-backend (pela área, ADR-0023)
 - **Depende de (já em `main`):** {tarefas}
-- **Branch:** `agent/T{nn}-{papel}`
+- **Branch:** `equipe-{claude|gemini}/T{nn}`, a partir de `origin/main` (dev e QA fazem commit nela)
+- **Revisores:** cruzado (sempre): {revisor | gemini-revisor}; da mesma equipe: obrigatório | dispensado (obrigatório em regra financeira, auth, RLS, banco, migração, sincronização e segurança)
 
 ### Objetivo
 
@@ -67,12 +67,19 @@ Copie este arquivo para `docs/tasks/E{n}/T{nn}.md`. O CTO preenche o cartão; o 
 - **Testes adicionados:** {arquivos}
 - **Não consegui verificar:** {itens e motivo}
 
-## Revisão do revisor (preenchida pelo revisor)
+## Revisão cruzada (revisor da outra equipe; copiada do comentário no PR)
 
+- **Revisor e link do comentário:** {revisor | gemini-revisor}, {link}
 - **Veredito:** APROVADO | ALTERAÇÕES
 - **Achados:** {gravidade, arquivo e linha, problema, cenário em que falha, o que fazer}
-- **Verifiquei:** {o que leu e rodou}
-- **Não consegui verificar:** {itens e motivo}
+- **Verifiquei / Não consegui verificar:** {itens}
+
+## Revisão da mesma equipe (quando obrigatória; copiada do comentário no PR)
+
+- **Revisor e link do comentário:** {revisor | gemini-revisor}, {link} | dispensada (motivo)
+- **Veredito:** APROVADO | ALTERAÇÕES
+- **Achados:** {gravidade, arquivo e linha, problema, cenário em que falha, o que fazer}
+- **Verifiquei / Não consegui verificar:** {itens}
 
 ## Revisão do CTO
 
