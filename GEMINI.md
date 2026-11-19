@@ -10,7 +10,7 @@ As regras abaixo vêm do `CLAUDE.md` e são as mesmas para as duas equipes. Onde
 
 @[CLAUDE.md](CLAUDE.md)
 
-Leia também, antes de trabalhar: `docs/AGENTES.md` (como a equipe Claude trabalha; o seu fluxo é igual), `ROADMAP.md` (plano), `docs/tasks/_TEMPLATE.md` (cartão e relatório) e a spec `docs/Meu_financeiro.md` nas seções que o cartão citar.
+Leia também, antes de trabalhar: `docs/equipes/AGENTES.md` (como a equipe Claude trabalha; o seu fluxo é igual), `ROADMAP.md` (plano), `docs/tasks/_TEMPLATE.md` (cartão e relatório) e a spec `docs/spec/Meu_financeiro.md` nas seções que o cartão citar.
 
 ## 2. A ideia em uma frase
 

@@ -1,7 +1,7 @@
 # Debate: auditoria da branch zen-mayer (Claude × Gemini)
 
 **Alvo:** `origin/claude/zen-mayer-trcp1r`, que será renomeada para `pendente/zen-mayer-E1-E2`. A ponta é `fb6bf2a` e o merge-base com `main` é `8ea548b`.
-**Regras:** seção 7 de `docs/delegacao/2026-11-19-gemini.md` (branch `docs-agent-delegation-guide`).
+**Regras:** seção 7 de `docs/historico/delegacao/2026-11-19-gemini.md` (branch `docs-agent-delegation-guide`).
 **Quem decide no fim:** o dono (Athos). Este arquivo só prepara a decisão.
 
 | Equipe | Branch da auditoria | Revisor de conteúdo |
@@ -24,7 +24,7 @@ PRONTO gemini 2f2c1c6 (branch `auditoria/zen-mayer-gemini`; G1–G2 por `gemini-
 
 ### Parecer de claude sobre gemini
 
-Lido em `2f2c1c6` (G1 a G4). Cada fato abaixo foi conferido rodando o comando de novo em 19/11/2026. Inclui o adendo Claude `5ece678` (`docs/auditoria/zen-mayer-adendo-claude.md`), escrito depois do PRONTO.
+Lido em `2f2c1c6` (G1 a G4). Cada fato abaixo foi conferido rodando o comando de novo em 19/11/2026. Inclui o adendo Claude `5ece678` (`docs/historico/auditoria-zen-mayer/zen-mayer-adendo-claude.md`), escrito depois do PRONTO.
 
 **1. Divergências de fato**
 

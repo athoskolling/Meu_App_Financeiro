@@ -1,6 +1,6 @@
 # Auditoria da branch zen-mayer (19/11/2026)
 
-A branch `claude/zen-mayer-trcp1r` (depois `pendente/zen-mayer-E1-E2`) trouxe 63 commits feitos numa sessão de nuvem, sem PR e sem aprovação do dono: T1.3, T1.5 a T1.8, T2.1s, T2.2, T2.5 e T2.10. As equipes Claude e Google auditaram essa branch, cada uma por conta própria. Depois, a equipe Claude comparou as duas auditorias. O roteiro está em `docs/delegacao/2026-11-19-gemini.md`.
+A branch `claude/zen-mayer-trcp1r` (depois `pendente/zen-mayer-E1-E2`) trouxe 63 commits feitos numa sessão de nuvem, sem PR e sem aprovação do dono: T1.3, T1.5 a T1.8, T2.1s, T2.2, T2.5 e T2.10. As equipes Claude e Google auditaram essa branch, cada uma por conta própria. Depois, a equipe Claude comparou as duas auditorias. O roteiro está em `docs/historico/delegacao/2026-11-19-gemini.md`.
 
 **Comece pelo `debate.md`:** ele tem a comparação, o placar e a conclusão, com o veredito de cada tarefa.
 
@@ -10,7 +10,7 @@ A branch `claude/zen-mayer-trcp1r` (depois `pendente/zen-mayer-E1-E2`) trouxe 63
 | `gemini/` | G1 a G4 da equipe Google (PRONTO `2f2c1c6`) |
 | `debate.md` | o parecer cruzado e a conclusão |
 
-Os relatórios citam caminhos como `docs/auditoria/zen-mayer-G1-inventario.md`, que eram os caminhos nas branches de cada equipe. Aqui eles estão nas subpastas.
+Os relatórios citam caminhos como `docs/historico/auditoria-zen-mayer/zen-mayer-G1-inventario.md`, que eram os caminhos nas branches de cada equipe. Aqui eles estão nas subpastas.
 
 ## Onde está o código e o histórico
 

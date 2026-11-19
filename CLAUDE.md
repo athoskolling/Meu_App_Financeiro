@@ -1,6 +1,6 @@
 # Meu Financeiro — instruções para o agente
 
-App pessoal e open source de controle financeiro (Santander e Nubank via MeuPluggy; Caju por prints). Spec completa em `docs/Meu_financeiro.md`; plano de execução em `ROADMAP.md`; roteiro do núcleo de domínio em `docs/Fase0_roteiro.md`; como os agentes trabalham em `docs/AGENTES.md`.
+App pessoal e open source de controle financeiro (Santander e Nubank via MeuPluggy; Caju por prints). Spec completa em `docs/spec/Meu_financeiro.md`; plano de execução em `ROADMAP.md`; roteiro do núcleo de domínio em `docs/spec/Fase0_roteiro.md`; como os agentes trabalham em `docs/equipes/AGENTES.md`; os prompts de cada equipe, em ordem, em `docs/equipes/prompts.md`. O índice de toda a documentação está em `docs/README.md`.
 
 ## Como trabalhamos
 

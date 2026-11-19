@@ -42,7 +42,7 @@ Copie este arquivo para `docs/tasks/E{n}/T{nn}.md`. O CTO preenche o cartão; o 
 
 ### Escalar ao CTO se
 
-{Gatilhos específicos desta tarefa, além dos gerais de `docs/AGENTES.md` seção 9.}
+{Gatilhos específicos desta tarefa, além dos gerais de `docs/equipes/AGENTES.md` seção 9.}
 
 ---
 

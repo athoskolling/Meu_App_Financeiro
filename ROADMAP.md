@@ -1,6 +1,6 @@
 # Meu Financeiro — Roadmap (caminho rápido)
 
-Este arquivo é o plano de execução. A spec (`docs/Meu_financeiro.md`) diz **o que** construir; este arquivo diz **em que ordem, por quem e quando está pronto**. Como os agentes funcionam: `docs/AGENTES.md`. Por que este plano é mais curto que o original: `docs/decisoes/` (ADR-0015).
+Este arquivo é o plano de execução. A spec (`docs/spec/Meu_financeiro.md`) diz **o que** construir; este arquivo diz **em que ordem, por quem e quando está pronto**. Como os agentes funcionam: `docs/equipes/AGENTES.md`. Por que este plano é mais curto que o original: `docs/decisoes/` (ADR-0015).
 
 ## Como usar
 
@@ -110,7 +110,7 @@ O cartão de cada tarefa lista explicitamente os arquivos de configuração que 
 
 ## E1 — Núcleo de domínio (v0.1 e v0.1.1)
 
-Os contratos e os casos de teste estão em `docs/Fase0_roteiro.md`. Em todo o E1, o **CTO escreve os casos de teste primeiro**; o BE implementa até os testes passarem; QA, REV e CTO revisam; você lê o diff e faz as perguntas do gate.
+Os contratos e os casos de teste estão em `docs/spec/Fase0_roteiro.md`. Em todo o E1, o **CTO escreve os casos de teste primeiro**; o BE implementa até os testes passarem; QA, REV e CTO revisam; você lê o diff e faz as perguntas do gate.
 
 ### Parte A (v0.1): o núcleo, que libera o E2 (T2.6) e o E3
 
@@ -140,7 +140,7 @@ O **mesclador de prints** (Tarefa 4 do roteiro) deixou o E1: ver T5.4.
 
 ## E1b — Sondagem Pluggy (sem versão, em paralelo ao E1 e ao E2)
 
-Objetivo: trocar suposição por dado real antes de escrever o adapter. Os dados reais **nunca** passam pelos agentes (ver `docs/AGENTES.md`, privacidade). Comece logo, por causa do trial da Pluggy.
+Objetivo: trocar suposição por dado real antes de escrever o adapter. Os dados reais **nunca** passam pelos agentes (ver `docs/equipes/AGENTES.md`, privacidade). Comece logo, por causa do trial da Pluggy.
 
 | ID | Tarefa | Quem | Depende de | Pronto quando |
 |---|---|---|---|---|

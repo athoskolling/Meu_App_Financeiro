@@ -6,7 +6,7 @@
 
 ## Contexto
 
-Até aqui as duas equipes (`.claude/agents/` e `.agents/agents/`) eram cópias uma da outra. As duas podiam pegar qualquer tarefa, havia dois líderes que planejavam, e cada tarefa abria duas ou três branches (dev, QA, docs). A `main` não tinha proteção. Uma sessão de nuvem fez 10 tarefas em 33 minutos numa branch própria, sem cartão aprovado e sem PR (auditoria em `docs/auditoria/`). Na auditoria, a revisão feita pela outra equipe achou três problemas que a revisão da própria equipe deixou passar.
+Até aqui as duas equipes (`.claude/agents/` e `.agents/agents/`) eram cópias uma da outra. As duas podiam pegar qualquer tarefa, havia dois líderes que planejavam, e cada tarefa abria duas ou três branches (dev, QA, docs). A `main` não tinha proteção. Uma sessão de nuvem fez 10 tarefas em 33 minutos numa branch própria, sem cartão aprovado e sem PR (auditoria em `docs/historico/auditoria-zen-mayer/`). Na auditoria, a revisão feita pela outra equipe achou três problemas que a revisão da própria equipe deixou passar.
 
 ## Decisão
 
@@ -28,7 +28,7 @@ O `cto` (Claude, Opus) é o **único** que escreve cartões, ADRs, casos de test
 
 ### 3. Uma branch por tarefa
 
-- **Nome:** `equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`, sempre criada a partir de `origin/main`. Exemplos: `equipe-claude/T1.3`, `equipe-gemini/T2.5`.
+- **Nome:** `equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`, sempre criada a partir de `origin/main`. Exemplos: `equipe-claude/T1.3`, `equipe-gemini/T2.5`. Trabalho só de documentação do `cto` (cartões, decisões, gate) usa `equipe-claude/<assunto>`, por exemplo `equipe-claude/cartoes-E1A-E2`.
 - O dev e o QA **da mesma equipe** fazem commit na **mesma** branch, um depois do outro. O QA não cria branch própria.
 - Os revisores não fazem commit. Eles escrevem o parecer como **comentário no PR** (`gh pr comment`), e o líder da equipe autora copia o veredito para o cartão.
 - **Um PR por tarefa**, da branch da tarefa para a `main`.
@@ -57,4 +57,4 @@ Ativada em 19/11/2026: só entra por PR, com `check` e `gitleaks` verdes, sem pu
 - Cada tarefa custa uma revisão a mais, com um modelo de outra família. Em regra financeira são duas revisões.
 - Quando uma tarefa de tela precisa de dado novo, ela espera a tarefa Claude que publica o contrato.
 - **Pendente (cartão próprio):** pôr Postgres no CI, para os testes de banco rodarem em todo PR. Até isso entrar, o QA da tarefa roda os testes de banco localmente e registra o resultado no cartão.
-- Atualizados junto com esta ADR: `CLAUDE.md`, `GEMINI.md`, `docs/AGENTES.md`, `docs/tasks/_TEMPLATE.md` e os arquivos dos agentes nas duas pastas.
+- Atualizados junto com esta ADR: `CLAUDE.md`, `GEMINI.md`, `docs/equipes/AGENTES.md`, `docs/tasks/_TEMPLATE.md` e os arquivos dos agentes nas duas pastas.
