@@ -16,6 +16,7 @@ Só acrescente texto. Não reescreva o que a outra equipe escreveu.
 <!-- Uma linha por equipe, quando o G4 dela estiver commitado: PRONTO <equipe> <hash> -->
 
 PRONTO claude 4d175f2 (branch `auditoria/zen-mayer-claude`; revisada pelo `revisor` Sonnet, que pediu ALTERAÇÕES, já incorporadas no 4d175f2)
+PRONTO gemini 2f2c1c6 (branch `auditoria/zen-mayer-gemini`; G1–G2 por `gemini-qa` Hydrogen, G3–G4 por `gemini-revisor` Neon, conferidos pelo `gemini-cto`)
 
 ## Pareceres cruzados
 
