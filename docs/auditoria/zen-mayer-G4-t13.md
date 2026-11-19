@@ -21,7 +21,7 @@ O texto canônico é conferido **exatamente** (linhas 50 e 55, com o hash falso 
 
 ## 2. Casos C2 (propostos na ADR-0022)
 
-Os C2 não existem como teste na zen-mayer. **Rodei os 14 casos contra o código dela** com um teste temporário, num worktree descartável. O arquivo foi apagado depois e não foi commitado em lugar nenhum; `git status` ficou limpo. Resultado: **14 passaram, 14 no total.**
+**Correção depois do parecer do revisor:** a primeira versão dizia que os C2 não existiam como teste na zen-mayer. Na verdade, `tests/qa/identity-qa.test.ts` já cobre a maior parte: NEL (`:33`, `:403`), U+202F e U+3000 (`:382-383`), NFC e NFD (`:360-377`), `-0` (`:505`), `Infinity` (`:536`), chave inválida fora do lote (`:545`), `mode` inválido (`:549`) e 13 contra 12 (`:568`). `2 ** 60` está em `identity.test.ts:212`. **Sem teste ficam C2.3 (U+200B), C2.11 (estouro sem resultado parcial) e C2.13 (mensagens sem dados)**: `grep -nE '200b|MAX_SAFE_INTEGER - 1|message' tests/qa/identity-qa.test.ts tests/domain/transactions/identity.test.ts` não devolve nada. Também rodei os 14 casos contra o código dela, com um teste temporário num worktree descartável; o arquivo foi apagado e não entrou em commit nenhum, e o `git status` ficou limpo. Resultado: **14 de 14 passaram.**
 
 | Caso | Passa | Por quê, no código |
 |---|---|---|
@@ -67,5 +67,5 @@ A API é **idêntica** ao contrato da T1.0 e aos nomes do item 4 da ADR-0022: `H
 **CUMPRE.** A T1.3 da zen-mayer cumpre a seção C e os 14 casos C2. Recomendo **não reimplementar**: o dev-backend Claude refaria um código que já passa em tudo. O caminho mais barato é:
 
 1. aprovar a ADR-0022. Os itens 1, 2 e 4 passam a registrar o que já está implementado; o item 3 é o contrato para a T2.6 e a T3.4;
-2. acrescentar os C2 como testes na T1.3 da zen-mayer, num commit pequeno, antes do merge;
+2. acrescentar como teste **só os C2 que faltam (C2.3, C2.11 e C2.13)**, num commit pequeno, no PR B do G3;
 3. marcar o cartão novo da T1.3 como "substituído" pelo da zen-mayer.
