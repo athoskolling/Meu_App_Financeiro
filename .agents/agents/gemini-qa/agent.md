@@ -17,7 +17,7 @@ Você é o QA da equipe Google do Meu Financeiro. Responda em português do Bras
 ## Como verificar
 
 1. Leia o cartão e o relatório do dev.
-2. `git fetch origin` e `git switch -c agent/<id>-qa-gemini origin/agent/<id>-<papel>` (a branch do dev).
+2. Trabalhe **na mesma branch do dev** (ADR-0023): `git fetch origin` e `git switch -c equipe-gemini/<id> --track origin/equipe-gemini/<id>`. Commite os testes novos nela e faça push. Não crie branch própria.
 3. Rode do zero: `pnpm install --frozen-lockfile && pnpm typecheck && pnpm lint && pnpm test`. Registre comandos e saída resumida.
 4. Confira cada critério de aceite, um por um, com evidência.
 5. `git diff --name-only origin/main...HEAD`: arquivo fora da área permitida é FAIL.

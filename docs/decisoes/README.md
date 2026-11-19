@@ -23,6 +23,7 @@ Cada decisão relevante vira um arquivo `NNNN-titulo.md` com contexto, decisão 
 | 0017 | Isolamento de `domain/` por lista de permitidos (só relativos; pacote novo exige ADR), sem `eslint-disable`, imports relativos presos a `domain/`; mudanças nas travas do projeto exigem revisor | `0017-isolamento-domain-allowlist.md` |
 | 0018 | Núcleo E1 parte A: `Cents` como `number` com brand; `parseBRL`/`formatBRL` sem `Intl`; erros com código sem ecoar a entrada; `date` civil; validação devolve todos os problemas; `baseKey` com a descrição normalizada (sem `merchantName`, `status`, `type`, `externalId`), texto canônico em JSON, hash injetado | `0018-nucleo-e1-parte-a.md` |
 | 0019 | Base do app no E2: dependências Next/React/Tailwind/Zod aprovadas; tsconfig próprio de `domain/` sem DOM nem Node; variáveis obrigatórias por etapa; log por lista de permitidos; Postgres local em Docker | `0019-base-do-app-e2.md` |
+| 0023 | Duas equipes divididas por área (Claude: `domain/`, `lib/`, `drizzle/`, `app/api/`; Gemini: telas e README); só o `cto` Claude planeja; uma branch por tarefa (`equipe-claude/T{nn}`, `equipe-gemini/T{nn}`); revisão cruzada sempre, dupla em regra; `main` protegida | `0023-divisao-das-equipes.md` |
 
 ## Propostas (aguardam o dono)
 

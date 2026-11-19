@@ -6,7 +6,9 @@ App pessoal e open source de controle financeiro (Santander e Nubank via MeuPlug
 
 - O projeto usa uma equipe de agentes (`.claude/agents/`): **cto** (Opus), **dev-backend** e **dev-frontend** (Sonnet), **revisor** (Sonnet, esforço alto), **fixer** e **qa** (Haiku), mais o **tutor** (Haiku), que só explica ao dono. Só o CTO delega, e ele não chama o tutor. Ninguém trabalha sem um cartão de tarefa em `docs/tasks/`.
 - **O dono (Athos) não escreve código.** Os agentes escrevem; o dono lê os diffs, pede alterações, aprova o merge e fecha o gate. Por isso os relatórios e explicações devem ser claros: ele precisa entender o que foi feito.
-- **Cadeia de cada tarefa:** dev → `qa` → `revisor` (obrigatório em regra financeira, auth, banco, sincronização e segurança) → `cto` → dono.
+- **Duas equipes, divididas por área (ADR-0023).** A equipe Claude cuida de `domain/`, `lib/`, `drizzle/`, `app/api/` e `scripts/`, ou seja, regra financeira, banco e auth. A equipe Gemini (`GEMINI.md`, `.agents/agents/`) cuida de `app/` (fora de `app/api/`), `components/`, estilos e `README.md`. Só o `cto` escreve cartões, ADRs e gates, para as duas equipes.
+- **Uma branch por tarefa:** `equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`, a partir de `origin/main`. O dev e o QA fazem commit nela. Um PR por tarefa. A `main` é protegida: só entra por PR com CI verde.
+- **Cadeia de cada tarefa:** dev → `qa` da mesma equipe → revisor da **outra** equipe (sempre) → revisor da mesma equipe (em regra financeira, auth, banco, sincronização e segurança) → `cto` → dono faz o merge. Os revisores comentam no PR.
 - **Dúvidas do dono** vão para o `tutor` (`claude --agent tutor`), não para o fluxo de tarefas.
 - Antes de qualquer coisa, confira em qual estágio estamos (tags do Git e `docs/gates/`). Não trabalhe em estágio cujo gate anterior não foi fechado.
 - Mudança de escopo, de dependência ou de regra financeira vira ADR em `docs/decisoes/` antes do código.
