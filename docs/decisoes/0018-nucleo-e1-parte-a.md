@@ -6,7 +6,7 @@
 
 ## Contexto
 
-O roteiro (`docs/Fase0_roteiro.md`, Tarefas 1 a 3) pede que algumas escolhas sejam decididas e registradas antes do código. Este arquivo registra todas elas de uma vez, para que os casos de teste da T1.0 sejam inequívocos.
+O roteiro (`docs/spec/Fase0_roteiro.md`, Tarefas 1 a 3) pede que algumas escolhas sejam decididas e registradas antes do código. Este arquivo registra todas elas de uma vez, para que os casos de teste da T1.0 sejam inequívocos.
 
 ## Decisões
 

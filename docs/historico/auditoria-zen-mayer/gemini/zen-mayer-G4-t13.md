@@ -6,7 +6,7 @@
   - Cartão novo da T1.3: `docs/E1-T1.3-cartao:docs/tasks/E1/T1.3.md` (commit `597b1e5`)
   - ADR-0022 proposta: `docs/E1-T1.3-cartao:docs/decisoes/0022-identidade-detalhes-t1.3.md` (commit `597b1e5`)
   - Casos aprovados (seção C): `docs/tasks/E1/T1.0.md`
-  - Regras do projeto: `CLAUDE.md`, `docs/decisoes/0018-nucleo-e1-parte-a.md`, `docs/Meu_financeiro.md` (seção 5.4) e `docs/Fase0_roteiro.md` (Tarefa 3)
+  - Regras do projeto: `CLAUDE.md`, `docs/decisoes/0018-nucleo-e1-parte-a.md`, `docs/spec/Meu_financeiro.md` (seção 5.4) e `docs/spec/Fase0_roteiro.md` (Tarefa 3)
 - **Commits da T1.3 na `zen-mayer`:** `694310a` (cartões E1/E2), `8148e59` (testes iniciais C), `6c9de9a` (implementação), `37c98cc` (testes QA), `a76a82d` (relatório QA), `6af3420` (fix rodada 1: `\p{White_Space}` e overflow de ocorrência), `b7bc0a2` (fix rodada 2: `Number.isSafeInteger` em `existingCounts` e `identityKey`), `fb917d5` (parecer revisor/CTO).
 
 ---
@@ -197,7 +197,7 @@ O veredito não é `CUMPRE` puro porque **a suíte de testes do dev (`tests/doma
 ## Verifiquei / Não consegui verificar
 
 - **Verifiquei:**
-  - Leitura completa de `docs/delegacao/2026-11-19-gemini.md`, `docs/tasks/E1/T1.0.md`, `CLAUDE.md`, `docs/decisoes/0018-nucleo-e1-parte-a.md`, `docs/Meu_financeiro.md` (seção 5.4) e `docs/Fase0_roteiro.md` (Tarefa 3).
+  - Leitura completa de `docs/historico/delegacao/2026-11-19-gemini.md`, `docs/tasks/E1/T1.0.md`, `CLAUDE.md`, `docs/decisoes/0018-nucleo-e1-parte-a.md`, `docs/spec/Meu_financeiro.md` (seção 5.4) e `docs/spec/Fase0_roteiro.md` (Tarefa 3).
   - Leitura completa via `git show` de `docs/E1-T1.3-cartao:docs/tasks/E1/T1.3.md` e `docs/E1-T1.3-cartao:docs/decisoes/0022-identidade-detalhes-t1.3.md` (`597b1e5`).
   - Leitura completa na `zen-mayer` (`fb6bf2a`) de `domain/transactions/identity.ts`, `domain/transactions/index.ts`, `domain/transactions/transaction.ts`, `tests/domain/transactions/identity.test.ts`, `tests/qa/identity-qa.test.ts` e `docs/tasks/E1/T1.3.md`.
   - Inspeção de codepoints Unicode em `T1.0.md:251`, `identity.test.ts:39,42` e `docs/E1-T1.3-cartao:docs/tasks/E1/T1.3.md` (`C2.3`).

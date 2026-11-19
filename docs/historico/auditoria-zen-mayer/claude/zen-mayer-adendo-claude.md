@@ -14,7 +14,7 @@ O G2 (achado 3) e o G3 ("Conflitos") dizem que a zen-mayer "entraria como avanç
 | `git merge-base origin/main origin/pendente/zen-mayer-E1-E2` | `8ea548b` (igual) |
 | `git rev-list --count origin/main..origin/pendente/zen-mayer-E1-E2` | `63` (igual) |
 | `git merge-base --is-ancestor origin/main origin/pendente/zen-mayer-E1-E2` | falso: **não é mais fast-forward** |
-| `git diff --name-only 8ea548b origin/main` | 9 arquivos, só `.agents/`, `GEMINI.md` e `docs/delegacao/` |
+| `git diff --name-only 8ea548b origin/main` | 9 arquivos, só `.agents/`, `GEMINI.md` e `docs/historico/delegacao/` |
 | arquivos tocados pelos dois lados | nenhum |
 | `git merge-tree --write-tree --name-only origin/main origin/pendente/zen-mayer-E1-E2` | exit 0, **sem conflito** |
 | `git merge-tree --write-tree --name-only origin/docs/E1-T1.3-cartao origin/pendente/zen-mayer-E1-E2` | `CONFLICT (add/add)` em `docs/tasks/E1/T1.3.md` (já era o D4 do G3) |
