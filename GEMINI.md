@@ -16,18 +16,19 @@ Leia também, antes de trabalhar: `docs/AGENTES.md` (como a equipe Claude trabal
 
 **Neon pensa, decide e revisa; Hydrogen executa o que já está bem definido.** O Neon nunca gasta seu próprio contexto em trabalho mecânico, e o Hydrogen nunca decide regra financeira.
 
-| Equipe Claude | Equipe Google | Papel |
-|---|---|---|
-| Opus (esforço médio) | **Gemini 4 Neon**, sessão principal | líder técnico: planeja, escreve cartões, delega, revisa |
-| Sonnet (esforço médio) | **Neon** como subagente (`model: inherit`) | implementação de back-end e regra financeira |
-| Sonnet (esforço alto) | **Neon** como subagente (`model: inherit`) | revisão independente |
-| Sonnet (esforço médio) | **Hydrogen** (`model: flash`) | front-end a partir de design e contrato prontos |
-| Haiku (esforço alto) | **Hydrogen** (`model: flash`) | QA, consertos pequenos |
-| Haiku (esforço alto) | **Hydrogen** (sessão própria, `--model`) | tutor (só explica) |
+| Equipe Claude          | Equipe Google                              | Papel                                                   |
+| ---------------------- | ------------------------------------------ | ------------------------------------------------------- |
+| Opus (esforço médio)   | **Gemini 4 Neon**, sessão principal        | líder técnico: planeja, escreve cartões, delega, revisa |
+| Sonnet (esforço médio) | **Neon** como subagente (`model: inherit`) | implementação de back-end e regra financeira            |
+| Sonnet (esforço alto)  | **Neon** como subagente (`model: inherit`) | revisão independente                                    |
+| Sonnet (esforço médio) | **Hydrogen** (`model: flash`)              | front-end a partir de design e contrato prontos         |
+| Haiku (esforço alto)   | **Hydrogen** (`model: flash`)              | QA, consertos pequenos                                  |
+| Haiku (esforço alto)   | **Hydrogen** (sessão própria, `--model`)   | tutor (só explica)                                      |
 
 IDs dos modelos (conferidos com `agy models` em 2026-11-19): `gemini-4-neon-low|medium|high|xhigh`, `gemini-4-hydrogen-low|medium|high|xhigh`.
 
 **Como o modelo é escolhido (testado em 2026-11-19):**
+
 - Na frontmatter de um agente, o campo `model` só aceita `inherit`, `flash` ou `pro`. Um ID completo (`gemini-4-hydrogen-high`) faz o `agy` **ignorar o arquivo em silêncio**.
 - `inherit` = o modelo da sessão. Como o `gemini-cto` roda no Neon, os subagentes `inherit` rodam no Neon.
 - `flash` se identificou como Gemini 4 Hydrogen num teste. **[VERIFICAR]** a confirmação é só a resposta do próprio modelo.
@@ -35,15 +36,15 @@ IDs dos modelos (conferidos com `agy models` em 2026-11-19): `gemini-4-neon-low|
 
 ## 3. Os agentes Google (`.agents/agents/`)
 
-| Agente | Modelo | Escreve código? | Equivale a | Quando usar |
-|---|---|---|---|---|
-| `gemini-cto` | Neon (`--model gemini-4-neon-medium`) | não | `cto` | abrir a sessão: `agy --agent gemini-cto` |
-| `gemini-dev-backend` | Neon (`inherit`) | sim | `dev-backend` | `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`, qualquer regra financeira |
-| `gemini-revisor` | Neon (`inherit`) | não (só lê) | `revisor` | depois do QA, em regra financeira, auth, banco, sync, segurança |
-| `gemini-dev-frontend` | Hydrogen (`flash`) | sim | `dev-frontend` | telas em `app/`, `components/`, estilos, com contrato pronto |
-| `gemini-qa` | Hydrogen (`flash`) | só testes em `tests/qa/` | `qa` | verificação independente de cada entrega |
-| `gemini-fixer` | Hydrogen (`flash`) | sim, pouco | `fixer` | lint, tipos, texto, bug de poucas linhas já diagnosticado |
-| `gemini-tutor` | Hydrogen (`--model gemini-4-hydrogen-medium`) | não | `tutor` | o dono tirar dúvidas: `agy --agent gemini-tutor` |
+| Agente                | Modelo                                        | Escreve código?          | Equivale a     | Quando usar                                                                      |
+| --------------------- | --------------------------------------------- | ------------------------ | -------------- | -------------------------------------------------------------------------------- |
+| `gemini-cto`          | Neon (`--model gemini-4-neon-medium`)         | não                      | `cto`          | abrir a sessão: `agy --agent gemini-cto`                                         |
+| `gemini-dev-backend`  | Neon (`inherit`)                              | sim                      | `dev-backend`  | `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`, qualquer regra financeira |
+| `gemini-revisor`      | Neon (`inherit`)                              | não (só lê)              | `revisor`      | depois do QA, em regra financeira, auth, banco, sync, segurança                  |
+| `gemini-dev-frontend` | Hydrogen (`flash`)                            | sim                      | `dev-frontend` | telas em `app/`, `components/`, estilos, com contrato pronto                     |
+| `gemini-qa`           | Hydrogen (`flash`)                            | só testes em `tests/qa/` | `qa`           | verificação independente de cada entrega                                         |
+| `gemini-fixer`        | Hydrogen (`flash`)                            | sim, pouco               | `fixer`        | lint, tipos, texto, bug de poucas linhas já diagnosticado                        |
+| `gemini-tutor`        | Hydrogen (`--model gemini-4-hydrogen-medium`) | não                      | `tutor`        | o dono tirar dúvidas: `agy --agent gemini-tutor`                                 |
 
 Os arquivos ficam em `.agents/agents/<nome>/agent.md`. `agy agents` lista só os agentes de sessão principal (`gemini-cto` e `gemini-tutor`); os cinco subagentes aparecem para o `gemini-cto` (testado).
 
