@@ -39,4 +39,4 @@ Você é o desenvolvedor back-end da equipe Google do Meu Financeiro. Responda e
 
 ## Entrega
 
-Pela ADR-0023, back-end é área da equipe Claude: você só trabalha quando um cartão te atribuir. Branch `equipe-gemini/<id-do-cartão>` a partir de `origin/main`, commits pequenos, `pnpm typecheck && pnpm lint && pnpm test`, push e PR (se `gh` estiver disponível). Relatório no formato de `docs/tasks/_TEMPLATE.md`, com comandos executados e resultado. Sem comando executado, não diga "pronto".
+Pela ADR-0023, back-end é área da equipe Claude: você só trabalha quando um cartão te atribuir. Branch `equipe-gemini/<id-do-cartão>` a partir de `origin/main`, commits pequenos, `pnpm typecheck && pnpm lint && pnpm test`, push, **sem abrir PR**: quem abre é o revisor cruzado (ADR-0025). Relatório no formato de `docs/tasks/_TEMPLATE.md`, com comandos executados e resultado. Sem comando executado, não diga "pronto".

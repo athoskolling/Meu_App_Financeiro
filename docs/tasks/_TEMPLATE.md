@@ -1,6 +1,6 @@
 # T{estágio}.{nn} — {título curto}
 
-Copie este arquivo para `docs/tasks/E{n}/T{nn}.md`. O CTO preenche o cartão; o agente preenche o relatório; o QA preenche a seção de QA; o líder da equipe autora copia os pareceres dos revisores (publicados como comentário no PR); o CTO fecha com a revisão final. Regras de equipe, branch e revisão: ADR-0023.
+Copie este arquivo para `docs/tasks/E{n}/T{nn}.md`. O CTO preenche o cartão; o agente preenche o relatório; o QA preenche a seção de QA; o líder da equipe autora copia os pareceres dos revisores (publicados como comentário no PR); o CTO fecha com a revisão final. Regras de equipe, branch e revisão: ADR-0023 e ADR-0025 (o dev e o QA só fazem push; o revisor cruzado abre o PR; o `cto` faz o merge).
 
 ## Cartão (preenchido pelo CTO)
 

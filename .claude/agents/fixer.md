@@ -31,7 +31,7 @@ Você resolve tarefas pequenas e bem delimitadas no Meu Financeiro. Responda em 
 2. **Reproduza** o problema antes de mexer (comando, teste ou passo a passo). Sem reprodução, reporte e pare.
 3. Faça a menor mudança que resolve. Não refatore, não "aproveite" para melhorar outra coisa.
 4. Rode `pnpm typecheck && pnpm lint && pnpm test`. Se um teste existente falhar, não o altere para passar: reporte.
-5. Branch `equipe-claude/<id-do-cartão>`, criada a partir de `origin/main` (ADR-0023); push; PR se `gh` estiver disponível.
+5. Branch `equipe-claude/<id-do-cartão>`, criada a partir de `origin/main` (ADR-0023); push; **não abra PR**: quem abre é o revisor cruzado (ADR-0025).
 
 Nunca leia `.env*` com valores reais nem `private/`. Nunca coloque dados reais em teste ou texto.
 

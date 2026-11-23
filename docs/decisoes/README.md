@@ -25,6 +25,7 @@ Cada decisão relevante vira um arquivo `NNNN-titulo.md` com contexto, decisão 
 | 0019 | Base do app no E2: dependências Next/React/Tailwind/Zod aprovadas; tsconfig próprio de `domain/` sem DOM nem Node; variáveis obrigatórias por etapa; log por lista de permitidos; Postgres local em Docker | `0019-base-do-app-e2.md` |
 | 0023 | Duas equipes divididas por área (Claude: `domain/`, `lib/`, `drizzle/`, `app/api/`; Gemini: telas e README); só o `cto` Claude planeja; uma branch por tarefa (`equipe-claude/T{nn}`, `equipe-gemini/T{nn}`); revisão cruzada sempre, dupla em regra; `main` protegida | `0023-divisao-das-equipes.md` |
 | 0024 | Equivalência de modelos: Neon = Opus (líder) e = Sonnet (back-end e revisor); Hydrogen xhigh = Sonnet (front-end); Hydrogen high = Haiku (QA, fixer, tutor); esforço do Hydrogen fixado pelo swarm | `0024-modelos-da-equipe-gemini.md` |
+| 0025 | Limites das branches (`equipe-claude/T{id}`, `equipe-gemini/T{id}`, `cto/{assunto}`), checados pelo job `limites`; o revisor cruzado abre o PR; o `cto` faz o merge das tarefas; o dono faz o merge de `cto/` e `claude/`, fecha gates e veta com `dono-segura` | `0025-branches-pr-e-merge.md` |
 
 ## Propostas (aguardam o dono)
 

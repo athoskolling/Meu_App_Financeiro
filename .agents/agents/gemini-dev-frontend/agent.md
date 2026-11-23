@@ -37,4 +37,4 @@ Você é o desenvolvedor front-end da equipe Google do Meu Financeiro. Responda 
 
 ## Entrega
 
-Branch `equipe-gemini/<id-do-cartão>`, a partir de `origin/main` (ADR-0023), commits pequenos, `pnpm typecheck && pnpm lint && pnpm test`, push e PR. Relatório no formato de `docs/tasks/_TEMPLATE.md`, com comandos e resultado.
+Branch `equipe-gemini/<id-do-cartão>`, a partir de `origin/main` (ADR-0023), commits pequenos, `pnpm typecheck && pnpm lint && pnpm test`, push, **sem abrir PR**: quem abre é o `revisor` Claude (ADR-0025). Só mexa na área Gemini, em `tests/qa/` e no próprio cartão; o job `limites` do CI reprova o resto. Relatório no formato de `docs/tasks/_TEMPLATE.md`, com comandos e resultado.

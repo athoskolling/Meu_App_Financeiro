@@ -2,7 +2,7 @@
 
 Este arquivo é lido automaticamente pelo Antigravity CLI (`agy`) como regra do projeto. Ele explica a quem roda no **Gemini 4 Neon** como ajudar a equipe Claude que já trabalha aqui, e como **delegar** trabalho ao **Gemini 4 Hydrogen** (mais barato) e a si mesmo, do mesmo jeito que o Claude Opus delega ao Sonnet e ao Haiku.
 
-O dono do projeto é o Athos. Ele **não escreve código**: lê diffs, pede alterações, aprova merges e fecha gates. Responda sempre em **português do Brasil**, de forma direta e clara, porque ele precisa entender o que foi feito.
+O dono do projeto é o Athos. Ele **não escreve código**: aprova cartões, lê resumos, pode vetar merges (rótulo `dono-segura`) e fecha gates. Responda sempre em **português do Brasil**, de forma direta e clara, porque ele precisa entender o que foi feito.
 
 ## 1. Regras do projeto (valem para você, sem exceção)
 
@@ -40,8 +40,8 @@ IDs dos modelos (conferidos com `agy models` em 2026-11-19): `gemini-4-neon-low|
 
 - **Quem planeja:** só o `cto` Claude escreve cartões, ADRs, casos de teste e gates. O `gemini-cto` executa os cartões da equipe Gemini e não planeja.
 - **Áreas da equipe Gemini:** `app/` (fora de `app/api/`), `components/`, estilos, `public/`, `README.md` e `tests/ui/`. **Áreas da equipe Claude:** `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`. As telas usam o contrato (tipos e rotas) que a equipe Claude publica e nunca calculam regra financeira.
-- **Uma branch por tarefa:** `equipe-gemini/T{nn}`, a partir de `origin/main`. O dev e o QA fazem commit nela. Um PR por tarefa.
-- **Revisão cruzada obrigatória:** toda tarefa Gemini é revisada pelo `revisor` Claude. Toda tarefa Claude é revisada pelo `gemini-revisor`, e é você quem o roda quando o dono indicar o PR. O parecer vai como comentário no PR (`gh pr comment`).
+- **Uma branch por tarefa (ADR-0025):** `equipe-gemini/T{id}`, a partir de `origin/main`. O dev e o QA fazem commit e push nela, só na área Gemini, em `tests/qa/` e no próprio cartão. Ninguém da equipe Gemini abre PR da própria tarefa nem faz merge. O job `limites` do CI reprova arquivo fora da área.
+- **Revisão cruzada obrigatória:** toda tarefa Gemini é revisada pelo `revisor` Claude. Toda tarefa Claude é revisada pelo `gemini-revisor`, e é você quem o roda quando o dono indicar a branch. **O `gemini-revisor` abre o PR** da tarefa Claude (`gh pr create`, rascunho se pedir ALTERAÇÕES) com o parecer no corpo; quem faz o merge é o `cto` Claude. O parecer vai como comentário no PR (`gh pr comment`).
 - **`main` protegida:** só entra por PR com `check` e `gitleaks` verdes. Push direto é recusado.
 
 ## 3. Os agentes Google (`.agents/agents/`)
@@ -99,10 +99,10 @@ cto Claude escreve o cartão ─► dono aprova e passa ao gemini-cto
    ─► dev (gemini-dev-backend | gemini-dev-frontend | gemini-fixer) ─► relatório
    ─► gemini-qa (não confia no relatório; roda tudo do zero) ─► PASS | FAIL
          └─ FAIL ─► dev corrige (máx. 2 rodadas)
-   ─► gemini-cto confere o diff contra o cartão ─► avisa o dono
-   ─► revisor Claude (revisão cruzada, sempre) ─► APROVADO | ALTERAÇÕES
-         └─ e também o gemini-revisor, se tocar regra financeira, auth, banco, sync ou segurança
-   ─► cto Claude (revisão final) ─► dono faz o merge
+   ─► gemini-cto confere o diff contra o cartão (sem PR ainda) ─► avisa o dono
+   ─► revisor Claude (revisão cruzada, sempre) abre o PR ─► APROVADO | ALTERAÇÕES (PR em rascunho)
+         └─ e também o gemini-revisor comenta no PR, se tocar regra financeira, auth, banco, sync ou segurança
+   ─► cto Claude (revisão final) ─► cto Claude faz o merge (ADR-0025)
 ```
 
 Depois de delegar, **espere o resultado** antes de qualquer passo que dependa dele. Ao receber um relatório, confira contra o cartão antes de chamar o próximo agente. Relatório sem comandos executados é devolvido.

@@ -28,9 +28,21 @@ Em resumo: **Neon = Opus** no comando, **Neon = Sonnet** quando o trabalho é re
 | --- | --- |
 | **Claude** | `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`, `middleware.ts`, `tests/domain/`, `tests/lib/`, `tests/integration/`, `tests/fixtures/` |
 | **Gemini** | `app/` (fora de `app/api/`), `components/`, estilos, `public/`, `README.md`, `tests/ui/` |
-| Só `cto` Claude ou você | `package.json`, lockfile, `.github/`, `.claude/`, `.agents/`, `CLAUDE.md`, `GEMINI.md`, configs, `.env.example`, `LICENSE`, `docs/` |
+| Só `cto` Claude ou você | `package.json`, lockfile, `.github/`, `.claude/`, `.agents/`, `tools/`, `tests/ci/`, `CLAUDE.md`, `GEMINI.md`, configs, `.env.example`, `LICENSE`, `docs/` |
 
 `tests/qa/` é do QA da equipe que fez a tarefa.
+
+### 1.2.1 Em que branch cada um faz commit (ADR-0025)
+
+| Branch | Quem faz commit | Pode mexer em | Quem faz o merge |
+| --- | --- | --- | --- |
+| `equipe-claude/T{id}` | dev e QA Claude | área Claude, `tests/qa/`, o próprio cartão | `cto` |
+| `equipe-gemini/T{id}` | dev e QA Gemini | área Gemini, `tests/qa/`, o próprio cartão | `cto` |
+| `cto/{assunto}` | só o `cto` | o que não é código: docs, cartões, ADRs, gates, configs, dependências | **você** |
+| `claude/{nome}` (sessão de nuvem) | a sessão | igual a `cto/` | **você** |
+| `main` | ninguém | — | — |
+
+O job `limites` do CI reprova o PR se a branch estiver fora do padrão ou mexer fora da área. Para ele bloquear de verdade, marque `limites` como obrigatório na regra da `main` no GitHub (veja 1.4).
 
 ### 1.3 Onde os agentes ficam
 
@@ -53,6 +65,7 @@ Em resumo: **Neon = Opus** no comando, **Neon = Sonnet** quando o trabalho é re
 - [ ] `agy models`: confira que `gemini-4-neon-medium`, `gemini-4-neon-high`, `gemini-4-hydrogen-high` e `gemini-4-hydrogen-xhigh` existem. **[VERIFICAR]** num teste curto se o swarm aceita o sufixo `-xhigh` (ADR-0024).
 - [ ] `gh auth status` funcionando nas duas ferramentas, porque os revisores comentam no PR.
 - [ ] Docker Desktop instalado e ligado. O E2 precisa dele para os testes de banco.
+- [ ] No GitHub, na regra da `main` (Settings → Branches ou Rulesets): marcar **`limites`** como verificação obrigatória, ao lado de `check` e `gitleaks`. Criar o rótulo **`dono-segura`** (Issues → Labels), que é o seu veto de merge.
 
 ### 1.5 As janelas de trabalho
 
@@ -62,7 +75,7 @@ Em resumo: **Neon = Opus** no comando, **Neon = Sonnet** quando o trabalho é re
 | 2 | `agy --agent gemini-cto --model gemini-4-neon-medium` | rodar a equipe Gemini e a revisão cruzada das tarefas Claude |
 | 3 (quando tiver dúvida) | `claude --agent tutor` ou `agy --agent gemini-tutor --model gemini-4-hydrogen-high` | entender o que foi feito |
 
-As equipes **não conversam entre si**. Você é o mensageiro: copia o número do PR de uma janela para a outra.
+As equipes **não conversam entre si**. Você só avisa a outra janela qual branch está pronta para revisão. Daí em diante, o revisor abre o PR e o `cto` faz o merge.
 
 ---
 
@@ -74,16 +87,16 @@ Siga sempre esta ordem. Nenhum passo pode ser pulado.
 2. **Você aprova o cartão.** Leia o objetivo, as pastas permitidas e os critérios. Se tiver dúvida, pergunte ao tutor. Responda _"aprovado"_ ou peça mudança.
 3. **Dev.** Tarefa Claude: _"Delegue a T{nn} ao dev-backend."_ Tarefa Gemini, na janela 2: _"Execute o cartão docs/tasks/E{n}/T{nn}.md."_ O dev trabalha na branch `equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`.
 4. **QA da mesma equipe**, na mesma branch. O QA roda tudo do zero e devolve PASS ou FAIL. Com FAIL, o dev corrige. São no máximo 2 rodadas; depois o `cto` reescreve o cartão ou chama você.
-5. **O líder da equipe confere o diff** e abre **um PR** da branch para a `main`.
-6. **Revisão cruzada (sempre).** Leve o número do PR para a outra janela:
-   - PR Claude, na janela 2: _"Rode o gemini-revisor no PR #N."_
-   - PR Gemini, na janela 1: _"Rode o revisor no PR #N."_
+5. **O líder da equipe confere o diff** e faz push da branch. **Ninguém da equipe autora abre PR.**
+6. **Revisão cruzada (sempre): o revisor abre o PR.** Leve o nome da branch para a outra janela:
+   - Tarefa Claude, na janela 2: _"Rode o gemini-revisor na branch equipe-claude/T{id} e abra o PR."_
+   - Tarefa Gemini, na janela 1: _"Rode o revisor na branch equipe-gemini/T{id} e abra o PR."_
 
-   O parecer sai como comentário no PR.
-7. **Revisão da mesma equipe** quando a tarefa toca regra financeira, banco, migração, auth, RLS, sincronização ou segurança. Na prática, isso vale para quase toda tarefa Claude.
-8. **Correções.** Se algum revisor pedir ALTERAÇÕES, quem corrige é o dev da equipe autora, na mesma branch. Depois, a revisão volta para quem pediu.
-9. **Revisão final do `cto`**, na janela 1: _"Faça a revisão final do PR #N."_
-10. **CI verde e você faz o merge.** Antes, leia o resumo do `cto` e pelo menos o diff das regras financeiras.
+   Com APROVADO, o PR sai normal. Com ALTERAÇÕES, sai em rascunho, e o parecer vai no corpo do PR.
+7. **Revisão da mesma equipe**, comentada no PR, quando a tarefa toca regra financeira, banco, migração, auth, RLS, sincronização ou segurança. Na prática, isso vale para quase toda tarefa Claude.
+8. **Correções.** Se algum revisor pedir ALTERAÇÕES, quem corrige é o dev da equipe autora, na mesma branch. O revisor relê, comenta APROVADO e tira o PR do rascunho (`gh pr ready`).
+9. **Revisão final e merge pelo `cto`**, na janela 1: _"Faça a revisão final do PR #N e o merge."_ Ele só faz o merge com CI verde (`check`, `gitleaks`, `limites`), os pareceres APROVADO, o QA com PASS e sem o rótulo `dono-segura`.
+10. **Você lê o resumo depois.** Se quiser olhar antes, ponha o rótulo `dono-segura` no PR: o `cto` não faz o merge até você tirar.
 
 **Limites:** no máximo **3 agentes escrevendo ao mesmo tempo**, somando as duas equipes. Duas tarefas só andam juntas se as pastas permitidas não se cruzam. Uma tela só começa quando o cartão tem o **contrato** (tipos e rotas) que ela consome.
 
@@ -232,7 +245,7 @@ Onde há seta (→), a ordem é obrigatória. Onde há ponto e vírgula (;), as 
 1. Peça ao `cto`: _"Prepare o gate E{n}."_ Ele preenche `docs/gates/E{n}.md` com a evidência de cada item: PR, teste e comando.
 2. Para cada pergunta de explicação do gate, estude com o tutor e escreva a resposta **com as suas palavras**. Isso é a prova de que você entende o que está aprovando.
 3. Itens que só você confere (saldos, mês fechado, restauração do dump): faça e anote o resultado, **sem valores reais** no arquivo.
-4. Marque o gate como fechado, faça o merge e crie a tag (`git tag v0.{n}` e `git push --tags`).
+4. Marque o gate como fechado, faça o merge do PR do gate (branch `cto/`) e crie a tag (`git tag v0.{n}` e `git push --tags`).
 5. Só depois disso o estágio seguinte começa.
 
 ---
@@ -258,5 +271,6 @@ Onde há seta (→), a ordem é obrigatória. Onde há ponto e vírgula (;), as 
 - **Abrir o dia (janela 2):** _"Liste os cartões Gemini desbloqueados e os PRs Claude que esperam revisão cruzada."_
 - **Pedir um cartão:** _"Escreva o cartão da T{nn}, com a equipe certa pela ADR-0023 e o contrato, se for tela."_
 - **Mandar a Gemini trabalhar:** _"Execute o cartão docs/tasks/E{n}/T{nn}.md. Use o swarm com o modelo da ADR-0024."_
-- **Revisão cruzada:** _"Rode o gemini-revisor no PR #N e comente o parecer no PR."_ ou _"Rode o revisor no PR #N."_
-- **Fechar a tarefa:** _"Faça a revisão final do PR #N e diga se posso fazer o merge."_
+- **Revisão cruzada:** _"Rode o gemini-revisor na branch equipe-claude/T{id} e abra o PR."_ ou _"Rode o revisor na branch equipe-gemini/T{id} e abra o PR."_
+- **Fechar a tarefa:** _"Faça a revisão final do PR #N e, se tudo estiver verde e aprovado, o merge."_
+- **Segurar um merge:** ponha o rótulo `dono-segura` no PR.

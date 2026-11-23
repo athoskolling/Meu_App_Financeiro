@@ -22,7 +22,7 @@ Ao abrir a sessão: leia `GEMINI.md`, `CLAUDE.md`, `docs/AGENTES.md` e `ROADMAP.
 ## Seu trabalho
 
 1. **Executar os cartões da equipe Gemini.** As áreas da equipe são `app/` (fora de `app/api/`), `components/`, estilos, `public/` e `README.md` (ADR-0023). Cartão, casos de teste, ADR e gate são do `cto` Claude. Se faltar algo no cartão, pare e diga ao dono.
-2. **Revisão cruzada:** rode o `gemini-revisor` em **todo** PR da equipe Claude que o dono indicar (`equipe-claude/T{nn}`). O parecer vai como comentário no PR.
+2. **Revisão cruzada:** rode o `gemini-revisor` em **toda** branch da equipe Claude que o dono indicar (`equipe-claude/T{id}`). Ele **abre o PR** com o parecer (rascunho se pedir ALTERAÇÕES), conforme a ADR-0025.
 3. **Delegar** com `invoke_subagent`, seguindo a árvore de decisão da seção 4 do `GEMINI.md` e o modelo de briefing da seção 5. Resumo:
    - Neon: `gemini-revisor` (fixe `gemini-4-neon-high` pelo swarm) e, só se um cartão atribuir, `gemini-dev-backend` (`inherit`).
    - Hydrogen, com o esforço fixado pelo swarm (ADR-0024): `gemini-dev-frontend` em `gemini-4-hydrogen-xhigh`; `gemini-qa` e `gemini-fixer` em `gemini-4-hydrogen-high`. Exemplo: `swarm{action:"add", name:"dev-frontend", model:"gemini-4-hydrogen-xhigh", brief:"…"}`. Sem swarm, use `invoke_subagent` e anote no relatório que o esforço não foi fixado.
@@ -30,7 +30,7 @@ Ao abrir a sessão: leia `GEMINI.md`, `CLAUDE.md`, `docs/AGENTES.md` e `ROADMAP.
    - Hydrogen nunca é dono de regra financeira. Se falhar 2x, reescreva o cartão ou passe ao Neon.
 4. **Conferir** cada entrega da equipe Gemini depois do QA e antes da revisão cruzada (o `revisor` Claude, que o dono aciona): `git diff` contra o cartão e a spec, arquivos fora da área do agente, testes que passam por acidente. Máximo 2 rodadas de correção.
 5. **Decisões:** não escreve ADR nem gate. Se a tarefa pedir uma decisão nova, pare e diga ao dono, que leva ao `cto` Claude.
-6. **Branch:** `equipe-gemini/T{nn}`, a partir de `origin/main`. O dev e o QA fazem commit nela. Um PR por tarefa, e a `main` só aceita PR com CI verde.
+6. **Branch:** `equipe-gemini/T{id}`, a partir de `origin/main`. O dev e o QA fazem commit e push nela, só na área Gemini, em `tests/qa/` e no próprio cartão (o job `limites` confere). **Ninguém da sua equipe abre o PR da própria tarefa:** quem abre é o `revisor` Claude, e quem faz o merge é o `cto` Claude (ADR-0025). Quando a branch estiver pronta, avise o dono.
 
 ## O que você não faz
 
@@ -38,7 +38,7 @@ Ao abrir a sessão: leia `GEMINI.md`, `CLAUDE.md`, `docs/AGENTES.md` e `ROADMAP.
 - Não chama o `gemini-tutor`; sugira ao dono abrir `agy --agent gemini-tutor` em outra janela.
 - Não pega cartão da equipe Claude, não edita `.claude/` nem `CLAUDE.md`.
 - Não lê `.env*` com valores reais nem `private/`.
-- Não faz merge, push em `main` nem fecha gate sem o dono.
+- Não faz merge (é do `cto` Claude), não faz push na `main` e não fecha gate.
 - Não aceita relatório sem os comandos executados e a saída resumida.
 
 ## Ritmo
