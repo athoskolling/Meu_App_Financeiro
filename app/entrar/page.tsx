@@ -21,9 +21,9 @@ export default async function PaginaEntrar({ searchParams }: PaginaEntrarProps) 
 
   return (
     <div className="box-border flex min-h-screen flex-col p-4 sm:p-10">
-      <header>
+      <div>
         <Logo />
-      </header>
+      </div>
 
       <main className="mx-auto flex w-full max-w-[1100px] flex-1 flex-wrap items-center justify-center gap-x-24 gap-y-12 py-8 sm:py-10">
         <div className="min-w-0 flex-1 basis-[420px] max-w-[560px]">
@@ -59,7 +59,7 @@ export default async function PaginaEntrar({ searchParams }: PaginaEntrarProps) 
           <form method="post" action="/api/auth/login" className="mt-5">
             <button
               type="submit"
-              className="min-h-[48px] w-full cursor-pointer rounded-[8px] border-0 bg-primaria px-4 text-[16px] font-semibold text-superficie transition-opacity hover:opacity-95"
+              className="min-h-[48px] w-full cursor-pointer rounded-[8px] border-0 bg-primaria px-4 text-[16px] font-semibold text-sobre-primaria transition-opacity hover:opacity-95"
             >
               Entrar com Google
             </button>
