@@ -24,6 +24,7 @@ Cada decisão relevante vira um arquivo `NNNN-titulo.md` com contexto, decisão 
 | 0018 | Núcleo E1 parte A: `Cents` como `number` com brand; `parseBRL`/`formatBRL` sem `Intl`; erros com código sem ecoar a entrada; `date` civil; validação devolve todos os problemas; `baseKey` com a descrição normalizada (sem `merchantName`, `status`, `type`, `externalId`), texto canônico em JSON, hash injetado | `0018-nucleo-e1-parte-a.md` |
 | 0019 | Base do app no E2: dependências Next/React/Tailwind/Zod aprovadas; tsconfig próprio de `domain/` sem DOM nem Node; variáveis obrigatórias por etapa; log por lista de permitidos; Postgres local em Docker | `0019-base-do-app-e2.md` |
 | 0023 | Duas equipes divididas por área (Claude: `domain/`, `lib/`, `drizzle/`, `app/api/`; Gemini: telas e README); só o `cto` Claude planeja; uma branch por tarefa (`equipe-claude/T{nn}`, `equipe-gemini/T{nn}`); revisão cruzada sempre, dupla em regra; `main` protegida | `0023-divisao-das-equipes.md` |
+| 0024 | Equivalência de modelos: Neon = Opus (líder) e = Sonnet (back-end e revisor); Hydrogen xhigh = Sonnet (front-end); Hydrogen high = Haiku (QA, fixer, tutor); esforço do Hydrogen fixado pelo swarm | `0024-modelos-da-equipe-gemini.md` |
 
 ## Propostas (aguardam o dono)
 

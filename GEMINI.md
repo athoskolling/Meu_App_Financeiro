@@ -20,10 +20,12 @@ Leia também, antes de trabalhar: `docs/AGENTES.md` (como a equipe Claude trabal
 | ---------------------- | ------------------------------------------ | ------------------------------------------------------- |
 | Opus (esforço médio)   | **Gemini 4 Neon**, sessão principal        | líder técnico: planeja, escreve cartões, delega, revisa |
 | Sonnet (esforço médio) | **Neon** como subagente (`model: inherit`) | implementação de back-end e regra financeira            |
-| Sonnet (esforço alto)  | **Neon** como subagente (`model: inherit`) | revisão independente                                    |
-| Sonnet (esforço médio) | **Hydrogen** (`model: flash`)              | front-end a partir de design e contrato prontos         |
-| Haiku (esforço alto)   | **Hydrogen** (`model: flash`)              | QA, consertos pequenos                                  |
-| Haiku (esforço alto)   | **Hydrogen** (sessão própria, `--model`)   | tutor (só explica)                                      |
+| Sonnet (esforço alto)  | **Neon high** (swarm `gemini-4-neon-high`) | revisão independente                                    |
+| Sonnet (esforço médio) | **Hydrogen xhigh** (swarm, `-xhigh`)       | front-end a partir de design e contrato prontos         |
+| Haiku (esforço alto)   | **Hydrogen high** (swarm, `-high`)         | QA, consertos pequenos                                  |
+| Haiku (esforço alto)   | **Hydrogen high** (sessão, `--model`)      | tutor (só explica)                                      |
+
+Equivalência decidida pelo dono na ADR-0024: **Neon = Opus** no comando, **Neon = Sonnet** em regra e revisão, **Hydrogen xhigh = Sonnet** em tela, **Hydrogen high = Haiku**. O passo a passo completo até a v1.0 está em `docs/GUIA_ATE_V1.md`.
 
 IDs dos modelos (conferidos com `agy models` em 2026-11-19): `gemini-4-neon-low|medium|high|xhigh`, `gemini-4-hydrogen-low|medium|high|xhigh`.
 
@@ -44,15 +46,15 @@ IDs dos modelos (conferidos com `agy models` em 2026-11-19): `gemini-4-neon-low|
 
 ## 3. Os agentes Google (`.agents/agents/`)
 
-| Agente                | Modelo                                        | Escreve código?          | Equivale a     | Quando usar                                                                      |
-| --------------------- | --------------------------------------------- | ------------------------ | -------------- | -------------------------------------------------------------------------------- |
-| `gemini-cto`          | Neon (`--model gemini-4-neon-medium`)         | não                      | `cto`          | abrir a sessão: `agy --agent gemini-cto`                                         |
-| `gemini-dev-backend`  | Neon (`inherit`)                              | sim                      | `dev-backend`  | `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`, qualquer regra financeira |
-| `gemini-revisor`      | Neon (`inherit`)                              | não (só lê)              | `revisor`      | depois do QA, em regra financeira, auth, banco, sync, segurança                  |
-| `gemini-dev-frontend` | Hydrogen (`flash`)                            | sim                      | `dev-frontend` | telas em `app/`, `components/`, estilos, com contrato pronto                     |
-| `gemini-qa`           | Hydrogen (`flash`)                            | só testes em `tests/qa/` | `qa`           | verificação independente de cada entrega                                         |
-| `gemini-fixer`        | Hydrogen (`flash`)                            | sim, pouco               | `fixer`        | lint, tipos, texto, bug de poucas linhas já diagnosticado                        |
-| `gemini-tutor`        | Hydrogen (`--model gemini-4-hydrogen-medium`) | não                      | `tutor`        | o dono tirar dúvidas: `agy --agent gemini-tutor`                                 |
+| Agente                | Modelo                                      | Escreve código?          | Equivale a     | Quando usar                                                                      |
+| --------------------- | ------------------------------------------- | ------------------------ | -------------- | -------------------------------------------------------------------------------- |
+| `gemini-cto`          | Neon (`--model gemini-4-neon-medium`)       | não                      | `cto`          | abrir a sessão: `agy --agent gemini-cto`                                         |
+| `gemini-dev-backend`  | Neon (`inherit`)                            | sim                      | `dev-backend`  | `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`, qualquer regra financeira |
+| `gemini-revisor`      | Neon high (`inherit` ou swarm)              | não (só lê)              | `revisor`      | depois do QA, em regra financeira, auth, banco, sync, segurança                  |
+| `gemini-dev-frontend` | Hydrogen xhigh (`flash` + swarm)            | sim                      | `dev-frontend` | telas em `app/`, `components/`, estilos, com contrato pronto                     |
+| `gemini-qa`           | Hydrogen high (`flash` + swarm)             | só testes em `tests/qa/` | `qa`           | verificação independente de cada entrega                                         |
+| `gemini-fixer`        | Hydrogen high (`flash` + swarm)             | sim, pouco               | `fixer`        | lint, tipos, texto, bug de poucas linhas já diagnosticado                        |
+| `gemini-tutor`        | Hydrogen (`--model gemini-4-hydrogen-high`) | não                      | `tutor`        | o dono tirar dúvidas: `agy --agent gemini-tutor`                                 |
 
 Os arquivos ficam em `.agents/agents/<nome>/agent.md`. `agy agents` lista só os agentes de sessão principal (`gemini-cto` e `gemini-tutor`); os cinco subagentes aparecem para o `gemini-cto` (testado).
 
@@ -66,9 +68,9 @@ Siga esta ordem. Pare na primeira resposta "sim".
 2. **É planejamento, cartão, caso de teste de regra financeira, ADR ou gate?** Faça você mesmo (Neon, sessão principal). Isso é o seu trabalho, não código.
 3. **Toca dinheiro, sinal de `amount`, datas/mês, identidade e dedup (`baseKey`, ocorrência, `existingCounts`), transferências, fatura, caixinha, banco, migração, auth, RLS, sincronização ou segurança?** → `gemini-dev-backend` (Neon High). **Nunca Hydrogen.**
 4. **É revisão de um diff nessas áreas?** → `gemini-revisor` (Neon High).
-5. **É tela com design e contrato de dados já definidos?** → `gemini-dev-frontend` (Hydrogen).
-6. **É verificar uma entrega (rodar comandos, conferir critérios, achar bordas)?** → `gemini-qa` (Hydrogen).
-7. **É pequeno, local e com causa conhecida (lint, tipo, texto, README, ajuste visual)?** → `gemini-fixer` (Hydrogen).
+5. **É tela com design e contrato de dados já definidos?** → `gemini-dev-frontend` (Hydrogen xhigh).
+6. **É verificar uma entrega (rodar comandos, conferir critérios, achar bordas)?** → `gemini-qa` (Hydrogen high).
+7. **É pequeno, local e com causa conhecida (lint, tipo, texto, README, ajuste visual)?** → `gemini-fixer` (Hydrogen high).
 8. **Não cabe em nenhum?** O cartão está mal definido. Reescreva o cartão antes de delegar.
 
 Regra de custo: se o Hydrogen falhar **duas vezes** no mesmo ponto, não tente uma terceira. Ou o cartão está ambíguo (reescreva) ou a tarefa é mais difícil do que parecia (passe ao `gemini-dev-backend`).
@@ -129,7 +131,7 @@ Rode `pnpm typecheck && pnpm lint && pnpm test` e relate os comandos e o resulta
 
 ```
 agy --agent gemini-cto --model gemini-4-neon-medium      # líder (Neon)
-agy --agent gemini-tutor --model gemini-4-hydrogen-medium # dúvidas, em outra janela
+agy --agent gemini-tutor --model gemini-4-hydrogen-high   # dúvidas, em outra janela
 agy agents                                               # lista os agentes carregados
 ```
 

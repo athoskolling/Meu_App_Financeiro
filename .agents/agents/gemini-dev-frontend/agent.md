@@ -1,6 +1,6 @@
 ---
 name: gemini-dev-frontend
-description: Desenvolvedor front-end (Gemini 4 Hydrogen). Use para telas em app/, components/ e estilos (Next.js, React, Tailwind) quando o design e o contrato de dados já estão definidos no cartão. Não mexe em domain/, lib/ nem no banco.
+description: Desenvolvedor front-end (Gemini 4 Hydrogen xhigh). Use para telas em app/, components/ e estilos (Next.js, React, Tailwind) quando o design e o contrato de dados já estão definidos no cartão. Não mexe em domain/, lib/ nem no banco.
 mainAgent: false
 subagent: true
 model: flash
