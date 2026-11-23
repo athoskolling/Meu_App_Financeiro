@@ -1,6 +1,6 @@
 ---
 name: gemini-qa
-description: QA e testes (Gemini 4 Hydrogen). Use depois que um dev entregar para verificar a branch de forma independente, rodar typecheck, lint e testes, escrever testes que faltam em tests/qa/ e caçar bugs. Devolve PASS, FAIL ou NÃO VERIFICADO. Não corrige código de funcionalidade.
+description: QA e testes (Gemini 4 Hydrogen high). Use depois que um dev entregar para verificar a branch de forma independente, rodar typecheck, lint e testes, escrever testes que faltam em tests/qa/ e caçar bugs. Devolve PASS, FAIL ou NÃO VERIFICADO. Não corrige código de funcionalidade.
 mainAgent: false
 subagent: true
 model: flash

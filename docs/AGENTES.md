@@ -4,6 +4,8 @@ Este guia explica como funciona, quem faz o quê e como rodar. O plano de tarefa
 
 > **Atualização de 19/11/2026 (ADR-0023):** agora há duas equipes, Claude (`.claude/agents/`) e Gemini (`.agents/agents/`, ver `GEMINI.md`), **divididas por área**. Claude: `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`. Gemini: `app/` (fora de `app/api/`), `components/`, estilos, `README.md`. Só o `cto` Claude planeja. Cada tarefa tem **uma branch** (`equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`), onde o dev e o QA fazem commit. A **revisão é cruzada**: a outra equipe sempre revisa, e em regra financeira, banco, auth, sincronização e segurança os dois revisores olham. A `main` é protegida no GitHub. Onde este guia disser outra coisa, vale a ADR-0023.
 
+> **Atualização de 23/11/2026 (ADR-0024):** modelos da equipe Gemini: Neon no `gemini-cto`, `gemini-dev-backend` e `gemini-revisor`; Hydrogen xhigh no `gemini-dev-frontend`; Hydrogen high no `gemini-qa`, `gemini-fixer` e `gemini-tutor`. Qual equipe faz cada tarefa, até a v1.0: `docs/GUIA_ATE_V1.md`.
+
 ## 1. O que é desenvolvimento multiagente
 
 Pense numa equipe pequena: um líder técnico (CTO) que planeja e revisa, dois desenvolvedores, uma pessoa para consertos pequenos, uma pessoa de QA, um segundo revisor de código e um tutor que só explica as coisas a você. No Claude Code, cada "pessoa" é uma instância de modelo com:

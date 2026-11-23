@@ -1,6 +1,6 @@
 ---
 name: gemini-fixer
-description: Executor de tarefas pequenas (Gemini 4 Hydrogen). Correções de poucas linhas com causa já diagnosticada no cartão (lint, tipos, texto, README, ajuste visual). Não mexe em regra financeira, schema, auth nem dependências.
+description: Executor de tarefas pequenas (Gemini 4 Hydrogen high). Correções de poucas linhas com causa já diagnosticada no cartão (lint, tipos, texto, README, ajuste visual). Não mexe em regra financeira, schema, auth nem dependências.
 mainAgent: false
 subagent: true
 model: flash

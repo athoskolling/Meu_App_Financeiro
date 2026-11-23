@@ -7,6 +7,7 @@ Este arquivo é o plano de execução. A spec (`docs/Meu_financeiro.md`) diz **o
 - O CTO (sessão principal) lê este arquivo no início de cada sessão, descobre o estágio atual (tags do Git e `docs/gates/`) e cria um **cartão de tarefa** (`docs/tasks/`) para cada tarefa desbloqueada.
 - Nenhum agente trabalha sem cartão. O cartão copia a linha da tarefa daqui e acrescenta arquivos permitidos e critérios de aceite.
 - Uma tarefa só está pronta quando: os critérios do cartão passam, o QA deu PASS, o CTO revisou o diff e o CI está verde. O estágio só fecha com o gate (`docs/gates/E{n}.md`) assinado pelo dono.
+- **Duas equipes:** qual equipe (Claude ou Gemini) faz cada tarefa, a ordem em ondas e o passo a passo de cada tarefa estão em `docs/GUIA_ATE_V1.md` (ADR-0023 e ADR-0024).
 - **Dúvida sobre o que está acontecendo?** Abra uma segunda janela com `claude --agent tutor` e pergunte. O tutor só explica; ele não faz parte do fluxo de tarefas.
 
 ## Legenda

@@ -24,8 +24,9 @@ Ao abrir a sessão: leia `GEMINI.md`, `CLAUDE.md`, `docs/AGENTES.md` e `ROADMAP.
 1. **Executar os cartões da equipe Gemini.** As áreas da equipe são `app/` (fora de `app/api/`), `components/`, estilos, `public/` e `README.md` (ADR-0023). Cartão, casos de teste, ADR e gate são do `cto` Claude. Se faltar algo no cartão, pare e diga ao dono.
 2. **Revisão cruzada:** rode o `gemini-revisor` em **todo** PR da equipe Claude que o dono indicar (`equipe-claude/T{nn}`). O parecer vai como comentário no PR.
 3. **Delegar** com `invoke_subagent`, seguindo a árvore de decisão da seção 4 do `GEMINI.md` e o modelo de briefing da seção 5. Resumo:
-   - Neon (você mesmo, em esforço alto): `gemini-revisor` e, só se um cartão atribuir, `gemini-dev-backend`.
-   - Hydrogen (mais barato): `gemini-dev-frontend`, `gemini-qa`, `gemini-fixer`.
+   - Neon: `gemini-revisor` (fixe `gemini-4-neon-high` pelo swarm) e, só se um cartão atribuir, `gemini-dev-backend` (`inherit`).
+   - Hydrogen, com o esforço fixado pelo swarm (ADR-0024): `gemini-dev-frontend` em `gemini-4-hydrogen-xhigh`; `gemini-qa` e `gemini-fixer` em `gemini-4-hydrogen-high`. Exemplo: `swarm{action:"add", name:"dev-frontend", model:"gemini-4-hydrogen-xhigh", brief:"…"}`. Sem swarm, use `invoke_subagent` e anote no relatório que o esforço não foi fixado.
+   - A ordem das tarefas e qual equipe faz cada uma estão em `docs/GUIA_ATE_V1.md`.
    - Hydrogen nunca é dono de regra financeira. Se falhar 2x, reescreva o cartão ou passe ao Neon.
 4. **Conferir** cada entrega da equipe Gemini depois do QA e antes da revisão cruzada (o `revisor` Claude, que o dono aciona): `git diff` contra o cartão e a spec, arquivos fora da área do agente, testes que passam por acidente. Máximo 2 rodadas de correção.
 5. **Decisões:** não escreve ADR nem gate. Se a tarefa pedir uma decisão nova, pare e diga ao dono, que leva ao `cto` Claude.

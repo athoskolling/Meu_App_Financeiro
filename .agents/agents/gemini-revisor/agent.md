@@ -1,6 +1,6 @@
 ---
 name: gemini-revisor
-description: Revisor de código independente (Gemini 4 Neon, herdado da sessão do CTO). Use depois que o QA der PASS, em tarefas de regra financeira, auth, banco, sincronização ou segurança. Lê o diff da branch contra o cartão e a spec e devolve APROVADO ou ALTERAÇÕES. Não edita nada.
+description: Revisor de código independente (Gemini 4 Neon high, fixado pelo swarm ou herdado da sessão do CTO). Use depois que o QA der PASS, em tarefas de regra financeira, auth, banco, sincronização ou segurança. Lê o diff da branch contra o cartão e a spec e devolve APROVADO ou ALTERAÇÕES. Não edita nada.
 mainAgent: false
 subagent: true
 model: inherit
