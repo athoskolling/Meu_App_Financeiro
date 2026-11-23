@@ -23,15 +23,14 @@ Cada decisão relevante vira um arquivo `NNNN-titulo.md` com contexto, decisão 
 | 0017 | Isolamento de `domain/` por lista de permitidos (só relativos; pacote novo exige ADR), sem `eslint-disable`, imports relativos presos a `domain/`; mudanças nas travas do projeto exigem revisor | `0017-isolamento-domain-allowlist.md` |
 | 0018 | Núcleo E1 parte A: `Cents` como `number` com brand; `parseBRL`/`formatBRL` sem `Intl`; erros com código sem ecoar a entrada; `date` civil; validação devolve todos os problemas; `baseKey` com a descrição normalizada (sem `merchantName`, `status`, `type`, `externalId`), texto canônico em JSON, hash injetado | `0018-nucleo-e1-parte-a.md` |
 | 0019 | Base do app no E2: dependências Next/React/Tailwind/Zod aprovadas; tsconfig próprio de `domain/` sem DOM nem Node; variáveis obrigatórias por etapa; log por lista de permitidos; Postgres local em Docker | `0019-base-do-app-e2.md` |
+| 0022 | Identidade (T1.3): espaço em branco da Unicode em `normalizeText`; inteiro seguro em `existingCounts` e `occurrence`; linhas excluídas logicamente contam no `existingCounts`; `incremental` sem reenvio; SHA-256 completo em produção | `0022-identidade-detalhes-t1.3.md` |
 | 0023 | Duas equipes divididas por área (Claude: `domain/`, `lib/`, `drizzle/`, `app/api/`; Gemini: telas e README); só o `cto` Claude planeja; uma branch por tarefa (`equipe-claude/T{nn}`, `equipe-gemini/T{nn}`); revisão cruzada sempre, dupla em regra; `main` protegida | `0023-divisao-das-equipes.md` |
 | 0024 | Equivalência de modelos: Neon = Opus (líder) e = Sonnet (back-end e revisor); Hydrogen xhigh = Sonnet (front-end); Hydrogen high = Haiku (QA, fixer, tutor); esforço do Hydrogen fixado pelo swarm | `0024-modelos-da-equipe-gemini.md` |
 | 0025 | Limites das branches (`equipe-claude/T{id}`, `equipe-gemini/T{id}`, `cto/{assunto}`), checados pelo job `limites`; o revisor cruzado abre o PR; o `cto` faz o merge das tarefas; o dono faz o merge de `cto/` e `claude/`, fecha gates e veta com `dono-segura` | `0025-branches-pr-e-merge.md` |
 
 ## Propostas (aguardam o dono)
 
-| # | Decisão | Onde |
-|---|---------|------|
-| 0022 | Identidade (T1.3): espaço em branco da Unicode em `normalizeText`; inteiro seguro em `existingCounts` e `occurrence`; linhas excluídas logicamente contam no `existingCounts`; `incremental` sem reenvio; SHA-256 completo em produção | `0022-identidade-detalhes-t1.3.md` |
+Nenhuma no momento.
 
 ## Adiadas, com prazo
 

@@ -1,6 +1,6 @@
 # 0022: Detalhes da identidade e dedup (T1.3)
 
-- **Status:** **proposta** pelo CTO em 19/11/2026. **Aguarda o dono.** Nada desta ADR vale antes da aprovação registrada aqui embaixo.
+- **Status:** **aceita** pelo dono em 23/11/2026 (proposta pelo CTO em 19/11/2026).
 - **Estágio:** E1 parte A
 - **Spec:** 5.4 (identidade, deduplicação, identidade das linhas da Pluggy)
 - **Complementa:** ADR-0018, itens 7 a 11. Não muda nenhum caso aprovado na seção C de `docs/tasks/E1/T1.0.md`; só fecha pontos que a T1.0 deixou em aberto.
@@ -39,4 +39,4 @@ Ao preparar o cartão da T1.3, quatro pontos ficaram sem resposta exata nos caso
 
 ## Aprovação do dono
 
-- [ ] Aprovo os itens 1 a 4. (Ou: aprovo com as mudanças: …)
+- [x] Aprovo os itens 1 a 4. Dono, 23/11/2026.
