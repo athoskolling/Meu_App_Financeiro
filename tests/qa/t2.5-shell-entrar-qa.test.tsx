@@ -80,10 +80,11 @@ describe('QA T2.5: PaginaEntrar (bordas e segurança)', () => {
     expect(entrarMetadata.title).toBe('Entrar · Meu Financeiro');
   });
 
-  it('mantém form method="post" e action="/api/auth/login"', async () => {
+  it('mantém form method="post" e action="/api/auth/login" e não renderiza <header>', async () => {
     const html = renderToStaticMarkup(await PaginaEntrar({ searchParams: Promise.resolve({}) }));
     expect(html).toMatch(/<form\b[^>]*method="post"[^>]*>/i);
     expect(html).toMatch(/<form\b[^>]*action="\/api\/auth\/login"[^>]*>/i);
+    expect(html).not.toMatch(/<header\b/i);
   });
 
   it.each([
