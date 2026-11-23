@@ -26,7 +26,7 @@ Em resumo: **Neon = Opus** no comando, **Neon = Sonnet** quando o trabalho é re
 
 | Equipe | Pastas |
 | --- | --- |
-| **Claude** | `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`, `middleware.ts`, `tests/domain/`, `tests/lib/`, `tests/integration/`, `tests/fixtures/` |
+| **Claude** | `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`, `middleware.ts` ou `proxy.ts` (Next 16), `instrumentation.ts`, `tests/domain/`, `tests/lib/`, `tests/integration/`, `tests/fixtures/` |
 | **Gemini** | `app/` (fora de `app/api/`), `components/`, estilos, `public/`, `README.md`, `tests/ui/` |
 | Só `cto` Claude ou você | `package.json`, lockfile, `.github/`, `.claude/`, `.agents/`, `tools/`, `tests/ci/`, `CLAUDE.md`, `GEMINI.md`, configs, `.env.example`, `LICENSE`, `docs/` |
 

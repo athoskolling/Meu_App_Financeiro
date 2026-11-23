@@ -7,6 +7,7 @@ describe('limites das branches (ADR-0025)', () => {
       'domain/identity/assign.ts',
       'lib/db/schema.ts',
       'app/api/manual/route.ts',
+      'proxy.ts',
       'tests/domain/identity.test.ts',
       'tests/qa/identity-qa.test.ts',
       'docs/tasks/E1/T1.3.md',

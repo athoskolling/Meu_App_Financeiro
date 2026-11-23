@@ -16,6 +16,7 @@ const AREA_CLAUDE = [
   'app/api/',
   'scripts/',
   'middleware.ts',
+  'proxy.ts', // nome do middleware no Next 16
   'instrumentation.ts',
   'tests/domain/',
   'tests/lib/',
