@@ -6,6 +6,8 @@ Este guia explica como funciona, quem faz o quê e como rodar. O plano de tarefa
 
 > **Atualização de 23/11/2026 (ADR-0024):** modelos da equipe Gemini: Neon no `gemini-cto`, `gemini-dev-backend` e `gemini-revisor`; Hydrogen xhigh no `gemini-dev-frontend`; Hydrogen high no `gemini-qa`, `gemini-fixer` e `gemini-tutor`. Qual equipe faz cada tarefa, até a v1.0: `docs/GUIA_ATE_V1.md`.
 
+> **Atualização de 23/11/2026 (ADR-0025):** cada branch tem limites (o job `limites` do CI confere). O dev e o QA só fazem push; **o revisor cruzado abre o PR**; o **`cto` faz o merge** com CI verde e os pareceres APROVADO. O dono aprova cartões, faz o merge dos PRs `cto/` e `claude/`, fecha gates e pode vetar com o rótulo `dono-segura`. Onde este guia disser que o dono faz o merge de tarefa, vale a ADR-0025.
+
 ## 1. O que é desenvolvimento multiagente
 
 Pense numa equipe pequena: um líder técnico (CTO) que planeja e revisa, dois desenvolvedores, uma pessoa para consertos pequenos, uma pessoa de QA, um segundo revisor de código e um tutor que só explica as coisas a você. No Claude Code, cada "pessoa" é uma instância de modelo com:
@@ -60,7 +62,7 @@ Não há um agente "dono" de segurança: auth, RLS e segredos são sempre revisa
 Todo o código é escrito por `dev-backend`, `dev-frontend` e `fixer`. Cadeia de cada tarefa:
 
 ```
-dev ──► qa (mesma equipe) ──► revisor da outra equipe ──► [revisor da mesma equipe] ──► cto ──► você (merge)
+dev ──► qa (mesma equipe) ──► revisor da outra equipe ──► [revisor da mesma equipe] ──► cto (merge)
 ```
 
 - O revisor da **outra** equipe é obrigatório em toda tarefa (ADR-0023). O revisor da **mesma** equipe também é obrigatório em regra financeira, auth, RLS, banco e migração, sincronização e segurança; nas demais, o CTO pode dispensá-lo no cartão, escrevendo o motivo.
@@ -126,8 +128,8 @@ CTO cria cartão ──► dev (worktree, branch equipe-claude/T2.4) ──► r
 
 Fato técnico que importa: o worktree de um subagente nasce da **branch padrão** (`main`), não da branch da sessão. Por isso:
 - uma tarefa que depende de outra só começa **depois do merge** da anterior;
-- o `revisor` não precisa de worktree: ele lê a branch da tarefa com `git fetch` e `git diff origin/main...origin/equipe-<equipe>/T{nn}`, e publica o parecer como comentário no PR;
-- o QA, que precisa ver o código do dev, faz `git fetch` e cria a sua branch a partir da branch do dev, e abre o PR de volta para ela.
+- o `revisor` não precisa de worktree: ele lê a branch da tarefa com `git fetch` e `git diff origin/main...origin/equipe-<equipe>/T{nn}`, e abre o PR (revisão cruzada) ou comenta nele (mesma equipe), conforme a ADR-0025;
+- o QA, que precisa ver o código do dev, faz `git fetch` e trabalha **na mesma branch** do dev, sem abrir PR (ADR-0023 e ADR-0025).
 
 ### 6.1 Acompanhar cada agente
 

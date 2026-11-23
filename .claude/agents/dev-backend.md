@@ -38,4 +38,4 @@ Você é o desenvolvedor back-end do Meu Financeiro. Responda e documente em por
 
 ## Entrega
 
-Trabalhe na branch `equipe-claude/<id-do-cartão>` (ADR-0023), criada a partir de `origin/main`, faça commits pequenos, rode `pnpm typecheck && pnpm lint && pnpm test`, faça push e, se `gh` estiver disponível, abra um PR. Termine com o relatório no formato de `docs/tasks/_TEMPLATE.md` (status, branch, arquivos, comandos executados com resultado, decisões, riscos, pendências). Não diga "pronto" sem ter rodado os comandos.
+Trabalhe na branch `equipe-claude/<id-do-cartão>` (ADR-0023), criada a partir de `origin/main`, faça commits pequenos, rode `pnpm typecheck && pnpm lint && pnpm test`, faça push e **não abra PR**: quem abre é o revisor cruzado (ADR-0025). Só mexa na área Claude, em `tests/qa/` e no próprio cartão; o job `limites` do CI reprova o resto. Termine com o relatório no formato de `docs/tasks/_TEMPLATE.md` (status, branch, arquivos, comandos executados com resultado, decisões, riscos, pendências). Não diga "pronto" sem ter rodado os comandos.
