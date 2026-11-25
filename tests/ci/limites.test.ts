@@ -33,20 +33,47 @@ describe('limites das branches (ADR-0025)', () => {
       ]);
   });
 
-  it('equipe-gemini aceita telas e README, mas não app/api nem domain', () => {
+  it('equipe-gemini aceita áreas Gemini e Claude (ADR-0026), mas recusa configs, deps e outros cartões', () => {
     expect(
       verificarLimites('equipe-gemini/T2.10a', ['README.md', 'docs/tasks/E2/T2.10a.md']).ok,
     ).toBe(true);
-    const r = verificarLimites('equipe-gemini/T2.5', [
-      'app/layout.tsx',
-      'app/entrar/page.tsx',
-      'components/Nav.tsx',
-      'tests/ui/nav.test.ts',
-      'app/api/auth/route.ts',
-      'domain/money/money.ts',
+    expect(
+      verificarLimites('equipe-gemini/T2.5', [
+        'app/layout.tsx',
+        'app/entrar/page.tsx',
+        'components/Nav.tsx',
+        'tests/ui/nav.test.ts',
+        'tests/qa/t2.5-qa.test.tsx',
+        'docs/tasks/E2/T2.5.md',
+      ]).ok,
+    ).toBe(true);
+    expect(
+      verificarLimites('equipe-gemini/T1.3', [
+        'domain/transactions/identity.ts',
+        'lib/db/schema.ts',
+        'app/api/auth/route.ts',
+        'tests/domain/identity.test.ts',
+        'tests/qa/identity-qa.test.ts',
+        'docs/tasks/E1/T1.3.md',
+      ]).ok,
+    ).toBe(true);
+    const r = verificarLimites('equipe-gemini/T1.3', [
+      'domain/transactions/identity.ts',
+      'package.json',
+      'tsconfig.json',
+      '.github/workflows/ci.yml',
+      'docs/decisoes/0026-operacao-unificada-gemini.md',
+      'docs/tasks/E2/T2.5.md',
     ]);
     expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.foraDaArea).toEqual(['app/api/auth/route.ts', 'domain/money/money.ts']);
+    if (!r.ok)
+      expect(r.foraDaArea).toEqual([
+        'package.json',
+        'tsconfig.json',
+        '.github/workflows/ci.yml',
+        'docs/decisoes/0026-operacao-unificada-gemini.md',
+        'docs/tasks/E2/T2.5.md',
+      ]);
   });
 
   it('branch de processo (cto/, claude/) mexe em docs e configs, nunca em código', () => {
