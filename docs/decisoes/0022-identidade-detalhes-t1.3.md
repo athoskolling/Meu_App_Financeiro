@@ -17,7 +17,8 @@ Ao preparar o cartão da T1.3, quatro pontos ficaram sem resposta exata nos caso
 
 ## Decisão (proposta)
 
-1. **Espaço em branco é o da Unicode.** `normalizeText` troca por espaço comum todo caractere com a propriedade `White_Space` (regex `\p{White_Space}` com a flag `u`), o que inclui U+0085, U+00A0, U+202F, U+3000, tab e quebras de linha. U+200B (espaço de largura zero) e U+FEFF **não** são `White_Space` e ficam como estão; se os prints do Caju mostrarem que eles aparecem, a regra é revista no E5, com ADR nova.
+1. **Espaço em branco é o da Unicode.** `normalizeText` troca por espaço comum todo caractere com a propriedade `White_Space` (regex `\p{White_Space}` com a flag `u`), o que inclui U+0085, U+00A0, U+202F, U+3000, tab e quebras de linha. U+200B (espaço de largura zero) e U+FEFF **não** são `White_Space` e ficam como estão no interior do texto; se os prints do Caju mostrarem que eles aparecem, a regra é revista no E5, com ADR nova.
+   - *Esclarecimento (26/11/2026, achado baixo na revisão da T1.3):* como a etapa final de `normalizeText` definida na T1.0 é `String.prototype.trim()` (ECMAScript), `U+FEFF` (BOM) **nas extremidades** é removido por `.trim()`, enquanto `U+FEFF` **interno** (ex.: `'a\ufeffb'`) permanece preservado. Esse comportamento é defensivo contra BOM espúrio de arquivos/APIs e fica fixado antes de gravar dados no E2.
 2. **Inteiros seguros em toda a contagem.**
    - Cada valor de `existingCounts` precisa ser inteiro seguro e `>= 0` (`Number.isSafeInteger`). `Infinity`, `2 ** 60`, texto e `null` lançam `Error`. Todas as entradas do mapa são conferidas, não só as chaves do lote: o erro é de programação e não pode depender do lote.
    - `identityKey` lança `Error` se `occurrence` não for inteiro seguro `>= 1`.
