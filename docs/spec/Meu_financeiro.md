@@ -602,7 +602,7 @@ Cada estágio vira uma **versão** (tag no Git) e só começa quando o gate do a
 
 ### Papéis
 
-Detalhes em `docs/AGENTES.md`; plano em `ROADMAP.md`.
+Detalhes em `docs/equipes/AGENTES.md`; plano em `ROADMAP.md`.
 
 - **O dono não escreve código.** Lê os diffs, pede alterações, aprova o merge e fecha o gate.
 - **Quem escreve:** `dev-backend` e `dev-frontend` (Sonnet 5.5, médio) e `fixer` (Haiku 5.5, alto), a partir de cartões de tarefa do `cto` (Opus 5.5, médio). Em regra financeira, o CTO escreve os casos de teste antes.

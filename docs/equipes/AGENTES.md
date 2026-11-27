@@ -4,7 +4,7 @@ Este guia explica como funciona, quem faz o quê e como rodar. O plano de tarefa
 
 > **Atualização de 19/11/2026 (ADR-0023):** agora há duas equipes, Claude (`.claude/agents/`) e Gemini (`.agents/agents/`, ver `GEMINI.md`), **divididas por área**. Claude: `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`. Gemini: `app/` (fora de `app/api/`), `components/`, estilos, `README.md`. Só o `cto` Claude planeja. Cada tarefa tem **uma branch** (`equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`), onde o dev e o QA fazem commit. A **revisão é cruzada**: a outra equipe sempre revisa, e em regra financeira, banco, auth, sincronização e segurança os dois revisores olham. A `main` é protegida no GitHub. Onde este guia disser outra coisa, vale a ADR-0023.
 
-> **Atualização de 23/11/2026 (ADR-0024):** modelos da equipe Gemini: Neon no `gemini-cto`, `gemini-dev-backend` e `gemini-revisor`; Hydrogen xhigh no `gemini-dev-frontend`; Hydrogen high no `gemini-qa`, `gemini-fixer` e `gemini-tutor`. Qual equipe faz cada tarefa, até a v1.0: `docs/GUIA_ATE_V1.md`.
+> **Atualização de 23/11/2026 (ADR-0024):** modelos da equipe Gemini: Neon no `gemini-cto`, `gemini-dev-backend` e `gemini-revisor`; Hydrogen xhigh no `gemini-dev-frontend`; Hydrogen high no `gemini-qa`, `gemini-fixer` e `gemini-tutor`. Qual equipe faz cada tarefa, até a v1.0: `docs/equipes/GUIA_ATE_V1.md`.
 
 > **Atualização de 23/11/2026 (ADR-0025):** cada branch tem limites (o job `limites` do CI confere). O dev e o QA só fazem push; **o revisor cruzado abre o PR**; o **`cto` faz o merge** com CI verde e os pareceres APROVADO. O dono aprova cartões, faz o merge dos PRs `cto/` e `claude/`, fecha gates e pode vetar com o rótulo `dono-segura`. Onde este guia disser que o dono faz o merge de tarefa, vale a ADR-0025.
 

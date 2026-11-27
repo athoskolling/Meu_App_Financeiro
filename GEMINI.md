@@ -10,7 +10,7 @@ As regras abaixo vêm do `CLAUDE.md` e são as mesmas para todas as equipes. Ond
 
 @[CLAUDE.md](CLAUDE.md)
 
-Leia também, antes de trabalhar: `docs/AGENTES.md`, `ROADMAP.md`, `docs/GUIA_ATE_V1.md`, `docs/tasks/_TEMPLATE.md` e a spec `docs/Meu_financeiro.md` nas seções que o cartão citar.
+Leia também, antes de trabalhar: `docs/equipes/AGENTES.md`, `ROADMAP.md`, `docs/equipes/GUIA_ATE_V1.md`, `docs/tasks/_TEMPLATE.md` e a spec `docs/spec/Meu_financeiro.md` nas seções que o cartão citar.
 
 ## 2. Modelos por papel (ADR-0026)
 
@@ -107,7 +107,7 @@ gemini-cto escreve o cartão (se ainda não existir) ─► dono aprova
    ─► gemini-cto (Carbon Medium/High) confere o diff final e CI (`check`, `gitleaks`, `limites`) ─► faz o merge (se sem rótulo `dono-segura`) e resume ao dono
 ```
 
-Quando o Claude retomar, volta o fluxo de duas equipes e revisão cruzada da seção 2 de `docs/GUIA_ATE_V1.md`.
+Quando o Claude retomar, volta o fluxo de duas equipes e revisão cruzada da seção 2 de `docs/equipes/GUIA_ATE_V1.md`.
 
 ## 7. Convivência com a estrutura do Claude
 

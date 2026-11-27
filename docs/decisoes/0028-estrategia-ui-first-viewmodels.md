@@ -2,7 +2,7 @@
 
 - **Status:** proposta (aguarda aprovação/merge do dono; alinhada ao plano `ui_first_plan.md` aprovado pelo dono em 26/11/2026)
 - **Estágio:** transversal (E2/E3/E4/E5 — camada visual)
-- **Atualiza em parte:** ordem de execução do `ROADMAP.md` e `docs/GUIA_ATE_V1.md` (sem alterar escopo funcional, segurança nem regras financeiras)
+- **Atualiza em parte:** ordem de execução do `ROADMAP.md` e `docs/equipes/GUIA_ATE_V1.md` (sem alterar escopo funcional, segurança nem regras financeiras)
 
 ## Contexto
 

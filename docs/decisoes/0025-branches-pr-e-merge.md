@@ -60,4 +60,4 @@ Continuam com o **dono**:
 - O dono passa a ler o resumo do `cto` depois do merge, e não antes. A proteção está no CI, nas duas revisões e no veto `dono-segura`.
 - **O dono precisa fazer no GitHub:** marcar `limites` como verificação obrigatória na regra da `main` (Settings → Branches ou Rulesets) e criar o rótulo `dono-segura`. Até isso ser feito, o job roda mas não bloqueia.
 - O `gh` das sessões usa a conta do dono. Por isso a regra de merge vale pelo processo, não por permissão do GitHub. O `cto` que fizer merge fora das condições acima está violando esta ADR.
-- Atualizados junto: `CLAUDE.md`, `GEMINI.md`, `docs/AGENTES.md`, `docs/GUIA_ATE_V1.md`, `docs/tasks/_TEMPLATE.md`, `.claude/agents/` e `.agents/agents/`.
+- Atualizados junto: `CLAUDE.md`, `GEMINI.md`, `docs/equipes/AGENTES.md`, `docs/equipes/GUIA_ATE_V1.md`, `docs/tasks/_TEMPLATE.md`, `.claude/agents/` e `.agents/agents/`.

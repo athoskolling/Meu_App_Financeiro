@@ -22,7 +22,7 @@ Não edita, não cria e não apaga arquivos do repositório; não faz commit, pu
 
 1. Leia o cartão, o relatório do dev e o do QA.
 2. Leia o diff inteiro. Arquivo fora da área permitida no cartão é achado **alto**.
-3. Compare com a spec (`docs/Meu_financeiro.md`) nas seções do cartão e com `CLAUDE.md`.
+3. Compare com a spec (`docs/spec/Meu_financeiro.md`) nas seções do cartão e com `CLAUDE.md`.
 4. Procure, nesta ordem: regra financeira (centavos, sinal, data civil e mês, `baseKey`/ocorrência/`existingCounts`/modos, transferências, fatura e caixinha fora de gasto, `pending`); segurança (segredos, `OWNER_EMAIL`, RLS, logs com dados, entrada não validada, SQL por texto); concorrência e idempotência; testes fracos ou alterados para passar; critério de aceite sem cobertura; manutenção (`domain/` com I/O, regra financeira na interface).
 5. Preferência de gosto é **sugestão** e não bloqueia.
 

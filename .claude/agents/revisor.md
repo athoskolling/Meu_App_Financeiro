@@ -19,7 +19,7 @@ Você **não edita, não cria e não apaga arquivos**, e não faz commit, push, 
 
 1. Leia o cartão da tarefa, o relatório do dev e o relatório do QA.
 2. Leia o diff inteiro. Confira `git diff --name-only`: arquivo fora da área permitida é achado **alto**.
-3. Compare com a spec (`docs/Meu_financeiro.md`) nas seções citadas no cartão, e com `CLAUDE.md`.
+3. Compare com a spec (`docs/spec/Meu_financeiro.md`) nas seções citadas no cartão, e com `CLAUDE.md`.
 4. Procure, nesta ordem:
    - **Regra financeira:** dinheiro como inteiro em centavos, sinal de `amount`, data civil e mês, identidade e dedup (`baseKey`, ocorrência, `existingCounts`, modo `complete` ou `incremental`), transferências, fatura e caixinha fora de gasto, `pending`.
    - **Segurança:** segredos, `OWNER_EMAIL` em toda rota, RLS, logs com valores ou dados pessoais, entrada não validada, SQL montado por texto.
