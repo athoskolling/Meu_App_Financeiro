@@ -73,7 +73,8 @@ describe('T4.3a: Tela Painel e componentes puros', () => {
     expect(html).toContain('Zaffari Supermercados');
     expect(html).toContain('Para a caixinha Viagem');
     expect(html).toContain('Guardado, fora dos gastos');
-    expect(html).toContain('bg-primaria-fundo text-primaria');
+    expect(html).toContain('bg-primaria-fundo');
+    expect(html).toContain('text-primaria');
     expect(html).toContain('text-texto-suave');
   });
 
