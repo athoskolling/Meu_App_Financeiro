@@ -91,6 +91,58 @@ describe('limites das branches (ADR-0025)', () => {
     if (!r.ok) expect(r.foraDaArea).toEqual(['lib/env.ts']);
   });
 
+  it('aceita os caminhos novos de src/ (ADR-0029) na área de cada equipe', () => {
+    expect(
+      verificarLimites('equipe-claude/T2.6', [
+        'src/domain/transactions/identity.ts',
+        'src/application/lancamento-manual.ts',
+        'src/infrastructure/database/schema.ts',
+        'src/app/api/manual/route.ts',
+        'src/instrumentation.ts',
+        'tests/application/lancamento-manual.test.ts',
+        'tests/infrastructure/env.test.ts',
+      ]).ok,
+    ).toBe(true);
+    const r = verificarLimites('equipe-claude/T2.7', [
+      'src/app/(app)/page.tsx',
+      'src/components/x.tsx',
+    ]);
+    expect(r.ok).toBe(false);
+    expect(
+      verificarLimites('equipe-gemini/T4.4a', [
+        'src/app/(app)/transacoes/page.tsx',
+        'src/components/transacoes/Lista.tsx',
+        'tests/ui/transacoes.test.tsx',
+      ]).ok,
+    ).toBe(true);
+  });
+
+  it('cto/ não mexe no código nos caminhos novos de src/', () => {
+    const r = verificarLimites('cto/x', [
+      'docs/README.md',
+      'src/domain/money/money.ts',
+      'src/app/page.tsx',
+    ]);
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.foraDaArea).toEqual(['src/domain/money/money.ts', 'src/app/page.tsx']);
+  });
+
+  it('estrutura/{slug} só vale para mudanças aprovadas em ADR (ADR-0029)', () => {
+    expect(
+      verificarLimites('estrutura/src-camadas', [
+        'domain/money/money.ts',
+        'src/domain/money/money.ts',
+        'app/page.tsx',
+        'src/app/page.tsx',
+        'package.json',
+        'eslint.config.mjs',
+      ]).ok,
+    ).toBe(true);
+    for (const slug of ['outra', 'constructor', '__proto__', 'toString', 'src-camadas/x', '']) {
+      expect(verificarLimites(`estrutura/${slug}`, ['README.md']).ok).toBe(false);
+    }
+  });
+
   it('recusa branch fora do padrão e id de tarefa inválido', () => {
     expect(verificarLimites('feature/x', ['README.md']).ok).toBe(false);
     expect(verificarLimites('equipe-claude/tarefa', ['lib/a.ts']).ok).toBe(false);

@@ -42,7 +42,7 @@ Leia também, antes de trabalhar: `docs/equipes/AGENTES.md`, `docs/ROADMAP.md`, 
 ## 2.1 Modo unificado Gemini (ADR-0026) vs duas equipes com Claude (ADR-0023)
 
 - **Enquanto o Claude estiver pausado (ADR-0026, modo atual):**
-  - O `gemini-cto` assume o papel completo de CTO (cartões, casos de teste, ADRs, gates, revisão final e merge das tarefas; branches de processo usam `cto/{assunto}`, cujo merge continua sendo do **dono**).
+  - O `gemini-cto` assume o papel completo de CTO (cartões, casos de teste, ADRs, gates, revisão final e merge das tarefas; branches de processo usam `cto/{assunto}`, cujo merge continua sendo do **dono**; mudança de estrutura aprovada em ADR usa `estrutura/{slug}`, também com merge do dono, ADR-0029).
   - As branches de tarefa usam `equipe-gemini/T{id}` (a partir de `origin/main`) e podem tocar tanto a área Gemini quanto a área Claude (`tools/ci/limites.ts`), continuando impedidas de tocar configs, `package.json`, lockfile, `.github/`, `.claude/`, `.agents/`, ADRs, gates e outros cartões.
   - Há **um único revisor** (`gemini-revisor` em `Neon XHigh`), que abre o PR (`gh pr create`, com `--draft` se pedir ALTERAÇÕES). O `gemini-cto` faz o merge quando `check`, `gitleaks` e `limites` estiverem verdes, QA PASS, parecer APROVADO e sem rótulo `dono-segura`.
 - **Quando o Claude retomar (ADR-0023 e ADR-0025):**
