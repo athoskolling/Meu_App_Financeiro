@@ -64,10 +64,12 @@ export function verificarLimites(branch: string, arquivos: readonly string[]): R
         foraDaArea: [],
       };
     }
+    // ADR-0026: equipe-gemini também pode tocar AREA_CLAUDE no modo unificado Gemini,
+    // mantendo equipe-claude intacta e continuando a barrar configs, deps, ADRs e outros cartões.
     const naArea = (a: string) =>
       dentro(a, AREA_QA) ||
       cartaoDaTarefa(a, id) ||
-      (nome === 'claude' ? dentro(a, AREA_CLAUDE) : naAreaGemini(a));
+      (nome === 'claude' ? dentro(a, AREA_CLAUDE) : naAreaGemini(a) || dentro(a, AREA_CLAUDE));
     const fora = arquivos.filter((a) => !naArea(a));
     return fora.length === 0
       ? { ok: true, regra }
