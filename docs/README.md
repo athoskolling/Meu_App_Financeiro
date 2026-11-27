@@ -17,16 +17,18 @@ Os arquivos de `historico/` foram mantidos como foram escritos, então citam os 
 
 ## Raiz do repositório
 
-Na raiz ficam só os arquivos que precisam estar lá:
+Todo o código fica em `src/`, separado por camada (ADR-0029): `domain/` (regras puras), `application/` (casos de uso), `infrastructure/` (env, log, banco, auth, integrações), `app/` (rotas do Next) e `components/` (telas). As setas de dependência só apontam para dentro, e o lint barra o contrário.
 
-- as configurações que as ferramentas procuram na raiz: `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `next.config.ts`, `next-env.d.ts`, `instrumentation.ts`, `eslint.config.mjs`, `vitest.config.ts`, `postcss.config.mjs`, `docker-compose.yml` e os arquivos com ponto (`.editorconfig`, `.nvmrc`, `.prettierrc.json`…);
+Na raiz ficam só as pastas `src/`, `tests/`, `docs/`, `tools/`, `.claude/`, `.agents/`, `.github/` e os arquivos que precisam estar lá:
+
+- as configurações que as ferramentas procuram na raiz: `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `next.config.ts`, `next-env.d.ts`, `eslint.config.mjs`, `vitest.config.ts`, `postcss.config.mjs`, `docker-compose.yml` e os arquivos com ponto (`.editorconfig`, `.nvmrc`, `.prettierrc.json`…);
 - as instruções que cada equipe lê sozinha: `CLAUDE.md` e `GEMINI.md`;
 - o `CHANGELOG.md`, que por convenção fica na raiz (o GitHub e as ferramentas de versão procuram lá).
 
 | Pasta de código | Equipe (ADR-0023) |
 | --- | --- |
-| `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/` | Claude |
-| `app/` (fora de `app/api/`), `components/`, estilos, `public/` | Gemini |
+| `src/domain/`, `src/application/`, `src/infrastructure/`, `drizzle/`, `src/app/api/`, `scripts/` | Claude |
+| `src/app/` (fora de `src/app/api/`), `src/components/`, estilos, `public/` | Gemini |
 | `tests/` | a equipe da tarefa (o QA escreve em `tests/qa/`) |
 | `tools/ci/` | a verificação de limites do CI (ADR-0025) |
 | `.claude/` e `.agents/` | os agentes de cada equipe (só o `cto` ou o dono mudam) |

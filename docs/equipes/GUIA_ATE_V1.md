@@ -28,8 +28,8 @@ Em resumo: **Neon = Opus** no comando, **Neon = Sonnet** quando o trabalho é re
 
 | Equipe | Pastas |
 | --- | --- |
-| **Claude** | `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`, `middleware.ts` ou `proxy.ts` (Next 16), `instrumentation.ts`, `tests/domain/`, `tests/lib/`, `tests/integration/`, `tests/fixtures/` |
-| **Gemini** | `app/` (fora de `app/api/`), `components/`, estilos, `public/`, `README.md`, `tests/ui/` |
+| **Claude** | `src/domain/`, `src/application/`, `src/infrastructure/`, `drizzle/`, `src/app/api/`, `scripts/`, `src/middleware.ts` ou `src/proxy.ts` (Next 16), `src/instrumentation.ts`, `tests/domain/`, `tests/infrastructure/`, `tests/integration/`, `tests/fixtures/` |
+| **Gemini** | `src/app/` (fora de `src/app/api/`), `src/components/`, estilos, `public/`, `README.md`, `tests/ui/` |
 | Só `cto` Claude ou você | `package.json`, lockfile, `.github/`, `.claude/`, `.agents/`, `tools/`, `tests/ci/`, `CLAUDE.md`, `GEMINI.md`, configs, `.env.example`, `LICENSE`, `docs/` |
 
 `tests/qa/` é do QA da equipe que fez a tarefa.
@@ -210,7 +210,7 @@ Nenhum agente lê `private/` nem `.env.local`. Eles só veem o relatório de est
 | --- | --- | --- | --- | --- |
 | T5.0 | Um print do Caju por semana, anonimizado, fora do Git | **você** | — | **comece já** |
 | T5.1 | Decidir Q14 e Q16; casos do parser | `cto` + **você** | — | T5.0, G3 |
-| T5.2 | Parser em `domain/caju/` | Claude, `dev-backend` | X+M | T5.1 |
+| T5.2 | Parser em `src/domain/caju/` | Claude, `dev-backend` | X+M | T5.1 |
 | T5.3 | `ExtractionProvider` e script de avaliação | Claude, `dev-backend` | X+M | T5.1 |
 | T5.4 | Mesclador de prints e âncora | `cto` desenha, **você aprova**, Claude `dev-backend` faz | X+M | T5.1, T1.3 |
 | T5.5 | `ImportService`; nada em `transactions` sem confirmação | Claude, `dev-backend` | X+M | T5.2, T5.4 |

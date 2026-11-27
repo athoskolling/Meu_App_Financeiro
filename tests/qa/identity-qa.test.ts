@@ -2,7 +2,7 @@
 // Dados sempre sintéticos. Sem Date, sem Math.random: fuzz/embaralhamento usam PRNG determinístico.
 // Caracteres Unicode invisíveis escritos exclusivamente via escape (\uXXXX / String.fromCharCode).
 import { describe, expect, it } from 'vitest';
-import type { Cents } from '../../domain/money';
+import type { Cents } from '../../src/domain/money';
 import {
   assignIdentities,
   baseKey,
@@ -15,7 +15,7 @@ import {
   type TransactionSource,
   type TransactionStatus,
   type TransactionType,
-} from '../../domain/transactions';
+} from '../../src/domain/transactions';
 
 const asCents = (n: number): Cents => n as Cents;
 const h: Hash = (s) => `h(${s})`;

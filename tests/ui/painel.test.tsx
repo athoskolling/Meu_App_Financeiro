@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import PaginaPainel, { metadata } from '../../app/(app)/page';
-import { ResumoMes } from '../../components/painel/ResumoMes';
-import { GraficoGastoDiario } from '../../components/painel/GraficoGastoDiario';
-import { ListaCategorias } from '../../components/painel/ListaCategorias';
-import { UltimasMovimentacoes } from '../../components/painel/UltimasMovimentacoes';
-import { CardContasConferidas } from '../../components/painel/CardContasConferidas';
-import { PAINEL_PREVIA } from '../../components/previa/painel';
+import PaginaPainel, { metadata } from '../../src/app/(app)/page';
+import { ResumoMes } from '../../src/components/painel/ResumoMes';
+import { GraficoGastoDiario } from '../../src/components/painel/GraficoGastoDiario';
+import { ListaCategorias } from '../../src/components/painel/ListaCategorias';
+import { UltimasMovimentacoes } from '../../src/components/painel/UltimasMovimentacoes';
+import { CardContasConferidas } from '../../src/components/painel/CardContasConferidas';
+import { PAINEL_PREVIA } from '../../src/components/previa/painel';
 
 describe('T4.3a: Tela Painel e componentes puros', () => {
   it('1. renderiza a página Painel com a fixture padrão de outubro/2026', () => {

@@ -16,6 +16,30 @@ const MENSAGEM_TIPO =
   "Em domain/, use `import type { X } from './arquivo'` em vez de `import('...')` em posição de tipo (ADR-0017).";
 const RELATIVOS = ['**', '!./**', '!../**', '!.', '!..'];
 
+// ADR-0029: regra de dependência das camadas em src/ (as setas só apontam para dentro).
+const MENSAGEM_APPLICATION =
+  'src/application/ só depende de src/domain/: infraestrutura, telas e frameworks entram por parâmetro (ADR-0029).';
+const MENSAGEM_COMPONENTS =
+  'src/components/ só recebe ViewModel pronto: não importa domain/, application/ nem infrastructure/ (ADR-0028 e ADR-0029).';
+const FRAMEWORKS_E_BANCO = ['next', 'react', 'react-dom', 'drizzle-orm', 'pg', 'postgres'];
+
+const importsCamada = (proibidos, mensagem, pacotes = []) => [
+  'error',
+  {
+    paths: pacotes.map((name) => ({ name, message: mensagem })),
+    patterns: [
+      {
+        group: [
+          ...proibidos.flatMap((pasta) => [`**/${pasta}`, `**/${pasta}/**`]),
+          ...pacotes.map((p) => `${p}/*`),
+          '@supabase/*',
+        ],
+        message: mensagem,
+      },
+    ],
+  },
+];
+
 const importsDomain = (permitidosExtras = []) => [
   'error',
   {
@@ -77,10 +101,34 @@ export default tseslint.config(
       },
     },
   },
+  // ADR-0029: application/ não depende de infraestrutura, telas nem frameworks.
+  {
+    files: ['src/application/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}'],
+    rules: {
+      'no-restricted-imports': 'off',
+      '@typescript-eslint/no-restricted-imports': importsCamada(
+        ['infrastructure', 'app', 'components'],
+        MENSAGEM_APPLICATION,
+        FRAMEWORKS_E_BANCO,
+      ),
+    },
+  },
+  // ADR-0028 e ADR-0029: componentes de tela só recebem ViewModel.
+  {
+    files: ['src/components/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}'],
+    rules: {
+      'no-restricted-imports': 'off',
+      '@typescript-eslint/no-restricted-imports': importsCamada(
+        ['domain', 'application', 'infrastructure'],
+        MENSAGEM_COMPONENTS,
+        ['drizzle-orm', 'pg', 'postgres'],
+      ),
+    },
+  },
   // Os blocos de domain/ devem ficar por último (antes de prettier) para nenhum bloco posterior sobrepor as regras (ADR-0017).
   // T0.2: isolamento de domain/ (TypeScript puro: sem I/O, framework ou banco)
   {
-    files: ['domain/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}'],
+    files: ['src/domain/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}'],
     // Comentários eslint-disable não valem em domain/ (ADR-0017).
     linterOptions: { noInlineConfig: true, reportUnusedDisableDirectives: 'error' },
     rules: {
@@ -133,7 +181,7 @@ export default tseslint.config(
   },
   // ADR-0017: testes dentro de domain/ podem importar vitest, além dos relativos.
   {
-    files: ['domain/**/*.test.{ts,tsx,mts,cts}'],
+    files: ['src/domain/**/*.test.{ts,tsx,mts,cts}'],
     rules: { '@typescript-eslint/no-restricted-imports': importsDomain(['vitest']) },
   },
   prettier,

@@ -4,10 +4,10 @@ import { verificarLimites } from '../../tools/ci/limites';
 describe('limites das branches (ADR-0025)', () => {
   it('equipe-claude aceita a área Claude, tests/qa e o próprio cartão', () => {
     const r = verificarLimites('equipe-claude/T1.3', [
-      'domain/identity/assign.ts',
-      'lib/db/schema.ts',
-      'app/api/manual/route.ts',
-      'proxy.ts',
+      'src/domain/identity/assign.ts',
+      'src/infrastructure/database/schema.ts',
+      'src/app/api/manual/route.ts',
+      'src/proxy.ts',
       'tests/domain/identity.test.ts',
       'tests/qa/identity-qa.test.ts',
       'docs/tasks/E1/T1.3.md',
@@ -17,8 +17,8 @@ describe('limites das branches (ADR-0025)', () => {
 
   it('equipe-claude recusa tela, configuração e cartão de outra tarefa', () => {
     const r = verificarLimites('equipe-claude/T2.6', [
-      'lib/manual.ts',
-      'app/page.tsx',
+      'src/infrastructure/manual.ts',
+      'src/app/page.tsx',
       'package.json',
       'docs/tasks/E2/T2.7.md',
       '.github/workflows/ci.yml',
@@ -26,7 +26,7 @@ describe('limites das branches (ADR-0025)', () => {
     expect(r.ok).toBe(false);
     if (!r.ok)
       expect(r.foraDaArea).toEqual([
-        'app/page.tsx',
+        'src/app/page.tsx',
         'package.json',
         'docs/tasks/E2/T2.7.md',
         '.github/workflows/ci.yml',
@@ -39,9 +39,9 @@ describe('limites das branches (ADR-0025)', () => {
     ).toBe(true);
     expect(
       verificarLimites('equipe-gemini/T2.5', [
-        'app/layout.tsx',
-        'app/entrar/page.tsx',
-        'components/Nav.tsx',
+        'src/app/layout.tsx',
+        'src/app/entrar/page.tsx',
+        'src/components/Nav.tsx',
         'tests/ui/nav.test.ts',
         'tests/qa/t2.5-qa.test.tsx',
         'docs/tasks/E2/T2.5.md',
@@ -49,16 +49,16 @@ describe('limites das branches (ADR-0025)', () => {
     ).toBe(true);
     expect(
       verificarLimites('equipe-gemini/T1.3', [
-        'domain/transactions/identity.ts',
-        'lib/db/schema.ts',
-        'app/api/auth/route.ts',
+        'src/domain/transactions/identity.ts',
+        'src/infrastructure/database/schema.ts',
+        'src/app/api/auth/route.ts',
         'tests/domain/identity.test.ts',
         'tests/qa/identity-qa.test.ts',
         'docs/tasks/E1/T1.3.md',
       ]).ok,
     ).toBe(true);
     const r = verificarLimites('equipe-gemini/T1.3', [
-      'domain/transactions/identity.ts',
+      'src/domain/transactions/identity.ts',
       'package.json',
       'tsconfig.json',
       '.github/workflows/ci.yml',
@@ -86,9 +86,12 @@ describe('limites das branches (ADR-0025)', () => {
         'tests/ci/limites.test.ts',
       ]).ok,
     ).toBe(true);
-    const r = verificarLimites('claude/sessao-x', ['docs/GUIA_ATE_V1.md', 'lib/env.ts']);
+    const r = verificarLimites('claude/sessao-x', [
+      'docs/GUIA_ATE_V1.md',
+      'src/infrastructure/env.ts',
+    ]);
     expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.foraDaArea).toEqual(['lib/env.ts']);
+    if (!r.ok) expect(r.foraDaArea).toEqual(['src/infrastructure/env.ts']);
   });
 
   it('aceita os caminhos novos de src/ (ADR-0029) na área de cada equipe', () => {
@@ -127,6 +130,17 @@ describe('limites das branches (ADR-0025)', () => {
     if (!r.ok) expect(r.foraDaArea).toEqual(['src/domain/money/money.ts', 'src/app/page.tsx']);
   });
 
+  it('caminhos antigos da raiz já não são área de nenhuma equipe (ADR-0029)', () => {
+    const r = verificarLimites('equipe-claude/T2.6', [
+      'domain/a.ts',
+      'lib/a.ts',
+      'instrumentation.ts',
+    ]);
+    expect(r.ok).toBe(false);
+    const g = verificarLimites('equipe-gemini/T4.4a', ['app/page.tsx', 'components/x.tsx']);
+    expect(g.ok).toBe(false);
+  });
+
   it('estrutura/{slug} só vale para mudanças aprovadas em ADR (ADR-0029)', () => {
     expect(
       verificarLimites('estrutura/src-camadas', [
@@ -145,13 +159,13 @@ describe('limites das branches (ADR-0025)', () => {
 
   it('recusa branch fora do padrão e id de tarefa inválido', () => {
     expect(verificarLimites('feature/x', ['README.md']).ok).toBe(false);
-    expect(verificarLimites('equipe-claude/tarefa', ['lib/a.ts']).ok).toBe(false);
+    expect(verificarLimites('equipe-claude/tarefa', ['src/infrastructure/a.ts']).ok).toBe(false);
     expect(verificarLimites('main', []).ok).toBe(false);
   });
 
   it('aceita os formatos de id do ROADMAP', () => {
     for (const id of ['T1.3', 'T1b.2', 'T2.10a', 'T1.4r', 'T0.4c']) {
-      expect(verificarLimites(`equipe-claude/${id}`, ['lib/a.ts']).ok).toBe(true);
+      expect(verificarLimites(`equipe-claude/${id}`, ['src/infrastructure/a.ts']).ok).toBe(true);
     }
   });
 });

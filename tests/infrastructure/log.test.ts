@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createLogger } from '../../lib/log';
+import { createLogger } from '../../src/infrastructure/log';
 
 function novo() {
   const linhas: string[] = [];

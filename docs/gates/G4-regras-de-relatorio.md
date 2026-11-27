@@ -27,6 +27,6 @@ Pode andar em paralelo com o G3. Precisa fechar antes do G7, porque a T4.1 usa `
 
 ## Qualidade e encerramento
 
-- [ ] CI verde; lint de isolamento do `domain/` continua barrando.
+- [ ] CI verde; lint de isolamento do `src/domain/` continua barrando.
 - [ ] `CHANGELOG` com a entrada v0.4 e tag `v0.4`.
 - [ ] Retro curta (o que funcionou no esquema de agentes, o que não).

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Navegacao } from '../../components/Navegacao';
+import { Navegacao } from '../../src/components/Navegacao';
 
 function extrairLinks(html: string) {
   const matches = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)];

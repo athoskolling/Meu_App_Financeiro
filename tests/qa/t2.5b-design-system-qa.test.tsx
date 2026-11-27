@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { SeloConferencia } from '../../components/ui/SeloConferencia';
-import { FaixaPrevia } from '../../components/ui/FaixaPrevia';
-import { NavegacaoMobile } from '../../components/NavegacaoMobile';
-import { Navegacao } from '../../components/Navegacao';
-import { Cabecalho } from '../../components/Cabecalho';
+import { SeloConferencia } from '../../src/components/ui/SeloConferencia';
+import { FaixaPrevia } from '../../src/components/ui/FaixaPrevia';
+import { NavegacaoMobile } from '../../src/components/NavegacaoMobile';
+import { Navegacao } from '../../src/components/Navegacao';
+import { Cabecalho } from '../../src/components/Cabecalho';
 
 function extrairLinks(html: string) {
   const matches = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)];

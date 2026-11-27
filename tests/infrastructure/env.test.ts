@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadEnv } from '../../lib/env';
+import { loadEnv } from '../../src/infrastructure/env';
 
 const OK = { DATABASE_URL: 'postgres://u:p@127.0.0.1:5432/db', OWNER_EMAIL: 'dono@example.com' };
 

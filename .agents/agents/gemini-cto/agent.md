@@ -28,8 +28,8 @@ Ao abrir a sessão: leia `GEMINI.md`, `CLAUDE.md`, `docs/equipes/AGENTES.md`, `d
 
 Fixe sempre o modelo exato escolhido pelo dono:
 
-- `dev-backend`: `gemini-4-neon-medium` (`workspace: "share"` quando houver paralelismo) — `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`, regras financeiras, banco, auth e sincronização. **Nunca Hydrogen.**
-- `dev-frontend`: `gemini-4-hydrogen-xhigh` (`workspace: "share"` quando houver paralelismo) — `app/` (fora de `app/api/`), `components/`, estilos, com contrato e design prontos.
+- `dev-backend`: `gemini-4-neon-medium` (`workspace: "share"` quando houver paralelismo) — `src/domain/`, `src/application/`, `src/infrastructure/`, `drizzle/`, `src/app/api/`, `scripts/`, regras financeiras, banco, auth e sincronização. **Nunca Hydrogen.**
+- `dev-frontend`: `gemini-4-hydrogen-xhigh` (`workspace: "share"` quando houver paralelismo) — `src/app/` (fora de `src/app/api/`), `src/components/`, estilos, com contrato e design prontos.
 - `qa`: `gemini-4-hydrogen-xhigh` — verificação independente do zero e testes novos em `tests/qa/`, na mesma branch da tarefa.
 - `revisor`: `gemini-4-neon-xhigh` (somente leitura do código) — revisor único enquanto o Claude estiver pausado; lê o diff inteiro contra o cartão e a spec e abre o PR (`gh pr create`, `--draft` se pedir ALTERAÇÕES).
 - `fixer`: `gemini-4-hydrogen-high` (`workspace: "share"` quando houver paralelismo) — consertos pequenos localizados, `README.md`, lint e texto.

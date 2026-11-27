@@ -88,7 +88,7 @@ Exceção controlada: arquivos **fictícios** usados em testes (CSVs, imagens e 
 
 ### 4.3 Modularidade
 
-Integrações externas ficam isoladas. Nenhum código específico de Pluggy, Caju ou Google fora de `lib/integrations/`, com uma exceção deliberada: o parser de linhas e o mesclador de prints do Caju são **puros** (texto entra, texto sai, sem I/O) e ficam em `domain/caju/`, para serem testados sem rede nem imagem. A extração (imagem para texto) fica em `lib/integrations/caju/`.
+Integrações externas ficam isoladas. Nenhum código específico de Pluggy, Caju ou Google fora de `src/infrastructure/integrations/`, com uma exceção deliberada: o parser de linhas e o mesclador de prints do Caju são **puros** (texto entra, texto sai, sem I/O) e ficam em `src/domain/caju/`, para serem testados sem rede nem imagem. A extração (imagem para texto) fica em `src/infrastructure/integrations/caju/`.
 
 Regra: **só criar uma interface abstrata quando houver (ou for iminente) uma segunda implementação**. No MVP existem dois adaptadores com formatos distintos (Pluggy e Caju via prints), então ambos produzem o mesmo tipo normalizado (`NormalizedTransaction`), e é essa a fronteira que importa.
 
@@ -252,7 +252,7 @@ A cada sincronização, comparar o saldo da conta com o saldo derivado dos lanç
 
 Decidido na rodada de arquitetura:
 
-- **App:** Next.js + React + TypeScript + Tailwind CSS. API routes no início, com camadas separadas (`domain`, `lib/finance`, `lib/integrations`, `lib/database`).
+- **App:** Next.js + React + TypeScript + Tailwind CSS. API routes no início, com camadas separadas (`src/domain`, `src/application`, `src/infrastructure/integrations`, `src/infrastructure/database`; ADR-0029).
 - **Banco:** PostgreSQL no **Supabase Free** (500 MB; sem backup automático; projetos de baixa atividade são pausados após cerca de 7 dias; restauração possível por até 1 ano).
 - **Hospedagem:** **Vercel Hobby** (R$ 0). Limites que importam: cron no máximo 1 vez por dia (com tolerância de até 59 min), função com no máximo 300 s, corpo de requisição de até 4,5 MB.
 - **Acesso ao banco:** **Drizzle ORM**, **somente no servidor**. O app conecta pelo pooler compartilhado do Supabase em modo transação (porta 6543) com `prepare: false`. As migrações rodam da máquina local pelo pooler em modo sessão (porta 5432), porque a conexão direta é IPv6 por padrão.
@@ -333,7 +333,7 @@ Fontes: guia "Personal use: read your own data with Meu Pluggy" (docs.pluggy.ai)
 
 ### 8.4 Adapter
 
-Código restrito a `lib/integrations/pluggy/`. Responsabilidades:
+Código restrito a `src/infrastructure/integrations/pluggy/`. Responsabilidades:
 
 - Obter a API key via `POST /auth` a cada execução serverless (no máximo um cache curto em memória do módulo, tolerando perda a qualquer momento). Nunca persistida em texto puro, nunca enviada ao frontend.
 - Listar contas por `itemId` e transações via `/v2/transactions`.
@@ -360,7 +360,7 @@ Todos esses itens são respondidos na **sondagem com dados reais (E1b)**: um scr
 
 ### 8.6 Sincronização
 
-`SyncService` (em `lib/finance/`):
+`SyncService` (caso de uso em `src/application/`, ADR-0029):
 
 1. Listar conexões ativas.
 2. Consultar `last_sync_at` e buscar apenas o necessário (incremental, se a API permitir; caso contrário, janela deslizante com deduplicação).
@@ -546,7 +546,7 @@ Obrigatórios antes de fechar o gate de cada estágio (seção 17).
 
 **IA (futuro):** respostas verificadas com dados fictícios.
 
-**Política (decidida):** domínio com testes primeiro (os casos são escritos antes do código). Persistência, a partir do E2, com testes de integração contra um Postgres local em Docker, incluindo o índice único de identidade e duas sincronizações concorrentes. Sem testes E2E de navegador até o E4. Sem meta de cobertura em porcentagem: o gate é cada caso do checklist passar. CI (GitHub Actions) roda `tsc --noEmit`, ESLint (com regra que impede `domain/` de importar I/O: `fs`, `fetch`, Drizzle, Next), Vitest e gitleaks. A `main` é protegida e o trabalho vai por PR.
+**Política (decidida):** domínio com testes primeiro (os casos são escritos antes do código). Persistência, a partir do E2, com testes de integração contra um Postgres local em Docker, incluindo o índice único de identidade e duas sincronizações concorrentes. Sem testes E2E de navegador até o E4. Sem meta de cobertura em porcentagem: o gate é cada caso do checklist passar. CI (GitHub Actions) roda `tsc --noEmit`, ESLint (com regra que impede `src/domain/` de importar I/O: `fs`, `fetch`, Drizzle, Next), Vitest e gitleaks. A `main` é protegida e o trabalho vai por PR.
 
 ## 16. Decisões
 
@@ -575,7 +575,7 @@ Cada estágio vira uma **versão** (tag no Git) e só começa quando o gate do a
 
 | Estágio | Versão | Entrega | Gate (resumo) |
 |---|---|---|---|
-| **E0 Fundação** | v0.0 | Repositório, CI, `CLAUDE.md`, docs, spec v2.3 | CI verde. Lint isola `domain/`. Varredura de segredos limpa |
+| **E0 Fundação** | v0.0 | Repositório, CI, `CLAUDE.md`, docs, spec v2.3 | CI verde. Lint isola `src/domain/`. Varredura de segredos limpa |
 | **E1 Núcleo de domínio** | v0.1 (núcleo) e v0.1.1 (regras) | Parte A: Money, NormalizedTransaction, identidade e dedup. Parte B: gastos do período (cartão, caixinha), transferências, categorizador. O mesclador de prints foi para o E5 | Todos os casos do roteiro passam. Dinheiro sem float. Identidade usa o mapa de contagens. A parte B fecha antes do E4 |
 | **E1b Sondagem Pluggy** (paralela ao E1, descartável) | sem versão | Script que baixa o JSON bruto de contas, transações, cartões e investimentos | Itens `[VERIFICAR]` respondidos em `docs/decisoes/`. Veredito sobre as caixinhas. Fixtures anonimizadas. Nenhum dado real no Git |
 | **E2 Esqueleto vertical** | v0.2 | Next.js, Drizzle, Supabase, login Google, RLS, deploy, lançamento manual | Outra conta Google é recusada. A chave anon não lê nada. A migração roda do zero. O deploy na Vercel funciona |
