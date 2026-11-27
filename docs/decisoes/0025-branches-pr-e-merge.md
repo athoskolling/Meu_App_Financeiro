@@ -24,7 +24,7 @@ Na ADR-0023, o dono fazia o merge de toda tarefa e levava cada PR de uma equipe 
 | `claude/{nome}` (sessão de nuvem) | sessão aberta pelo dono | a mesma regra de `cto/` |
 | `main` | **ninguém** | só recebe merge de PR |
 
-- `{id}` é o id da linha do `ROADMAP.md` (`T1.3`, `T2.10a`, `T1b.2`, `T1.4r`).
+- `{id}` é o id da linha do `docs/ROADMAP.md` (`T1.3`, `T2.10a`, `T1b.2`, `T1.4r`).
 - Dependência nova (`package.json`, lockfile) entra por uma branch `cto/`, com ADR, **antes** da tarefa que precisa dela.
 - O job `limites` reprova o PR quando a branch está fora do padrão ou mexe fora da área. Ele roda com `pull_request_target`: o script vem da `main`, então um PR não consegue afrouxar a própria checagem. O job só lê a lista de arquivos e não executa código do PR.
 

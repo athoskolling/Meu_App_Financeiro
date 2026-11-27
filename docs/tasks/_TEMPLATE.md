@@ -4,7 +4,7 @@ Copie este arquivo para `docs/tasks/E{n}/T{nn}.md`. O CTO preenche o cartão; o 
 
 ## Cartão (preenchido pelo CTO)
 
-- **Estágio / tarefa:** E{n} / T{nn} (linha correspondente do `ROADMAP.md`)
+- **Estágio / tarefa:** E{n} / T{nn} (linha correspondente do `docs/ROADMAP.md`)
 - **Equipe e agente responsável:** claude: dev-backend | dev-frontend | fixer, ou gemini: gemini-dev-frontend | gemini-fixer | gemini-dev-backend (pela área, ADR-0023)
 - **Depende de (já em `main`):** {tarefas}
 - **Branch:** `equipe-{claude|gemini}/T{nn}`, a partir de `origin/main` (dev e QA fazem commit nela)

@@ -4,6 +4,6 @@ dist
 docs/
 .claude/
 CLAUDE.md
-ROADMAP.md
+docs/ROADMAP.md
 .next/
 next-env.d.ts

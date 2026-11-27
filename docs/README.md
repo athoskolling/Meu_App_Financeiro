@@ -2,7 +2,7 @@
 
 | Pasta ou arquivo | O que tem | Quem escreve |
 | --- | --- | --- |
-| `../ROADMAP.md` | o plano: estágios, tarefas, dependências e datas | `cto` |
+| `ROADMAP.md` | o plano: estágios, tarefas, dependências e datas | `cto` |
 | `spec/Meu_financeiro.md` | a especificação completa do app | dono e `cto` |
 | `spec/Fase0_roteiro.md` | o roteiro do núcleo de domínio (contratos e casos) | `cto` |
 | `equipes/AGENTES.md` | como as equipes de agentes trabalham | `cto` |
@@ -21,7 +21,7 @@ Na raiz ficam só os arquivos que precisam estar lá:
 
 - as configurações que as ferramentas procuram na raiz: `package.json`, `pnpm-lock.yaml`, `tsconfig.json`, `next.config.ts`, `next-env.d.ts`, `instrumentation.ts`, `eslint.config.mjs`, `vitest.config.ts`, `postcss.config.mjs`, `docker-compose.yml` e os arquivos com ponto (`.editorconfig`, `.nvmrc`, `.prettierrc.json`…);
 - as instruções que cada equipe lê sozinha: `CLAUDE.md` e `GEMINI.md`;
-- o `ROADMAP.md` e o `CHANGELOG.md`.
+- o `CHANGELOG.md`, que por convenção fica na raiz (o GitHub e as ferramentas de versão procuram lá).
 
 | Pasta de código | Equipe (ADR-0023) |
 | --- | --- |

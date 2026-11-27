@@ -10,7 +10,7 @@ As regras abaixo vêm do `CLAUDE.md` e são as mesmas para todas as equipes. Ond
 
 @[CLAUDE.md](CLAUDE.md)
 
-Leia também, antes de trabalhar: `docs/equipes/AGENTES.md`, `ROADMAP.md`, `docs/equipes/GUIA_ATE_V1.md`, `docs/tasks/_TEMPLATE.md` e a spec `docs/spec/Meu_financeiro.md` nas seções que o cartão citar.
+Leia também, antes de trabalhar: `docs/equipes/AGENTES.md`, `docs/ROADMAP.md`, `docs/equipes/GUIA_ATE_V1.md`, `docs/tasks/_TEMPLATE.md` e a spec `docs/spec/Meu_financeiro.md` nas seções que o cartão citar.
 
 ## 2. Modelos por papel (ADR-0026)
 
