@@ -27,6 +27,6 @@ Na T0.1, duas versões saíram diferentes do texto original. O dono aceitou as d
 
 - **ESLint 10** (com `@eslint/js` 10) em vez de 9. É a versão estável atual, funciona com `typescript-eslint` 8.71 e o lint com type-check roda em cerca de 5 s.
 - **TypeScript fixado em `~6.0`** (6.0.3), não 7. O `typescript-eslint` 8.71 declara peer `typescript <6.1.0` e quebra no TS 7 ("does not support TS 7.0"). O `~` impede que o TS suba sozinho para uma versão sem suporte.
-- **Prettier só no código:** `.prettierignore` também ignora `docs/`, `.claude/`, `CLAUDE.md` e `ROADMAP.md`, para que a formatação automática não reescreva a spec e os documentos.
+- **Prettier só no código:** `.prettierignore` também ignora `docs/`, `.claude/`, `CLAUDE.md` e `docs/ROADMAP.md`, para que a formatação automática não reescreva a spec e os documentos.
 
 **Rever** quando o `typescript-eslint` suportar TS 7: subir TypeScript, typescript-eslint e lockfile juntos, num cartão próprio, com `pnpm typecheck && pnpm lint && pnpm test` verdes.

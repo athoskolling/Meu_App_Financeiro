@@ -6,14 +6,14 @@
 // a suíte vermelha. BUG-T1.2-05 (array com os campos) foi corrigido no T1.2b e agora é `it`.
 // Não alterar os testes do dev nem o código de domain/ aqui.
 import { describe, expect, it } from 'vitest';
-import type { Cents } from '../../domain/money';
+import type { Cents } from '../../src/domain/money';
 import {
   validateTransaction,
   type NormalizedTransaction,
   type ProblemCode,
   type TransactionType,
   type ValidationResult,
-} from '../../domain/transactions';
+} from '../../src/domain/transactions';
 
 const MAX = Number.MAX_SAFE_INTEGER;
 

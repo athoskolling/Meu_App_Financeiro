@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import type { Cents } from '../../../domain/money';
+import type { Cents } from '../../../src/domain/money';
 import {
   validateTransaction,
   type NormalizedTransaction,
   type Problem,
   type ProblemCode,
   type TransactionType,
-} from '../../../domain/transactions';
+} from '../../../src/domain/transactions';
 
 const asCents = (n: number): Cents => n as Cents;
 

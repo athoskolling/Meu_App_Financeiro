@@ -24,7 +24,7 @@ Na ADR-0023, o dono fazia o merge de toda tarefa e levava cada PR de uma equipe 
 | `claude/{nome}` (sessão de nuvem) | sessão aberta pelo dono | a mesma regra de `cto/` |
 | `main` | **ninguém** | só recebe merge de PR |
 
-- `{id}` é o id da linha do `ROADMAP.md` (`T1.3`, `T2.10a`, `T1b.2`, `T1.4r`).
+- `{id}` é o id da linha do `docs/ROADMAP.md` (`T1.3`, `T2.10a`, `T1b.2`, `T1.4r`).
 - Dependência nova (`package.json`, lockfile) entra por uma branch `cto/`, com ADR, **antes** da tarefa que precisa dela.
 - O job `limites` reprova o PR quando a branch está fora do padrão ou mexe fora da área. Ele roda com `pull_request_target`: o script vem da `main`, então um PR não consegue afrouxar a própria checagem. O job só lê a lista de arquivos e não executa código do PR.
 
@@ -60,4 +60,4 @@ Continuam com o **dono**:
 - O dono passa a ler o resumo do `cto` depois do merge, e não antes. A proteção está no CI, nas duas revisões e no veto `dono-segura`.
 - **O dono precisa fazer no GitHub:** marcar `limites` como verificação obrigatória na regra da `main` (Settings → Branches ou Rulesets) e criar o rótulo `dono-segura`. Até isso ser feito, o job roda mas não bloqueia.
 - O `gh` das sessões usa a conta do dono. Por isso a regra de merge vale pelo processo, não por permissão do GitHub. O `cto` que fizer merge fora das condições acima está violando esta ADR.
-- Atualizados junto: `CLAUDE.md`, `GEMINI.md`, `docs/AGENTES.md`, `docs/GUIA_ATE_V1.md`, `docs/tasks/_TEMPLATE.md`, `.claude/agents/` e `.agents/agents/`.
+- Atualizados junto: `CLAUDE.md`, `GEMINI.md`, `docs/equipes/AGENTES.md`, `docs/equipes/GUIA_ATE_V1.md`, `docs/tasks/_TEMPLATE.md`, `.claude/agents/` e `.agents/agents/`.
