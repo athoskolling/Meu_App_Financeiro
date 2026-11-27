@@ -4,8 +4,8 @@ import ts from 'typescript';
 import { describe, expect, it } from 'vitest';
 
 const RAIZ = fileURLToPath(new URL('../../', import.meta.url)).replaceAll('\\', '/');
-const CONFIG = `${RAIZ}domain/tsconfig.json`;
-const PROBE = `${RAIZ}domain/__probe__.ts`;
+const CONFIG = `${RAIZ}src/domain/tsconfig.json`;
+const PROBE = `${RAIZ}src/domain/__probe__.ts`;
 
 const norm = (nome: string) => nome.replaceAll('\\', '/');
 
@@ -26,7 +26,7 @@ function erros(codigo: string): string[] {
     .map((d) => ts.flattenDiagnosticMessageText(d.messageText, '\n'));
 }
 
-describe('domain/tsconfig.json barra globais de navegador e do Node', () => {
+describe('src/domain/tsconfig.json barra globais de navegador e do Node', () => {
   it.each([
     ['document', 'export const d = document.title;'],
     ['localStorage', "export const s = localStorage.getItem('x');"],

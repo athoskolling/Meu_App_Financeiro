@@ -7,11 +7,11 @@ const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
 
 /**
  * Caminhos de domain/ que não são `.ts` (ADR-0017, emenda 1). `.gitkeep` é tolerado, e o
- * caminho exato `domain/tsconfig.json` também (ADR-0019); qualquer outro `.json` é rejeitado.
+ * caminho exato `src/domain/tsconfig.json` também (ADR-0019); qualquer outro `.json` é rejeitado.
  */
 export function arquivosNaoTs(caminhos: string[]): string[] {
   return caminhos.filter(
-    (c) => !c.endsWith('.ts') && !/(^|\/)\.gitkeep$/.test(c) && c !== 'domain/tsconfig.json',
+    (c) => !c.endsWith('.ts') && !/(^|\/)\.gitkeep$/.test(c) && c !== 'src/domain/tsconfig.json',
   );
 }
 
@@ -41,28 +41,33 @@ describe('caminhosConsiderados', () => {
 describe('domain/ só aceita arquivos .ts', () => {
   it('aceita .gitkeep, .ts, .test.ts e .d.ts', () => {
     expect(
-      arquivosNaoTs(['domain/.gitkeep', 'domain/a.ts', 'domain/sub/b.test.ts', 'domain/c.d.ts']),
+      arquivosNaoTs([
+        'src/domain/.gitkeep',
+        'src/domain/a.ts',
+        'src/domain/sub/b.test.ts',
+        'src/domain/c.d.ts',
+      ]),
     ).toEqual([]);
   });
 
   it('aceita o caminho exato domain/tsconfig.json (ADR-0019)', () => {
-    expect(arquivosNaoTs(['domain/tsconfig.json'])).toEqual([]);
+    expect(arquivosNaoTs(['src/domain/tsconfig.json'])).toEqual([]);
   });
 
   it.each(['sub/tsconfig.json', 'x.json'])('continua rejeitando domain/%s', (nome) => {
-    expect(arquivosNaoTs([`domain/${nome}`])).toEqual([`domain/${nome}`]);
+    expect(arquivosNaoTs([`src/domain/${nome}`])).toEqual([`src/domain/${nome}`]);
   });
 
   it.each(['y.mjs', 'w.js', 'p.cjs', 'b.jsx', 'c.tsx', 'd.mts', 'e.json'])(
     'rejeita domain/%s',
     (nome) => {
-      expect(arquivosNaoTs([`domain/${nome}`])).toEqual([`domain/${nome}`]);
+      expect(arquivosNaoTs([`src/domain/${nome}`])).toEqual([`src/domain/${nome}`]);
     },
   );
 
   it('domain/ real só tem .ts', () => {
     const todos = caminhosConsiderados(
-      readdirSync(`${RAIZ}domain`, { recursive: true, withFileTypes: true }).map((e) => ({
+      readdirSync(`${RAIZ}src/domain`, { recursive: true, withFileTypes: true }).map((e) => ({
         caminho: relative(RAIZ, `${e.parentPath}/${e.name}`).replaceAll('\\', '/'),
         isDirectory: () => e.isDirectory(),
       })),

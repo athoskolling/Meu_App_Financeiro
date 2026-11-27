@@ -44,39 +44,39 @@ function especificadores(codigo: string, arquivo: string): string[] {
 }
 
 /**
- * Devolve os especificadores relativos de `codigo` que resolvem para fora de `domain/`.
- * `arquivo` é o caminho do arquivo a partir da raiz do repositório (ex.: `domain/sub/a.ts`).
+ * Devolve os especificadores relativos de `codigo` que resolvem para fora de `src/domain/`.
+ * `arquivo` é o caminho do arquivo a partir da raiz do repositório (ex.: `src/domain/sub/a.ts`).
  */
 export function relativosForaDoDomain(codigo: string, arquivo: string): string[] {
   const pasta = posix.dirname(arquivo);
   return especificadores(codigo, arquivo).filter((spec) => {
     if (!/^\.\.?(\/|$)/.test(spec)) return false; // não relativo: a lista de permitidos do lint cuida
     const destino = posix.normalize(posix.join(pasta, spec));
-    return destino !== 'domain' && !destino.startsWith('domain/');
+    return destino !== 'src/domain' && !destino.startsWith('src/domain/');
   });
 }
 
 function arquivosDoDomain(): string[] {
-  return readdirSync(`${RAIZ}domain`, { recursive: true, encoding: 'utf8' })
+  return readdirSync(`${RAIZ}src/domain`, { recursive: true, encoding: 'utf8' })
     .map((p) => p.replaceAll('\\', '/'))
     .filter((p) => /\.(ts|tsx|mts|cts|js|jsx|mjs|cjs)$/.test(p))
-    .map((p) => `domain/${p}`);
+    .map((p) => `src/domain/${p}`);
 }
 
 describe('imports relativos de domain/ não saem de domain/', () => {
   const casos: [string, string, string, boolean][] = [
-    ['domain/a.ts', 'import { b } from "./b";', './b', true],
-    ['domain/sub/a.ts', 'import { b } from "../b";', '../b', true],
-    ['domain/sub/a.ts', 'import { io } from "../../lib/io";', '../../lib/io', false],
-    ['domain/a.ts', 'import { io } from "../lib/io";', '../lib/io', false],
-    ['domain/a.ts', 'export * from "../tests/x";', '../tests/x', false],
-    ['domain/a.ts', 'import x = require("../lib/x");', '../lib/x', false],
-    ['domain/a.ts', 'export type K = typeof import("../lib/k");', '../lib/k', false],
-    ['domain/a.ts', 'export const m = () => import("../lib/m");', '../lib/m', false],
-    ['domain/a.ts', 'export type L = import("./l").L;', './l', true],
-    ['domain/a.mjs', 'export * from "../lib/io";', '../lib/io', false],
-    ['domain/sub/a.ts', 'export { b } from "..";', '..', true],
-    ['domain/a.ts', 'import { x } from "../domain-outro/x";', '../domain-outro/x', false],
+    ['src/domain/a.ts', 'import { b } from "./b";', './b', true],
+    ['src/domain/sub/a.ts', 'import { b } from "../b";', '../b', true],
+    ['src/domain/sub/a.ts', 'import { io } from "../../lib/io";', '../../lib/io', false],
+    ['src/domain/a.ts', 'import { io } from "../lib/io";', '../lib/io', false],
+    ['src/domain/a.ts', 'export * from "../tests/x";', '../tests/x', false],
+    ['src/domain/a.ts', 'import x = require("../lib/x");', '../lib/x', false],
+    ['src/domain/a.ts', 'export type K = typeof import("../lib/k");', '../lib/k', false],
+    ['src/domain/a.ts', 'export const m = () => import("../lib/m");', '../lib/m', false],
+    ['src/domain/a.ts', 'export type L = import("./l").L;', './l', true],
+    ['src/domain/a.mjs', 'export * from "../lib/io";', '../lib/io', false],
+    ['src/domain/sub/a.ts', 'export { b } from "..";', '..', true],
+    ['src/domain/a.ts', 'import { x } from "../domain-outro/x";', '../domain-outro/x', false],
   ];
 
   it.each(casos)('%s com %s', (arquivo, codigo, spec, ok) => {

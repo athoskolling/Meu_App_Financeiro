@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest';
-import type { Cents } from '../../../domain/money';
+import type { Cents } from '../../../src/domain/money';
 
 describe('tipo Cents', () => {
   it('um number comum não é aceito como Cents (verificado pelo typecheck)', () => {

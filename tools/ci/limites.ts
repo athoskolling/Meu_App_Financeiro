@@ -8,25 +8,43 @@ import { pathToFileURL } from 'node:url';
 export type Resultado =
   { ok: true; regra: string } | { ok: false; regra: string; motivo: string; foraDaArea: string[] };
 
-/** Áreas de código da equipe Claude (ADR-0023). */
+/** Áreas de código da equipe Claude (ADR-0023, caminhos novos da ADR-0029). */
 const AREA_CLAUDE = [
-  'domain/',
-  'lib/',
+  'src/domain/',
+  'src/application/',
+  'src/infrastructure/',
+  'src/app/api/',
+  'src/middleware.ts',
+  'src/proxy.ts', // nome do middleware no Next 16
+  'src/instrumentation.ts',
   'drizzle/',
-  'app/api/',
   'scripts/',
-  'middleware.ts',
-  'proxy.ts', // nome do middleware no Next 16
-  'instrumentation.ts',
   'tests/domain/',
-  'tests/lib/',
+  'tests/application/',
+  'tests/infrastructure/',
   'tests/integration/',
   'tests/fixtures/',
   'tests/lint/',
 ];
 
-/** Áreas de código da equipe Gemini (ADR-0023). `app/api/` é da equipe Claude. */
-const AREA_GEMINI = ['app/', 'components/', 'public/', 'styles/', 'README.md', 'tests/ui/'];
+/** Rotas de API ficam com a equipe Claude, mesmo dentro de `app/`. */
+const API = ['src/app/api/'];
+
+/** Áreas de código da equipe Gemini (ADR-0023, caminhos novos da ADR-0029). */
+const AREA_GEMINI = [
+  'src/app/',
+  'src/components/',
+  'src/styles/',
+  'public/',
+  'README.md',
+  'tests/ui/',
+];
+
+/**
+ * ADR-0029, seção 5: mudanças de estrutura aprovadas. A branch `estrutura/{slug}` só vale
+ * para os slugs desta lista, cada um ligado a uma ADR aceita. Só entra slug por branch `cto/`.
+ */
+const ESTRUTURAS_APROVADAS: ReadonlyMap<string, string> = new Map([['src-camadas', 'ADR-0029']]);
 
 /** Do QA da equipe que fez a tarefa. */
 const AREA_QA = ['tests/qa/'];
@@ -42,7 +60,7 @@ function dentro(arquivo: string, area: readonly string[]): boolean {
 }
 
 function naAreaGemini(arquivo: string): boolean {
-  return !arquivo.startsWith('app/api/') && dentro(arquivo, AREA_GEMINI);
+  return !dentro(arquivo, API) && dentro(arquivo, AREA_GEMINI);
 }
 
 /** O cartão da própria tarefa (o dev e o QA preenchem o relatório nele). */
@@ -64,10 +82,12 @@ export function verificarLimites(branch: string, arquivos: readonly string[]): R
         foraDaArea: [],
       };
     }
+    // ADR-0026: equipe-gemini também pode tocar AREA_CLAUDE no modo unificado Gemini,
+    // mantendo equipe-claude intacta e continuando a barrar configs, deps, ADRs e outros cartões.
     const naArea = (a: string) =>
       dentro(a, AREA_QA) ||
       cartaoDaTarefa(a, id) ||
-      (nome === 'claude' ? dentro(a, AREA_CLAUDE) : naAreaGemini(a));
+      (nome === 'claude' ? dentro(a, AREA_CLAUDE) : naAreaGemini(a) || dentro(a, AREA_CLAUDE));
     const fora = arquivos.filter((a) => !naArea(a));
     return fora.length === 0
       ? { ok: true, regra }
@@ -76,6 +96,20 @@ export function verificarLimites(branch: string, arquivos: readonly string[]): R
           regra,
           motivo: `a branch da equipe ${nome} mexeu fora da área dela.`,
           foraDaArea: fora,
+        };
+  }
+
+  const estrutura = /^estrutura\/(.+)$/.exec(branch);
+  if (estrutura) {
+    const slug = estrutura[1] ?? '';
+    const adr = ESTRUTURAS_APROVADAS.get(slug);
+    return adr
+      ? { ok: true, regra: `estrutura/{slug} (${adr})` }
+      : {
+          ok: false,
+          regra: 'estrutura/{slug}',
+          motivo: `"${slug}" não é uma mudança de estrutura aprovada: registre a ADR e o slug em ESTRUTURAS_APROVADAS por uma branch cto/.`,
+          foraDaArea: [],
         };
   }
 
@@ -100,7 +134,7 @@ export function verificarLimites(branch: string, arquivos: readonly string[]): R
     ok: false,
     regra: 'nenhuma',
     motivo:
-      'nome de branch fora do padrão. Use equipe-claude/T{id}, equipe-gemini/T{id} ou cto/{assunto}.',
+      'nome de branch fora do padrão. Use equipe-claude/T{id}, equipe-gemini/T{id}, cto/{assunto} ou estrutura/{slug}.',
     foraDaArea: [],
   };
 }

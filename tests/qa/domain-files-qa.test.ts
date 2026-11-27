@@ -20,24 +20,24 @@ function gerador(semente: number) {
 
 describe('QA T1.0a: caminhosConsiderados', () => {
   it('link simbólico (isFile e isDirectory falsos) entra na lista', () => {
-    const entradas: EntradaFalsa[] = [{ caminho: 'domain/l.mjs', isDirectory: () => false }];
-    expect(caminhosConsiderados(entradas)).toEqual(['domain/l.mjs']);
+    const entradas: EntradaFalsa[] = [{ caminho: 'src/domain/l.mjs', isDirectory: () => false }];
+    expect(caminhosConsiderados(entradas)).toEqual(['src/domain/l.mjs']);
   });
 
   it('link para .mjs dentro de domain/ é pego por arquivosNaoTs (antes era ignorado pelo isFile)', () => {
     const entradas: EntradaFalsa[] = [
-      { caminho: 'domain/a.ts', isDirectory: () => false },
-      { caminho: 'domain/l.mjs', isDirectory: () => false },
+      { caminho: 'src/domain/a.ts', isDirectory: () => false },
+      { caminho: 'src/domain/l.mjs', isDirectory: () => false },
     ];
-    expect(arquivosNaoTs(caminhosConsiderados(entradas))).toEqual(['domain/l.mjs']);
+    expect(arquivosNaoTs(caminhosConsiderados(entradas))).toEqual(['src/domain/l.mjs']);
   });
 
   it('diretório nunca entra, mesmo com nome que lembra arquivo', () => {
     const entradas: EntradaFalsa[] = [
-      { caminho: 'domain/sub.mjs', isDirectory: () => true },
-      { caminho: 'domain/x.ts', isDirectory: () => false },
+      { caminho: 'src/domain/sub.mjs', isDirectory: () => true },
+      { caminho: 'src/domain/x.ts', isDirectory: () => false },
     ];
-    expect(caminhosConsiderados(entradas)).toEqual(['domain/x.ts']);
+    expect(caminhosConsiderados(entradas)).toEqual(['src/domain/x.ts']);
   });
 
   it('propriedade: saída = entradas sem diretório, na mesma ordem, sem duplicar nem inventar', () => {
@@ -48,7 +48,7 @@ describe('QA T1.0a: caminhosConsiderados', () => {
       for (let i = 0; i < tamanho; i++) {
         // Sorteia uma vez por entrada: isDirectory() precisa ser determinístico.
         const ehDir = rnd() < 0.4;
-        entradas.push({ caminho: `domain/e${i}`, isDirectory: () => ehDir });
+        entradas.push({ caminho: `src/domain/e${i}`, isDirectory: () => ehDir });
       }
       const esperado = entradas.filter((e) => !e.isDirectory()).map((e) => e.caminho);
       expect(caminhosConsiderados(entradas)).toEqual(esperado);
@@ -79,7 +79,7 @@ describe.runIf(podeLink)('QA T1.0a: link simbólico real', () => {
   it('readdirSync recursivo: link para .mjs entra; diretório fica fora', () => {
     const raiz = mkdtempSync(join(tmpdir(), 'qa-t1-0a-real-'));
     try {
-      const dom = join(raiz, 'domain');
+      const dom = join(raiz, 'src', 'domain');
       mkdirSync(join(dom, 'sub'), { recursive: true });
       writeFileSync(join(dom, 'a.ts'), '');
       symlinkSync(join(dom, 'a.ts'), join(dom, 'l.mjs'), 'file');
@@ -90,8 +90,8 @@ describe.runIf(podeLink)('QA T1.0a: link simbólico real', () => {
           isDirectory: () => e.isDirectory(),
         })),
       );
-      expect(todos.sort()).toEqual(['domain/a.ts', 'domain/dl', 'domain/l.mjs'].sort());
-      expect(arquivosNaoTs(todos).sort()).toEqual(['domain/dl', 'domain/l.mjs'].sort());
+      expect(todos.sort()).toEqual(['src/domain/a.ts', 'src/domain/dl', 'src/domain/l.mjs'].sort());
+      expect(arquivosNaoTs(todos).sort()).toEqual(['src/domain/dl', 'src/domain/l.mjs'].sort());
     } finally {
       rmSync(raiz, { recursive: true, force: true });
     }

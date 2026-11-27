@@ -15,7 +15,7 @@ const MENSAGEM_DOMAIN = 'domain/ é TypeScript puro: sem I/O, framework ou banco
 const MENSAGEM_REFLEXAO =
   "domain/ não usa reflexão (.constructor, new.target). Em classe de erro, use nome literal: this.name = 'MeuErro' (ADR-0017).";
 
-const P = 'domain/__probe__.ts';
+const P = 'src/domain/__probe__.ts';
 
 async function mensagens(codigo: string, filePath: string) {
   const [resultado] = await eslint.lintText(codigo, { filePath });
@@ -110,25 +110,25 @@ const casos: [string, string, string, string][] = [
   [
     '.constructor em domain/*.test.ts',
     'export const c = (() => 0).constructor;',
-    'domain/__probe__.test.ts',
+    'src/domain/__probe__.test.ts',
     'REFLEXAO',
   ],
   [
     '.constructor em domain/x.js',
     'export const c = (() => 0).constructor;',
-    'domain/x.js',
+    'src/domain/x.js',
     'REFLEXAO',
   ],
   [
     'new.target em domain/x.mjs',
     'export function F() { return new.target; }',
-    'domain/x.mjs',
+    'src/domain/x.mjs',
     'REFLEXAO',
   ],
   [
     '.constructor em subpasta',
     'export const c = (() => 0).constructor;',
-    'domain/a/b/c.ts',
+    'src/domain/a/b/c.ts',
     'REFLEXAO',
   ],
   // Não são reflexão: não devem dar erro de reflexão (falsos positivos)

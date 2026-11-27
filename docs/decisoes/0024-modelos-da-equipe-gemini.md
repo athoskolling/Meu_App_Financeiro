@@ -2,7 +2,7 @@
 
 - **Status:** aceita pelo dono em 23/11/2026
 - **Complementa:** ADR-0023 (divisão das equipes) e a seção 2 do `GEMINI.md`
-- **Guia de execução que usa esta decisão:** `docs/GUIA_ATE_V1.md`
+- **Guia de execução que usa esta decisão:** `docs/equipes/GUIA_ATE_V1.md`
 
 ## Contexto
 
@@ -29,4 +29,4 @@ Como o modelo é fixado no Antigravity CLI (testado em 19/11/2026, ver `GEMINI.m
 - O Hydrogen continua **nunca** sendo dono de regra financeira, em qualquer esforço.
 - Nada muda na equipe Claude, nas áreas, nas branches nem na cadeia de revisão da ADR-0023.
 - **[VERIFICAR]** que `flash` é de fato o Hydrogen (hoje a confirmação é só a resposta do próprio modelo) e que o swarm aceita o sufixo `-xhigh`. O dono confere com `agy models` e um teste curto antes da primeira tarefa Gemini.
-- Atualizados junto com esta ADR: `GEMINI.md`, `.agents/agents/` (descrições e instruções do `gemini-cto`), `docs/decisoes/README.md`, `ROADMAP.md`, `CLAUDE.md` e `docs/AGENTES.md` (só o apontamento para o guia).
+- Atualizados junto com esta ADR: `GEMINI.md`, `.agents/agents/` (descrições e instruções do `gemini-cto`), `docs/decisoes/README.md`, `docs/ROADMAP.md`, `CLAUDE.md` e `docs/equipes/AGENTES.md` (só o apontamento para o guia).

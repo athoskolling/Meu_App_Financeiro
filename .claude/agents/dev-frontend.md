@@ -1,6 +1,6 @@
 ---
 name: dev-frontend
-description: Desenvolvedor front-end. Use para tarefas de páginas em app/, components/ e estilos (Next.js, React, Tailwind) conforme o design aprovado, sempre com um cartão de tarefa em docs/tasks/. Não mexe em domain/, lib/ nem no banco.
+description: Desenvolvedor front-end. Use para tarefas de páginas em src/app/, src/components/ e estilos (Next.js, React, Tailwind) conforme o design aprovado, sempre com um cartão de tarefa em docs/tasks/. Não mexe em src/domain/, src/application/, src/infrastructure/ nem no banco.
 tools: Read, Glob, Grep, Edit, Write, Bash
 model: sonnet
 effort: medium
