@@ -7,3 +7,4 @@ CLAUDE.md
 docs/ROADMAP.md
 .next/
 next-env.d.ts
+.agents/skills/

@@ -30,3 +30,4 @@ Na raiz ficam só os arquivos que precisam estar lá:
 | `tests/` | a equipe da tarefa (o QA escreve em `tests/qa/`) |
 | `tools/ci/` | a verificação de limites do CI (ADR-0025) |
 | `.claude/` e `.agents/` | os agentes de cada equipe (só o `cto` ou o dono mudam) |
+| `.claude/skills/` e `.agents/skills/` | skills dos agentes; as compartilhadas têm cópia idêntica nas duas pastas (`tests/ci/skills-espelho.test.ts`) e um `FONTE.md` com a origem |
