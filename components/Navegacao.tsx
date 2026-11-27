@@ -18,7 +18,7 @@ export function Navegacao({ atual }: { atual: string }) {
   return (
     <nav
       aria-label="Principal"
-      className="flex min-w-0 max-w-full flex-[1_1_320px] items-center gap-x-7 overflow-x-auto"
+      className="-m-1 flex min-w-0 max-w-full flex-[1_1_320px] items-center gap-x-7 overflow-x-auto p-1"
     >
       {ITENS_NAVEGACAO.map(({ href, rotulo }) => {
         const ativo = estaAtivo(atual, href);

@@ -13,6 +13,21 @@
   --color-erro: #8a2c2c;
   --color-erro-fundo: #fcecec;
   --color-erro-borda: #e6b8b8;
+  --color-borda-campo: #b9c0b4;
+  --color-superficie-sutil: #eef0ea;
+  --color-superficie-recorte: #e4e7df;
+  --color-trilha-barra: #dde1d6;
+  --color-barra-futuro: #c4cabf;
+  --color-primaria-suave: #9aa7e6;
+  --color-primaria-fundo: #e3e7f7;
+  --color-primaria-desabilitada: #c9ceea;
+  --color-primaria-desabilitada-texto: #4a5280;
+  --color-confere-fundo: #ddeee6;
+  --color-aviso: #8a4f00;
+  --color-aviso-texto: #5a3600;
+  --color-aviso-fundo: #fbebcb;
+  --color-esqueleto: #bfc6b9;
+  --color-esqueleto-forte: #aeb7a7;
 }
 
 @theme inline {
