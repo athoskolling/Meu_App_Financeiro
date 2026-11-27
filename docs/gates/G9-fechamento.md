@@ -1,4 +1,11 @@
-# Gate E6 — Fechamento (v1.0)
+# Gate G9 — Fechamento (v1.0)
+
+> Numeração por trilhas (ADR-0030). Índice e ordem: `docs/gates/README.md`. Antes: gate E6.
+
+- **Trilha:** fechamento (as duas equipes).
+- **Tarefas:** T6.1 a T6.5 (cartões em `docs/tasks/E6/`).
+- **Estado:** não começado.
+- **Depende de:** G7 e G8.
 
 > **Rascunho do pacote inicial.** O CTO relê e refina este checklist no início do estágio, com o que foi aprendido nos estágios anteriores, e o dono aprova. Regras gerais de gate: `docs/spec/Meu_financeiro.md`, seção 17.
 
@@ -22,7 +29,7 @@ Quem fecha: o dono. Quem confere antes: o QA, o `revisor` e o CTO (diff contra e
 
 ## Padrão (vale para todo gate)
 
-- [ ] Todas as tarefas do estágio no `docs/ROADMAP.md` concluídas, cada uma com QA PASS, parecer do `revisor` (quando obrigatório) e revisão do CTO.
+- [ ] Todas as tarefas deste gate no `docs/ROADMAP.md` concluídas, cada uma com QA PASS, parecer do `revisor` (quando obrigatório) e revisão do CTO.
 - [ ] CI verde (typecheck, lint, testes, gitleaks); nenhum dado real, print ou dump no repositório.
 - [ ] Spec e ADRs em `docs/decisoes/` atualizados.
 - [ ] `CHANGELOG` com a entrada v1.0 e tag `v1.0` no Git.

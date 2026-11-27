@@ -9,7 +9,7 @@
 | `equipes/GUIA_ATE_V1.md` | o passo a passo até a v1.0 com as duas equipes | `cto` |
 | `decisoes/` | as ADRs (decisões registradas) e o índice `README.md` | `cto`, com aprovação do dono |
 | `tasks/` | os cartões de tarefa, por estágio (`E0/`, `E1/`…), e o modelo `_TEMPLATE.md` | `cto` (cartão), agentes (relatórios) |
-| `gates/` | o checklist de cada gate (`E0.md` a `E6.md`) | `cto` preenche, o dono fecha |
+| `gates/` | o checklist de cada gate (`G0` a `G9`, por trilha) e o índice `README.md` com a ordem e o estado | `cto` preenche, o dono fecha |
 | `design/` | o design de referência das telas (`*.dc.html`) | dono |
 | `historico/` | registros que já terminaram e servem só de consulta: a auditoria da zen-mayer (`auditoria-zen-mayer/`) e a delegação ao Gemini (`delegacao/`) | ninguém mais edita |
 

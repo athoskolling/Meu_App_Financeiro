@@ -29,6 +29,7 @@ Cada decisão relevante vira um arquivo `NNNN-titulo.md` com contexto, decisão 
 | 0025 | Limites das branches (`equipe-claude/T{id}`, `equipe-gemini/T{id}`, `cto/{assunto}`), checados pelo job `limites`; o revisor cruzado abre o PR; o `cto` faz o merge das tarefas; o dono faz o merge de `cto/` e `claude/`, fecha gates e veta com `dono-segura` | `0025-branches-pr-e-merge.md` |
 | 0026 | Modo unificado em Gemini 4 enquanto o Claude estiver pausado (CTO em Carbon Medium/High, back-end em Neon Medium, UI e QA em Hydrogen XHigh, revisor único em Neon XHigh, fixer e tutor em Hydrogen High via `swarm`); `equipe-gemini/T{id}` aceita as duas áreas de código e `.claude/` + `equipe-claude/` seguem prontos para retomada imediata | `0026-operacao-unificada-gemini.md` |
 | 0029 | Código em `src/` por camada (clean architecture): `domain/`, `application/`, `infrastructure/` (ex-`lib/`), `app/`, `components/`; setas de dependência só para dentro, checadas pelo lint; áreas das equipes nos caminhos novos; transição em 2 PRs com a branch `estrutura/{slug}`, só para slugs aprovados em ADR e com merge do dono | `0029-estrutura-src-em-camadas.md` |
+| 0030 | Gates renumerados por trilha na ordem real: G0 Fundação, G1 Núcleo, G2 Telas com prévia, G3 Esqueleto do back-end, G4 Regras, G5 Sondagem, G6 Pluggy, G7 Painel com dados reais, G8 Caju, G9 Fechamento; tags v0.0 a v0.7 e v1.0 na ordem; ids de tarefa e pastas de cartão não mudam | `0030-gates-por-trilhas.md` |
 
 ## Propostas (aguardam o dono)
 

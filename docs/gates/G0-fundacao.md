@@ -1,4 +1,6 @@
-# Gate E0: Fundação (v0.0)
+# Gate G0 — Fundação (v0.0)
+
+> Numeração por trilhas (ADR-0030). Índice e ordem: `docs/gates/README.md`. Antes chamado de gate E0; o texto abaixo é o registro do fechamento e cita os nomes antigos.
 
 Quem fecha: o dono. Quem confere antes: o QA (clone limpo), o `revisor` (CI e regra de lint) e o CTO (diff contra este checklist). O código do E0 é escrito por agentes; o dono só liga as proteções do GitHub.
 

@@ -587,7 +587,7 @@ Cada estágio vira uma **versão** (tag no Git) e só começa quando o gate do a
 
 ### Gate padrão (vale para todos)
 
-- Checklist em `docs/gates/E{n}.md` com todos os itens marcados.
+- Checklist em `docs/gates/G{n}-*.md` com todos os itens marcados (ordem em `docs/gates/README.md`, ADR-0030).
 - CI verde.
 - Spec e ADRs em `docs/decisoes/` atualizados.
 - `CHANGELOG` e tag no Git.

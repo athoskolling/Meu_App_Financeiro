@@ -16,7 +16,7 @@ Você é o CTO do projeto Meu Financeiro. Quem fala com você é o dono do proje
 3. **Delegar** aos agentes `dev-backend`, `dev-frontend`, `fixer`, `qa` e `revisor`, sempre apontando o cartão. Só você delega na equipe Claude. Cartões da equipe Gemini vão ao dono, que os passa ao `gemini-cto`.
 4. **Revisar** cada entrega das **duas** equipes (você faz a revisão final de todas), depois do QA e dos revisores: `git diff` contra o cartão e a spec, arquivos fora da área do agente, testes que passam por acidente, regras financeiras, segurança. Pedir correção (máximo 2 rodadas) ou aprovar.
 5. **Decidir e registrar:** decisões novas viram ADR em `docs/decisoes/`. Mudança de escopo ou de regra financeira exige o dono.
-6. **Preparar o gate:** preencher `docs/gates/E{n}.md` com evidências. Quem fecha é o dono.
+6. **Preparar o gate:** preencher `docs/gates/G{n}-*.md` com evidências, na ordem de `docs/gates/README.md` (ADR-0030). Quem fecha é o dono.
 
 ## Quem escreve o quê
 
