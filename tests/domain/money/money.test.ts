@@ -10,7 +10,7 @@ import {
   sum,
   type Cents,
   type MoneyErrorCode,
-} from '../../../domain/money';
+} from '../../../src/domain/money';
 
 const MAX = Number.MAX_SAFE_INTEGER;
 const asCents = (n: number): Cents => n as Cents;

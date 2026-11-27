@@ -2,7 +2,7 @@
 
 Este guia explica como funciona, quem faz o quê e como rodar. O plano de tarefas está em `docs/ROADMAP.md`. As definições dos agentes estão em `.claude/agents/`.
 
-> **Atualização de 19/11/2026 (ADR-0023):** agora há duas equipes, Claude (`.claude/agents/`) e Gemini (`.agents/agents/`, ver `GEMINI.md`), **divididas por área**. Claude: `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`. Gemini: `app/` (fora de `app/api/`), `components/`, estilos, `README.md`. Só o `cto` Claude planeja. Cada tarefa tem **uma branch** (`equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`), onde o dev e o QA fazem commit. A **revisão é cruzada**: a outra equipe sempre revisa, e em regra financeira, banco, auth, sincronização e segurança os dois revisores olham. A `main` é protegida no GitHub. Onde este guia disser outra coisa, vale a ADR-0023.
+> **Atualização de 19/11/2026 (ADR-0023):** agora há duas equipes, Claude (`.claude/agents/`) e Gemini (`.agents/agents/`, ver `GEMINI.md`), **divididas por área**. Claude: `src/domain/`, `src/application/`, `src/infrastructure/`, `drizzle/`, `src/app/api/`, `scripts/`. Gemini: `src/app/` (fora de `src/app/api/`), `src/components/`, estilos, `README.md`. Só o `cto` Claude planeja. Cada tarefa tem **uma branch** (`equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`), onde o dev e o QA fazem commit. A **revisão é cruzada**: a outra equipe sempre revisa, e em regra financeira, banco, auth, sincronização e segurança os dois revisores olham. A `main` é protegida no GitHub. Onde este guia disser outra coisa, vale a ADR-0023.
 
 > **Atualização de 23/11/2026 (ADR-0024):** modelos da equipe Gemini: Neon no `gemini-cto`, `gemini-dev-backend` e `gemini-revisor`; Hydrogen xhigh no `gemini-dev-frontend`; Hydrogen high no `gemini-qa`, `gemini-fixer` e `gemini-tutor`. Qual equipe faz cada tarefa, até a v1.0: `docs/equipes/GUIA_ATE_V1.md`.
 
@@ -40,8 +40,8 @@ Detalhe técnico: por padrão um subagente pode chamar outros subagentes (até 3
 | Papel | Arquivo | Modelo | Esforço | Faz |
 |---|---|---|---|---|
 | **CTO** | `.claude/agents/cto.md` | Opus 5.5 | médio | Planejamento, cartões, casos de teste de regra financeira, revisão final, ADRs, gates |
-| **dev-backend** | `dev-backend.md` | Sonnet 5.5 | médio | `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/` |
-| **dev-frontend** | `dev-frontend.md` | Sonnet 5.5 | médio | `app/` (páginas), `components/`, estilos |
+| **dev-backend** | `dev-backend.md` | Sonnet 5.5 | médio | `src/domain/`, `src/application/`, `src/infrastructure/`, `drizzle/`, `src/app/api/`, `scripts/` |
+| **dev-frontend** | `dev-frontend.md` | Sonnet 5.5 | médio | `src/app/` (páginas), `src/components/`, estilos |
 | **fixer** | `fixer.md` | Haiku 5.5 | alto | Tarefas pequenas e bugs de poucas linhas, lint, documentação |
 | **qa** | `qa.md` | Haiku 5.5 | alto | `tests/`, verificação independente, relatórios de bug |
 | **revisor** | `revisor.md` | Sonnet 5.5 | alto | Segunda revisão do diff (somente leitura), depois do QA e antes do CTO |
@@ -155,8 +155,8 @@ Cartões ficam em `docs/tasks/E{n}/T{nn}.md` e são commitados: viram o históri
 
 | Área | Quem edita |
 |---|---|
-| `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/` | equipe Claude: dev-backend |
-| `app/` (páginas, fora de `app/api/`), `components/`, estilos, `public/`, `README.md` | equipe Gemini: gemini-dev-frontend (o `dev-frontend` Claude só quando o cartão atribuir) |
+| `src/domain/`, `src/application/`, `src/infrastructure/`, `drizzle/`, `src/app/api/`, `scripts/` | equipe Claude: dev-backend |
+| `src/app/` (páginas, fora de `src/app/api/`), `src/components/`, estilos, `public/`, `README.md` | equipe Gemini: gemini-dev-frontend (o `dev-frontend` Claude só quando o cartão atribuir) |
 | `tests/` | dev (testes da própria tarefa, na pasta da área); qa da equipe da tarefa (`tests/qa/`, testes adicionais) |
 | `package.json`, `pnpm-lock.yaml`, `.github/`, `.claude/`, `tsconfig`, configs | só o CTO ou o dono; os devs pedem a mudança no relatório, **salvo quando o cartão lista o arquivo** (é o caso das tarefas do E0 e de dependências novas aprovadas) |
 | `docs/` | CTO (cartões, ADRs, gates); fixer para correções de texto |

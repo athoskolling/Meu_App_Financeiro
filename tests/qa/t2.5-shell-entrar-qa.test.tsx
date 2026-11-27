@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Navegacao } from '../../components/Navegacao';
-import { Logo } from '../../components/Logo';
-import { Cabecalho } from '../../components/Cabecalho';
-import PaginaEntrar, { metadata as entrarMetadata } from '../../app/entrar/page';
-import PaginaTransacoes, { metadata as transacoesMetadata } from '../../app/(app)/transacoes/page';
-import PaginaContas, { metadata as contasMetadata } from '../../app/(app)/contas/page';
-import PaginaImportar, { metadata as importarMetadata } from '../../app/(app)/importar/page';
+import { Navegacao } from '../../src/components/Navegacao';
+import { Logo } from '../../src/components/Logo';
+import { Cabecalho } from '../../src/components/Cabecalho';
+import PaginaEntrar, { metadata as entrarMetadata } from '../../src/app/entrar/page';
+import PaginaTransacoes, {
+  metadata as transacoesMetadata,
+} from '../../src/app/(app)/transacoes/page';
+import PaginaContas, { metadata as contasMetadata } from '../../src/app/(app)/contas/page';
+import PaginaImportar, { metadata as importarMetadata } from '../../src/app/(app)/importar/page';
 
 function extrairLinks(html: string) {
   const matches = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)];

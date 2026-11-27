@@ -14,8 +14,8 @@ Quem fecha: o dono. Quem confere antes: o `gemini-qa` (screenshots), o revisor d
 - [ ] ADR-0028 aprovada pelo dono (hoje está como "proposta", embora os cartões já tenham sido executados).
 - [ ] As seis telas (Entrar, Painel, Transações, Contas, Enviar print e Revisar print) conferem com `docs/design/*.dc.html` em `1280px` e em `360px`, com screenshots do QA anexados a cada cartão.
 - [ ] Toda tela com dados fictícios mostra a `FaixaPrevia` ("Prévia visual — dados fictícios").
-- [ ] Os componentes só recebem ViewModel pronto (`components/contratos/ui.ts`): nenhum cálculo financeiro, nenhuma soma de centavos no JSX e nenhum import de `domain/`, `lib/` ou `@supabase/*` (o revisor confirma na leitura do diff).
-- [ ] Nenhuma cor hexadecimal solta no JSX: só os tokens de `@theme` em `app/globals.css`.
+- [ ] Os componentes só recebem ViewModel pronto (`src/components/contratos/ui.ts`): nenhum cálculo financeiro, nenhuma soma de centavos no JSX e nenhum import de `src/domain/`, `src/infrastructure/` ou `@supabase/*` (o revisor confirma na leitura do diff).
+- [ ] Nenhuma cor hexadecimal solta no JSX: só os tokens de `@theme` em `src/app/globals.css`.
 - [ ] Os estados de demonstração (filtros de Transações, os 4 estados de Revisar print) funcionam por `searchParams`, sem regra financeira no navegador.
 - [ ] Navegação: barra inferior no celular (`< 640px`) e cabeçalho completo no desktop.
 - [ ] Os dados da prévia são 100% fictícios (os mesmos cenários de `docs/design/`).
@@ -23,7 +23,7 @@ Quem fecha: o dono. Quem confere antes: o `gemini-qa` (screenshots), o revisor d
 ## Para o dono explicar (sem olhar o código)
 
 - [ ] Por que a tela nunca calcula regra financeira, mesmo na prévia.
-- [ ] O que muda quando o back-end chegar: só a fonte de dados das páginas, de `components/previa/` para o servidor; os componentes aprovados aqui não são reescritos.
+- [ ] O que muda quando o back-end chegar: só a fonte de dados das páginas, de `src/components/previa/` para o servidor; os componentes aprovados aqui não são reescritos.
 
 ## Padrão (vale para todo gate)
 

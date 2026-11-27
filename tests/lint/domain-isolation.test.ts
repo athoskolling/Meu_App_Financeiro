@@ -21,7 +21,7 @@ async function mensagens(codigo: string, filePath: string) {
 const MENSAGEM_REFLEXAO =
   "domain/ não usa reflexão (.constructor, new.target). Em classe de erro, use nome literal: this.name = 'MeuErro' (ADR-0017).";
 
-const P = 'domain/__probe__.ts';
+const P = 'src/domain/__probe__.ts';
 const FS = 'import { readFileSync } from "fs";';
 
 // [nome, código, filePath]
@@ -45,9 +45,9 @@ const barrados: [string, string, string][] = [
   ['postgres subpath', 'import x from "postgres/cjs";', P],
   ['eval', 'export const h = () => eval("1");', P],
   ['new Function', 'export const g = new Function("return 1");', P],
-  ['subpasta domain/a/b/c.ts', FS, 'domain/a/b/c.ts'],
-  ['extensao .mts', FS, 'domain/__probe__.mts'],
-  ['extensao .tsx', FS, 'domain/__probe__.tsx'],
+  ['subpasta domain/a/b/c.ts', FS, 'src/domain/a/b/c.ts'],
+  ['extensao .mts', FS, 'src/domain/__probe__.mts'],
+  ['extensao .tsx', FS, 'src/domain/__probe__.tsx'],
 ];
 
 // ADR-0017: lista de permitidos e comentários de desativação sem efeito.
@@ -64,11 +64,11 @@ const barradosAdr17: [string, string, string][] = [
   ['url https', 'import x from "https://esm.sh/x";', P],
   ['alias @/lib/io', 'import { io } from "@/lib/io";', P],
   ['zod (lista vazia)', 'import { z } from "zod";', P],
-  ['fs em .js', 'import fs from "fs";', 'domain/__probe__.js'],
-  ['fs em .mjs', 'import fs from "fs";', 'domain/__probe__.mjs'],
+  ['fs em .js', 'import fs from "fs";', 'src/domain/__probe__.js'],
+  ['fs em .mjs', 'import fs from "fs";', 'src/domain/__probe__.mjs'],
   ['import type fs', 'export type Stat = import("fs").Stats;', P],
   ['typeof import relativo', 'export type K = typeof import("./a");', P],
-  ['require em .cjs', 'const fs = require("fs");', 'domain/x.cjs'],
+  ['require em .cjs', 'const fs = require("fs");', 'src/domain/x.cjs'],
   ['module.require', 'export const r = module.require("fs");', P],
   ['Function() sem new', 'export const f = Function("return 1");', P],
   ['.constructor()', 'export const g = (() => 0).constructor("return 1");', P],
@@ -82,11 +82,11 @@ const barradosAdr17: [string, string, string][] = [
 ];
 
 const permitidosAdr17: [string, string, string][] = [
-  ['vitest em .test.ts', 'import { describe } from "vitest";', 'domain/__probe__.test.ts'],
-  ['./a', 'import { a } from "./a";', 'domain/sub/__probe__.ts'],
-  ['../b', 'import { b } from "../b";', 'domain/sub/__probe__.ts'],
-  ['.', 'import { c } from ".";', 'domain/sub/__probe__.ts'],
-  ['..', 'import { d } from "..";', 'domain/sub/__probe__.ts'],
+  ['vitest em .test.ts', 'import { describe } from "vitest";', 'src/domain/__probe__.test.ts'],
+  ['./a', 'import { a } from "./a";', 'src/domain/sub/__probe__.ts'],
+  ['../b', 'import { b } from "../b";', 'src/domain/sub/__probe__.ts'],
+  ['.', 'import { c } from ".";', 'src/domain/sub/__probe__.ts'],
+  ['..', 'import { d } from "..";', 'src/domain/sub/__probe__.ts'],
 ];
 
 const permitidos: [string, string, string][] = [
@@ -158,17 +158,17 @@ describe('isolamento de domain/', () => {
   });
 
   it('.cjs fora de domain/ não quebra o lint (module.exports)', async () => {
-    const msgs = await mensagens('module.exports = {};', 'lib/__probe__.cjs');
+    const msgs = await mensagens('module.exports = {};', 'src/infrastructure/__probe__.cjs');
     expect(msgs.filter((m) => m.fatal || m.severity === 2)).toEqual([]);
   });
 
   it('JS fora de domain/ não quebra o lint', async () => {
-    const msgs = await mensagens('export const x = 1;', 'lib/__probe__.mjs');
+    const msgs = await mensagens('export const x = 1;', 'src/infrastructure/__probe__.mjs');
     expect(msgs.filter((m) => m.fatal)).toEqual([]);
   });
 
   it('controle: fora de domain/ a regra nao vale', async () => {
-    const msgs = await mensagens(FS, 'lib/__probe__.ts');
+    const msgs = await mensagens(FS, 'src/infrastructure/__probe__.ts');
     expect(msgs.filter((m) => m.fatal)).toEqual([]);
     expect(msgs.filter((m) => m.message.includes(MENSAGEM))).toEqual([]);
   });

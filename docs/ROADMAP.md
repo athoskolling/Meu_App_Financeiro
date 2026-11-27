@@ -16,7 +16,7 @@ Este arquivo é o plano de execução. A spec (`docs/spec/Meu_financeiro.md`) di
 |---|---|---|---|
 | **DONO** | Athos | — | **Não escreve código.** Lê os diffs, pede alterações, cria contas e segredos, aprova merges, fecha gates |
 | **CTO** | `cto` | Opus 5.5, médio | Planeja, escreve cartões e casos de teste, delega, revisa, prepara gates |
-| **BE** | `dev-backend` | Sonnet 5.5, médio | `domain/`, `lib/`, banco, auth, integrações, `app/api/`, scripts |
+| **BE** | `dev-backend` | Sonnet 5.5, médio | `src/domain/`, `src/application/`, `src/infrastructure/`, banco, auth, integrações, `src/app/api/`, scripts |
 | **FE** | `dev-frontend` | Sonnet 5.5, médio | Páginas, componentes, Tailwind, tela conforme o design |
 | **FX** | `fixer` | Haiku 5.5, alto | Tarefas pequenas e bugs de poucas linhas, lint, documentação |
 | **QA** | `qa` | Haiku 5.5, alto | Testes, verificação independente, caça a bugs, relatórios |
@@ -108,7 +108,7 @@ O cartão de cada tarefa lista explicitamente os arquivos de configuração que 
 | ID | Tarefa | Quem | Depende de | Pronto quando |
 |---|---|---|---|---|
 | T0.1 | Repositório, `pnpm`, TypeScript `strict`, Vitest, ESLint, Prettier, scripts `test`/`typecheck`/`lint` | BE | — | os três scripts passam num teste de exemplo |
-| T0.2 | Regra de lint que isola `domain/` de I/O, com prova de que barra uma importação proibida | BE | T0.1 | arquivo de exemplo viola e o lint falha |
+| T0.2 | Regra de lint que isola `src/domain/` de I/O, com prova de que barra uma importação proibida | BE | T0.1 | arquivo de exemplo viola e o lint falha |
 | T0.3 | CI (typecheck, lint, test, gitleaks), `.gitignore`, `.env.example`, pasta `docs/` | BE | T0.1 | CI verde num PR vazio |
 | T0.3b | Proteger `main` (PR obrigatório, CI obrigatório) e ligar as verificações de segredos do GitHub | DONO | T0.3 | configurações salvas |
 | T0.4 | Verificação em clone limpo: clonar, instalar e rodar os três scripts | QA | T0.3, T0.3b | relatório PASS |
@@ -228,7 +228,7 @@ Começa assim que o gate G3 fecha. A medição de erro usa os prints guardados *
 |---|---|---|---|---|
 | T5.0 | **Começar já:** guardar um print do extrato do Caju por semana, anonimizado (sem nome nem número do cartão), fora do Git, em pasta sua. Separe 2 a 3 para o desenho do parser | DONO | — | pelo menos 4 prints semanais de semanas diferentes até o gate |
 | T5.1 | Decidir Q14 e Q16 (antes: confirmar a política de retenção do provedor); plano de medição e casos de teste do parser a partir do layout real | CTO + DONO | T5.0, G3 | ADR e casos em `docs/` |
-| T5.2 | Parser de linhas em `domain/caju/` (texto → `NormalizedTransaction`) | BE | T5.1 | casos do CTO passam |
+| T5.2 | Parser de linhas em `src/domain/caju/` (texto → `NormalizedTransaction`) | BE | T5.1 | casos do CTO passam |
 | T5.3 | `ExtractionProvider` com as duas implementações, saída validada por esquema, script de avaliação (taxa de erro) | BE | T5.1 | relatório de erro por extrator |
 | T5.4 | **Mesclador de prints e âncora** (Tarefa 4 do roteiro, vinda do E1): o CTO manda o desenho antes; você aprova; depois o BE implementa | CTO + BE | T5.1, T1.3 | os 10 casos do roteiro passam; âncora mínima e ambiguidade documentadas |
 | T5.5 | `import_items`, `ImportService`, conferência de saldo, integração com o mesclador; nada em `transactions` sem confirmação | BE | T5.2, T5.4, E2 | fluxo completo por API |
@@ -254,7 +254,7 @@ Começa assim que o gate G3 fecha. A medição de erro usa os prints guardados *
 ## Ritmo e limites
 
 - No máximo **3 agentes escrevendo ao mesmo tempo**. O QA entra depois do dev da mesma tarefa e conta como escritor só quando adiciona testes. O REV e o tutor não contam: não escrevem.
-- Dois agentes só rodam juntos se os **arquivos permitidos** dos cartões não se sobrepõem (ex.: `lib/integrations/pluggy/` do E3 e `domain/caju/` do E5).
+- Dois agentes só rodam juntos se os **arquivos permitidos** dos cartões não se sobrepõem (ex.: `src/infrastructure/integrations/pluggy/` do E3 e `src/domain/caju/` do E5).
 - BE e FE só trabalham em paralelo quando o cartão fixa o **contrato** (tipos e rotas) entre eles.
 - Máximo de **2 rodadas de correção** por tarefa; depois, o CTO reescopa ou chama o dono.
 - Para começar: nas primeiras tarefas, use só CTO + BE + QA. Adicione FE e FX quando o ciclo estiver fluindo.

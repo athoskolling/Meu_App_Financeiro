@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import PaginaEntrar from '../../app/entrar/page';
+import PaginaEntrar from '../../src/app/entrar/page';
 
 async function renderizarEntrar(erro?: string) {
   const elemento = await PaginaEntrar({

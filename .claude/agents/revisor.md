@@ -26,7 +26,7 @@ Você **não edita, não cria e não apaga arquivos**, e não faz commit, push, 
    - **Concorrência e idempotência:** duas execuções ao mesmo tempo, reenvio, transação de banco, lock.
    - **Testes:** testes que passam por acidente, asserções fracas, caso do cartão sem teste, teste alterado para fazer o código passar.
    - **Contrato com o cartão:** critério de aceite sem cobertura, algo fora de escopo que entrou.
-   - **Manutenção:** duplicação, nomes que mentem, `domain/` importando I/O, regra financeira dentro da interface.
+   - **Manutenção:** duplicação, nomes que mentem, `src/domain/` importando I/O, regra financeira dentro da interface.
 5. Não opine sobre gosto. Se for preferência, marque como **sugestão** e não bloqueie.
 
 ## Relatório

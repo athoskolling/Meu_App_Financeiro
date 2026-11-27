@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Cents } from '../../../domain/money';
+import type { Cents } from '../../../src/domain/money';
 import {
   assignIdentities,
   baseKey,
@@ -8,7 +8,7 @@ import {
   normalizeText,
   type Mode,
   type NormalizedTransaction,
-} from '../../../domain/transactions';
+} from '../../../src/domain/transactions';
 
 const nbsp = String.fromCharCode(0xa0);
 const h = (s: string): string => `h(${s})`;

@@ -29,7 +29,7 @@ Quem fecha: o dono. Quem confere antes: o QA, o `revisor` e o CTO. O código é 
 - [ ] QA atacou as três tarefas em `tests/qa/` (testes de propriedade e casos extras) e o relatório está no gate.
 - [ ] `revisor` deu APROVADO (ou os achados foram corrigidos) e o parecer está anexado.
 - [ ] O dono leu o diff de cada tarefa.
-- [ ] CI verde (typecheck, lint, testes, gitleaks); nada em `domain/` importa I/O; nenhum `float` em dinheiro.
+- [ ] CI verde (typecheck, lint, testes, gitleaks); nada em `src/domain/` importa I/O; nenhum `float` em dinheiro.
 - [ ] Todos os testes têm nome que descreve a regra, não a implementação.
 - [ ] `CHANGELOG` com a entrada v0.1 e tag `v0.1`.
 - [ ] Decisões novas em `docs/decisoes/`.

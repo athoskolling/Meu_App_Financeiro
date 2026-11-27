@@ -25,18 +25,10 @@ const AREA_CLAUDE = [
   'tests/integration/',
   'tests/fixtures/',
   'tests/lint/',
-  // Caminhos antigos, válidos até o PR `estrutura/src-camadas` (ADR-0029, seção 4).
-  'domain/',
-  'lib/',
-  'app/api/',
-  'middleware.ts',
-  'proxy.ts',
-  'instrumentation.ts',
-  'tests/lib/',
 ];
 
 /** Rotas de API ficam com a equipe Claude, mesmo dentro de `app/`. */
-const API = ['src/app/api/', 'app/api/'];
+const API = ['src/app/api/'];
 
 /** Áreas de código da equipe Gemini (ADR-0023, caminhos novos da ADR-0029). */
 const AREA_GEMINI = [
@@ -46,10 +38,6 @@ const AREA_GEMINI = [
   'public/',
   'README.md',
   'tests/ui/',
-  // Caminhos antigos, válidos até o PR `estrutura/src-camadas` (ADR-0029, seção 4).
-  'app/',
-  'components/',
-  'styles/',
 ];
 
 /**
