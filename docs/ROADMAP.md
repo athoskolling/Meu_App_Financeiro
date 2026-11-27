@@ -6,7 +6,7 @@ Este arquivo é o plano de execução. A spec (`docs/spec/Meu_financeiro.md`) di
 
 - O CTO (sessão principal) lê este arquivo no início de cada sessão, descobre o estágio atual (tags do Git e `docs/gates/`) e cria um **cartão de tarefa** (`docs/tasks/`) para cada tarefa desbloqueada.
 - Nenhum agente trabalha sem cartão. O cartão copia a linha da tarefa daqui e acrescenta arquivos permitidos e critérios de aceite.
-- Uma tarefa só está pronta quando: os critérios do cartão passam, o QA deu PASS, o CTO revisou o diff e o CI está verde. O estágio só fecha com o gate (`docs/gates/E{n}.md`) assinado pelo dono.
+- Uma tarefa só está pronta quando: os critérios do cartão passam, o QA deu PASS, o CTO revisou o diff e o CI está verde. Cada grupo de tarefas só fecha com o gate (`docs/gates/G{n}-*.md`) assinado pelo dono. A ordem dos gates, de G0 a G9, está em `docs/gates/README.md` (ADR-0030).
 - **Duas equipes:** qual equipe (Claude ou Gemini) faz cada tarefa, a ordem em ondas e o passo a passo de cada tarefa estão em `docs/equipes/GUIA_ATE_V1.md` (ADR-0023 e ADR-0024).
 - **Dúvida sobre o que está acontecendo?** Abra uma segunda janela com `claude --agent tutor` e pergunte. O tutor só explica; ele não faz parte do fluxo de tarefas.
 
@@ -29,34 +29,38 @@ Seis agentes trabalham no projeto (CTO, BE, FE, FX, QA, REV); o tutor é o séti
 
 ## Visão geral
 
-| Estágio | Versão | Quem escreve | Pode andar em paralelo com |
-|---|---|---|---|
-| E0 Fundação | v0.0 | você só liga as proteções do GitHub | — |
-| E1 Núcleo de domínio | v0.1 (parte A) e v0.1.1 (parte B) | agentes, com casos de teste do CTO | E1b, E2 |
-| E1b Sondagem Pluggy | sem versão | agentes + você (credenciais) | E1, E2 |
-| E2 Esqueleto vertical | v0.2 | agentes | E1 (só a partir do gate E0) |
-| E3 Ingestão Pluggy | v0.3 | agentes | E5 |
-| E4 Painel e relatórios | v0.4 | agentes | E5 |
-| E5 Caju por prints | v0.5 | agentes | E3 e E4 (começa logo depois do E2) |
-| E6 Fechamento | v1.0 | agentes | — |
+Os gates estão numerados por trilha, na ordem em que fecham (ADR-0030). O índice com o estado de cada um fica em `docs/gates/README.md`. Os ids das tarefas e as pastas dos cartões continuam com o estágio original (E0 a E6).
+
+| Gate | Trilha | Tarefas | Tag | Pode andar em paralelo com |
+|---|---|---|---|---|
+| G0 Fundação | base | E0 (T0.x) | v0.0 | — |
+| G1 Núcleo de domínio | núcleo | E1 parte A (T1.0 a T1.4g) | v0.1 | — |
+| G2 Telas com prévia | visual | T2.5, T2.5b, T4.3a, T4.4a, T3.7a, T5.6a, T5.6b (ADR-0028) | v0.2 | a conferência do G1 |
+| G3 Esqueleto do back-end | back-end | E2 sem a T2.5 (T2.1 a T2.11) | v0.3 | G4, G5 |
+| G4 Regras de relatório | núcleo | E1 parte B (T1.5 a T1.10) | v0.4 | G3, G5 |
+| G5 Sondagem Pluggy | integração | E1b (T1b.1 a T1b.6) | sem tag | G3, G4 |
+| G6 Ingestão Pluggy | integração | E3 (T3.1 a T3.10) | v0.5 | G8 |
+| G7 Painel e relatórios com dados reais | back-end | E4 (T4.1 a T4.8) | v0.6 | G8 |
+| G8 Caju por prints | integração | E5 (T5.0 a T5.9) | v0.7 | G6, G7 (começa depois do G3) |
+| G9 Fechamento | fechamento | E6 (T6.1 a T6.5) | v1.0 | — |
 
 ## Dependências
 
 ```
-E0 ─► E1 parte A (T1.1–T1.3) ─┬─► E3 ─► E4 ─► E6
- │                                    │    ▲     ▲
- │    E1 parte B (agentes) ───────────┼────┼─────┘  (pronta antes do E4)
- │                                    │    │
- ├─► E1b ─────────────────────────────┘    │
- │                                         │
- └─► E2 ──────────────────────────► E3     │
-        └──────► E5 (em paralelo a E3 e E4) ─► E6
+G0 ─► G1 ─► G2 ─┬─► G3 ─┬────────► G6 ──► G7 ──► G9
+                │       │          ▲      ▲      ▲
+                ├─► G4 ─┼──────────┼──────┘      │
+                │       │          │             │
+                └─► G5 ─┼──────────┘             │
+                        └─► G8 ──────────────────┘
 ```
 
-- E2 começa depois do gate E0, mesmo com o E1 em andamento. Só a T2.6 (lançamento manual) espera a T1.3 (identidade), porque usa `assignIdentities`.
-- E3 precisa do E1 parte A (identidade), do E1b (formato real da Pluggy) e do E2 (banco, auth, deploy).
-- E4 precisa do E3 **e** do E1 parte B (`spendingForPeriod`).
-- E5 precisa do E2 (banco, auth), da T1.3 (identidade) e dos prints anonimizados do dono (T5.0). **Não espera E3 nem E4.**
+- O G2 vem antes do back-end porque o dono decidiu validar todas as telas primeiro (ADR-0028).
+- Dentro do G3, só a T2.6 (lançamento manual) espera a T1.3 (identidade), porque usa `assignIdentities`.
+- O G6 precisa do G1 (identidade), do G5 (formato real da Pluggy) e do G3 (banco, auth, deploy).
+- O G7 precisa do G6 **e** do G4 (`spendingForPeriod`).
+- O G8 precisa do G3 (banco, auth), da T1.3 (identidade) e dos prints anonimizados do dono (T5.0). **Não espera o G6 nem o G7.**
+- Os gates fecham na ordem dos números; o trabalho de gates vizinhos pode andar junto, mas a tag sai na ordem.
 
 ## O que mudou no caminho rápido
 
@@ -74,6 +78,8 @@ E0 ─► E1 parte A (T1.1–T1.3) ─┬─► E3 ─► E4 ─► E6
 Nada disso mexe nas regras financeiras, na segurança nem nos gates: só **quem** escreve, **em que ordem** e **quantas revisões** cada tarefa recebe. Como você não escreve código, as perguntas de explicação nos gates continuam valendo: são a prova de que você entende o que está aprovando (o tutor ajuda a preparar).
 
 ## Linha do tempo (estimativa)
+
+> **Desatualizada.** Estas datas são do plano original, com os nomes antigos dos estágios (E0 a E6); o E2 estava previsto para 19/11/2026. O `cto` reestima no fechamento do G1, já na ordem dos gates G0 a G9 (ADR-0030).
 
 Premissas: início em segunda, 19/10/2026; **2 horas por dia útil (10 h/semana)** suas, para ler diffs, aprovar, criar contas e conferir saldos; revisões em até 1 dia; feriados de 2/11, 20/11, 25/12 e 1/1 sem trabalho. As datas são aproximadas e valem para o **caso central**.
 
@@ -95,7 +101,7 @@ Faixa: **otimista 22/12/2026** (tudo flui, poucas rodadas de correção); **cent
 
 ---
 
-## E0 — Fundação (v0.0)
+## E0 — Fundação (gate G0, v0.0)
 
 O cartão de cada tarefa lista explicitamente os arquivos de configuração que o agente pode tocar (`package.json`, `tsconfig`, `.github/`, etc.), porque são exceção à regra de posse de arquivos.
 
@@ -107,13 +113,13 @@ O cartão de cada tarefa lista explicitamente os arquivos de configuração que 
 | T0.3b | Proteger `main` (PR obrigatório, CI obrigatório) e ligar as verificações de segredos do GitHub | DONO | T0.3 | configurações salvas |
 | T0.4 | Verificação em clone limpo: clonar, instalar e rodar os três scripts | QA | T0.3, T0.3b | relatório PASS |
 | T0.4r | Segunda revisão do CI e da regra de lint (segurança) | REV | T0.4 | APROVADO ou lista de achados |
-| T0.5 | Revisão e preenchimento de `docs/gates/E0.md` | CTO | T0.4r | checklist completo; dono fecha o gate e cria a tag `v0.0` |
+| T0.5 | Revisão e preenchimento de `docs/gates/G0-fundacao.md` | CTO | T0.4r | checklist completo; dono fecha o gate e cria a tag `v0.0` |
 
-## E1 — Núcleo de domínio (v0.1 e v0.1.1)
+## E1 — Núcleo de domínio (gates G1 e G4)
 
 Os contratos e os casos de teste estão em `docs/spec/Fase0_roteiro.md`. Em todo o E1, o **CTO escreve os casos de teste primeiro**; o BE implementa até os testes passarem; QA, REV e CTO revisam; você lê o diff e faz as perguntas do gate.
 
-### Parte A (v0.1): o núcleo, que libera o E2 (T2.6) e o E3
+### Parte A (gate G1, v0.1): o núcleo, que libera o G3 (T2.6) e o G6
 
 | ID | Tarefa | Quem | Depende de | Pronto quando |
 |---|---|---|---|---|
@@ -123,9 +129,9 @@ Os contratos e os casos de teste estão em `docs/spec/Fase0_roteiro.md`. Em todo
 | T1.3 | Identidade e dedup com `existingCounts` (Tarefa 3) | BE | T1.2 | idem |
 | T1.4 | Ataque de testes: propriedade e casos extras em `tests/qa/` (reimportação, sobreposição, bordas de centavos) | QA | cada T1.x | relatório PASS/FAIL |
 | T1.4r | Segunda revisão do diff de T1.1 a T1.3 (obrigatória: regra financeira) | REV | T1.4 | APROVADO ou lista de achados |
-| T1.4g | Revisão do CTO e gate E1 parte A | CTO + DONO | T1.1 a T1.4r | você explica as perguntas do gate (use o tutor para estudar); tag `v0.1` |
+| T1.4g | Revisão do CTO e gate G1 | CTO + DONO | T1.1 a T1.4r | você explica as perguntas do gate (use o tutor para estudar); tag `v0.1` |
 
-### Parte B (v0.1.1): regras de relatório, junto com o E2
+### Parte B (gate G4, v0.4): regras de relatório, junto com o G3
 
 | ID | Tarefa | Quem | Depende de | Pronto quando |
 |---|---|---|---|---|
@@ -135,11 +141,25 @@ Os contratos e os casos de teste estão em `docs/spec/Fase0_roteiro.md`. Em todo
 | T1.8 | Categorizador (Tarefa 7) | BE | T1.5, T1.2 | idem |
 | T1.9 | Verificação independente das três (propriedade, bordas) | QA | T1.6 a T1.8 | PASS |
 | T1.9r | Segunda revisão do diff de T1.6 a T1.8 (obrigatória: regra financeira) | REV | T1.9 | APROVADO ou lista de achados |
-| T1.10 | Revisão do CTO e gate E1 parte B | CTO + DONO | T1.6 a T1.9r | tag `v0.1.1` |
+| T1.10 | Revisão do CTO e gate G4 | CTO + DONO | T1.6 a T1.9r | tag `v0.4` |
 
 O **mesclador de prints** (Tarefa 4 do roteiro) deixou o E1: ver T5.4.
 
-## E1b — Sondagem Pluggy (sem versão, em paralelo ao E1 e ao E2)
+## Trilha visual — Telas com prévia (gate G2, v0.2, ADR-0028)
+
+As seis telas reais, com contratos de ViewModel e dados fictícios, antes do back-end. Toda a trilha é da equipe Gemini. Quando o back-end de cada tela ficar pronto (G3, G6, G7, G8), só a fonte de dados das páginas muda.
+
+| ID | Tarefa | Quem | Depende de | Pronto quando |
+|---|---|---|---|---|
+| T2.5 | Shell inicial e tela Entrar | FE (Gemini) | T2.1 | mesclada (#30) |
+| T2.5b | Tokens `@theme`, cabeçalho, navegação inferior no celular, `SeloConferencia`, `FaixaPrevia`, contratos de ViewModel | FE (Gemini) | T2.5 | mesclada (#114) |
+| T4.3a | Tela Painel com prévia | FE (Gemini) | T2.5b | mesclada (#115) |
+| T4.4a | Tela Transações com prévia (filtros por `searchParams`) | FE (Gemini) | T2.5b | conforme `Transacoes.dc.html`, 1280px e 360px |
+| T3.7a | Tela Contas e patrimônio com prévia | FE (Gemini) | T2.5b | conforme `Contas.dc.html` |
+| T5.6a | Tela Enviar print do Caju com prévia | FE (Gemini) | T2.5b | conforme `Enviar.dc.html` |
+| T5.6b | Tela Revisar print do Caju com prévia (4 estados por `searchParams`) | FE (Gemini) | T2.5b | conforme `Revisar.dc.html`; aprovação visual do dono libera o back-end |
+
+## E1b — Sondagem Pluggy (gate G5, sem versão, em paralelo ao G3 e ao G4)
 
 Objetivo: trocar suposição por dado real antes de escrever o adapter. Os dados reais **nunca** passam pelos agentes (ver `docs/equipes/AGENTES.md`, privacidade). Comece logo, por causa do trial da Pluggy.
 
@@ -152,7 +172,7 @@ Objetivo: trocar suposição por dado real antes de escrever o adapter. Os dados
 | T1b.5 | Varredura das fixtures (padrões de CPF, número de conta, e-mail, ids reais) | QA | T1b.4 | PASS; gitleaks limpo |
 | T1b.6 | Responder a lista `[VERIFICAR]` (spec 8.5 e 5.9) em `docs/decisoes/` a partir do relatório estrutural; confirmar caixinhas | CTO + DONO | T1b.5 | cada item respondido ou marcado "não confirmável"; spec atualizada |
 
-## E2 — Esqueleto vertical (v0.2)
+## E2 — Esqueleto vertical (gate G3, v0.3; a T2.5 é do G2)
 
 | ID | Tarefa | Quem | Depende de | Pronto quando |
 |---|---|---|---|---|
@@ -166,15 +186,15 @@ Objetivo: trocar suposição por dado real antes de escrever o adapter. Os dados
 | T2.8 | Testes de integração contra Postgres em Docker: índice único, duas inserções concorrentes, RLS (anon não lê), auth (não dono recusado) | QA | T2.4, T2.6 | todos PASS |
 | T2.9 | Deploy na Vercel e teste de fumaça | DONO + BE | T2.4, T2.7 | URL no ar; login funciona; migração aplicada via pooler 5432 |
 | T2.10 | README de instalação, `.env.example` sincronizado, erros de lint | FX | qualquer | pequenos PRs |
-| T2.11 | Revisão e gate E2 | CTO | tudo acima | `docs/gates/E2.md` completo; dono fecha; tag `v0.2` |
+| T2.11 | Revisão e gate G3 | CTO | tudo acima | `docs/gates/G3-esqueleto-do-backend.md` completo; dono fecha; tag `v0.3` |
 
-## E3 — Ingestão Pluggy (v0.3)
+## E3 — Ingestão Pluggy (gate G6, v0.5)
 
-O rascunho do gate está em `docs/gates/E3.md`; o CTO o refina no início do estágio, depois da sondagem.
+O rascunho do gate está em `docs/gates/G6-ingestao-pluggy.md`; o CTO o refina no início, depois da sondagem (G5).
 
 | ID | Tarefa | Quem | Depende de | Pronto quando |
 |---|---|---|---|---|
-| T3.1 | Decidir Q15 (sincronização) e registrar ADR | CTO + DONO | E2, E1b | spec 8.6 atualizada |
+| T3.1 | Decidir Q15 (sincronização) e registrar ADR | CTO + DONO | G3, G5 | spec 8.6 atualizada |
 | T3.2 | Cliente Pluggy: auth, contas, `/v2/transactions` com cursor, janelas por data; testado com mocks das fixtures | BE | T3.1 | testes com sucesso, paginação, erro de auth, item expirado, limite |
 | T3.3 | Mapper para `NormalizedTransaction`: inversão de sinal do cartão, tipos, parcelas, status | BE | T3.2, T1.2 | testes por fixture |
 | T3.4 | `SyncService`: lock em `sync_logs`, primeira carga de 12 meses, janela de 7 dias, persistência em transação com `assignIdentities` | BE | T3.3, T1.3 | sincronizar duas vezes não duplica |
@@ -183,31 +203,31 @@ O rascunho do gate está em `docs/gates/E3.md`; o CTO o refina no início do est
 | T3.7 | Tela Contas (selos Confere/Verificar, conexões, Reconectar, exportação e backup) e status de sincronização no cabeçalho | FE | T3.5, T3.6 | conforme o design |
 | T3.8 | Testes: sincronização repetida, concorrente, conexão expirada, lacuna, reapresentação | QA | T3.4 a T3.6 | PASS |
 | T3.9 | Primeira sincronização real com Santander e Nubank; conferir os saldos contra o app do banco | DONO | T3.8 | saldos batem ou lacunas explicadas |
-| T3.10 | Revisão e gate E3 | CTO | tudo | tag `v0.3` |
+| T3.10 | Revisão e gate G6 | CTO | tudo | tag `v0.5` |
 
-## E4 — Painel e relatórios (v0.4)
+## E4 — Painel e relatórios com dados reais (gate G7, v0.6)
 
 Escopo do v1.0: resumo do mês, categorias, cartão e patrimônio. Fluxo de caixa detalhado, comparativos e outros relatórios vão para a v1.x.
 
 | ID | Tarefa | Quem | Depende de | Pronto quando |
 |---|---|---|---|---|
-| T4.1 | Consultas do painel usando **só** `spendingForPeriod`: mês, categorias, cartão, patrimônio (contas + holdings) | BE | E3, v0.1.1 | números conferem com fixtures |
+| T4.1 | Consultas do painel usando **só** `spendingForPeriod`: mês, categorias, cartão, patrimônio (contas + holdings) | BE | G6, G4 | números conferem com fixtures |
 | T4.2 | Categorização integrada e `merchant_rules` (apenas esta / sempre este estabelecimento) | BE | T4.1 | regras do roteiro respeitadas |
 | T4.3 | Painel conforme o design | FE | T4.1 | tela completa, desktop e celular |
 | T4.4 | Transações com filtros, busca e recategorização | FE | T4.2 | conforme o design |
 | T4.5 | Testes de componentes e da camada de consulta, mais um checklist manual de acessibilidade (Playwright fica para a v1.x) | QA | T4.3, T4.4 | PASS |
 | T4.6 | Conferir um mês fechado contra o app do banco | DONO | T4.3 | bate ao centavo |
 | T4.7 | Ajustes finos de texto e estados vazios | FX | T4.3 | pequenos PRs |
-| T4.8 | Revisão e gate E4 | CTO | tudo | tag `v0.4` |
+| T4.8 | Revisão e gate G7 | CTO | tudo | tag `v0.6` |
 
-## E5 — Caju por prints (v0.5, em paralelo ao E3 e ao E4)
+## E5 — Caju por prints (gate G8, v0.7, em paralelo ao G6 e ao G7)
 
-Começa assim que o gate E2 fecha. A medição de erro usa os prints guardados **desde a primeira semana** (T5.0).
+Começa assim que o gate G3 fecha. A medição de erro usa os prints guardados **desde a primeira semana** (T5.0).
 
 | ID | Tarefa | Quem | Depende de | Pronto quando |
 |---|---|---|---|---|
 | T5.0 | **Começar já:** guardar um print do extrato do Caju por semana, anonimizado (sem nome nem número do cartão), fora do Git, em pasta sua. Separe 2 a 3 para o desenho do parser | DONO | — | pelo menos 4 prints semanais de semanas diferentes até o gate |
-| T5.1 | Decidir Q14 e Q16 (antes: confirmar a política de retenção do provedor); plano de medição e casos de teste do parser a partir do layout real | CTO + DONO | T5.0, E2 | ADR e casos em `docs/` |
+| T5.1 | Decidir Q14 e Q16 (antes: confirmar a política de retenção do provedor); plano de medição e casos de teste do parser a partir do layout real | CTO + DONO | T5.0, G3 | ADR e casos em `docs/` |
 | T5.2 | Parser de linhas em `domain/caju/` (texto → `NormalizedTransaction`) | BE | T5.1 | casos do CTO passam |
 | T5.3 | `ExtractionProvider` com as duas implementações, saída validada por esquema, script de avaliação (taxa de erro) | BE | T5.1 | relatório de erro por extrator |
 | T5.4 | **Mesclador de prints e âncora** (Tarefa 4 do roteiro, vinda do E1): o CTO manda o desenho antes; você aprova; depois o BE implementa | CTO + BE | T5.1, T1.3 | os 10 casos do roteiro passam; âncora mínima e ambiguidade documentadas |
@@ -215,17 +235,17 @@ Começa assim que o gate E2 fecha. A medição de erro usa os prints guardados *
 | T5.6 | Telas Enviar (celular, recorte e compressão no navegador) e Revisar conforme o design | FE | T5.5 | conforme o design |
 | T5.7 | Testes: reenvio do mesmo print, sobreposição, âncora ambígua, saldo que não fecha bloqueia a confirmação | QA | T5.5, T5.6 | PASS |
 | T5.8 | Medir a taxa de correção manual sobre os prints semanais acumulados e sobre o uso real | DONO + BE | T5.7 | relatório com pelo menos 4 semanas de prints |
-| T5.9 | Revisão e gate E5 | CTO | tudo | tag `v0.5` |
+| T5.9 | Revisão e gate G8 | CTO | tudo | tag `v0.7` |
 
-## E6 — Fechamento (v1.0)
+## E6 — Fechamento (gate G9, v1.0)
 
 | ID | Tarefa | Quem | Depende de | Pronto quando |
 |---|---|---|---|---|
-| T6.1 | Exportação JSON e CSV | BE | E4 | arquivos corretos |
+| T6.1 | Exportação JSON e CSV | BE | G7 | arquivos corretos |
 | T6.2 | Dump manual e restauração num banco vazio | DONO + QA | T6.1 | restauração confere contagens |
 | T6.3 | README: seguir do zero num ambiente limpo | QA | — | PASS |
 | T6.4 | gitleaks no histórico inteiro; LICENSE | QA + CTO | — | limpo |
-| T6.5 | Revisão final e gate E6 | CTO | tudo | tag `v1.0` |
+| T6.5 | Revisão final e gate G9 | CTO | tudo | tag `v1.0` |
 
 **Fica para a v1.x:** lembrete de backup após 30 dias na interface, testes de interface com Playwright, relatórios além dos de E4, Sheets, notificações e IA.
 

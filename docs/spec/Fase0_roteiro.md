@@ -6,7 +6,7 @@ Como vamos trabalhar: **os agentes escrevem o código; o dono não** (ADR-0015).
 
 Regra de ouro: uma tarefa só termina quando os casos de teste dela passam **e** o dono consegue explicar por que cada regra existe (o `tutor` ajuda a estudar).
 
-Este roteiro cobre os estágios **E0** (Tarefa 0) e **E1** (Tarefas 1 a 7). O gate de cada um está em `docs/gates/E0.md` e `docs/gates/E1.md`. O parser de linhas do Caju **e o mesclador de prints (Tarefa 4 abaixo)** saem deste estágio e vão para o E5. O E1 fecha em duas partes: **A** (Tarefas 1 a 3, tag `v0.1`) e **B** (Tarefas 5 a 7, tag `v0.1.1`, antes do E4).
+Este roteiro cobre os estágios **E0** (Tarefa 0) e **E1** (Tarefas 1 a 7). O gate de cada um está em `docs/gates/G0-fundacao.md`, `docs/gates/G1-nucleo-de-dominio.md` (Tarefas 1 a 3) e `docs/gates/G4-regras-de-relatorio.md` (Tarefas 5 a 7), numerados pela ADR-0030. O parser de linhas do Caju **e o mesclador de prints (Tarefa 4 abaixo)** saem deste estágio e vão para o E5. O E1 fecha em duas partes: **A** (Tarefas 1 a 3, tag `v0.1`) e **B** (Tarefas 5 a 7, tag `v0.1.1`, antes do E4).
 
 ---
 

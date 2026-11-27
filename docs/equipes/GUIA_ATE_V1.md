@@ -4,7 +4,7 @@ Este é o passo a passo para levar o projeto do ponto atual até a v1.0, com as 
 
 > **Nota — Modo unificado em Gemini 4 (ADR-0026, ativo desde 24/11/2026 enquanto o Claude estiver pausado):** para poupar a cota do Claude, o `gemini-cto` (**Carbon Medium**, subindo a **Carbon High** em decisões difíceis) assume o papel de CTO completo e delega pelo `swarm` para `gemini-dev-backend` (**Neon Medium**), `gemini-dev-frontend` (**Hydrogen XHigh**), `gemini-qa` (**Hydrogen XHigh**), `gemini-revisor` único (**Neon XHigh**, que abre o PR) e `gemini-fixer` (**Hydrogen High**), usando branches `equipe-gemini/T{id}` (e `cto/{assunto}` para docs/ADRs/cartões). Tudo em `.claude/` e `equipe-claude/T{id}` segue intacto: basta abrir o Claude quando quiser retomar o fluxo de duas equipes abaixo.
 
-Situação em 23/11/2026: **E0 fechado** (`v0.0`). **E1 parte A** em andamento: T1.1 e T1.2 prontas, cartão da T1.3 proposto e esperando você. **E2**: T2.1 na `main`, com o critério do Docker não verificado.
+Situação em 27/11/2026, com os gates renumerados por trilha (ADR-0030; índice em `docs/gates/README.md`): **G0 fechado** (`v0.0`). **G1** em conferência: T1.1, T1.2 e T1.3 mescladas. **G2** (telas com prévia, ADR-0028): T2.5, T2.5b e T4.3a mescladas; faltam T4.4a, T3.7a, T5.6a e T5.6b. **G3**: T2.1 na `main`, com o critério do Docker não verificado.
 
 ---
 
@@ -66,7 +66,7 @@ O job `limites` do CI reprova o PR se a branch estiver fora do padrão ou mexer 
 - [ ] Antigravity CLI instalado. Na raiz do repositório, rode `agy` uma vez, aceite confiar na pasta e confira com `agy agents` que aparecem `gemini-cto` e `gemini-tutor`. Se a lista vier vazia, copie `.agents/agents/*` para `~/.gemini/config/agents/`.
 - [ ] `agy models`: confira que `gemini-4-neon-medium`, `gemini-4-neon-high`, `gemini-4-hydrogen-high` e `gemini-4-hydrogen-xhigh` existem. **[VERIFICAR]** num teste curto se o swarm aceita o sufixo `-xhigh` (ADR-0024).
 - [ ] `gh auth status` funcionando nas duas ferramentas, porque os revisores comentam no PR.
-- [ ] Docker Desktop instalado e ligado. O E2 precisa dele para os testes de banco.
+- [ ] Docker Desktop instalado e ligado. O G3 precisa dele para os testes de banco.
 - [ ] No GitHub, na regra da `main` (Settings → Branches ou Rulesets): marcar **`limites`** como verificação obrigatória, ao lado de `check` e `gitleaks`. Criar o rótulo **`dono-segura`** (Issues → Labels), que é o seu veto de merge.
 
 ### 1.5 As janelas de trabalho
@@ -104,22 +104,65 @@ Siga sempre esta ordem. Nenhum passo pode ser pulado.
 
 ---
 
-## 3. O caminho completo, estágio por estágio
+## 3. O caminho completo, gate por gate
 
 Legenda dos revisores: **X** = revisor da outra equipe (sempre); **X+M** = os dois revisores. QA-C é o `qa` Claude, QA-G é o `gemini-qa`.
 
-### E1 parte A: núcleo (tag `v0.1`)
+### G1 — Núcleo de domínio (antes E1 parte A; tag `v0.1`)
 
 | Tarefa | O quê | Equipe e agente | Revisores | Depende de |
 | --- | --- | --- | --- | --- |
 | T1.3 | Identidade e dedup | Claude, `dev-backend` | X+M | cartão aprovado por você, ADR-0022 aceita |
 | T1.4 | Ataque de testes em `tests/qa/` | Claude, `qa` | X | T1.3 |
 | T1.4r | Revisão de T1.1 a T1.3 | `revisor` **e** `gemini-revisor` | — | T1.4 |
-| T1.4g | Gate E1 parte A | `cto` + **você** | — | tudo acima |
+| T1.4g | Gate G1 | `cto` + **você** | — | tudo acima |
 
-**Você:** aprovar o cartão da T1.3 e a ADR-0022; responder às perguntas do `docs/gates/E1.md` (parte A) com a ajuda do tutor; criar a tag `v0.1`.
+**Você:** aprovar o cartão da T1.3 e a ADR-0022; responder às perguntas do `docs/gates/G1-nucleo-de-dominio.md` com a ajuda do tutor; criar a tag `v0.1`.
 
-### E1b: sondagem Pluggy (sem tag; corre em paralelo)
+### G2 — Telas com prévia (trilha visual, ADR-0028; tag `v0.2`)
+
+| Tarefa | O quê | Equipe e agente | Revisores | Depende de |
+| --- | --- | --- | --- | --- |
+| T2.5 | Shell inicial e tela Entrar (mesclada, #30) | **Gemini**, `gemini-dev-frontend` | X | T2.1 |
+| T2.5b | Tokens, cabeçalho, navegação no celular, selos, `FaixaPrevia`, contratos de ViewModel (mesclada, #114) | **Gemini**, `gemini-dev-frontend` | X | T2.5 |
+| T4.3a | Painel com prévia (mesclada, #115) | **Gemini**, `gemini-dev-frontend` | X | T2.5b |
+| T4.4a | Transações com prévia | **Gemini**, `gemini-dev-frontend` | X | T2.5b |
+| T3.7a | Contas e patrimônio com prévia | **Gemini**, `gemini-dev-frontend` | X | T2.5b |
+| T5.6a | Enviar print do Caju com prévia | **Gemini**, `gemini-dev-frontend` | X | T2.5b |
+| T5.6b | Revisar print do Caju com prévia | **Gemini**, `gemini-dev-frontend` | X | T2.5b |
+
+**Você:** aprovar a ADR-0028 (ainda está como "proposta"); conferir as seis telas nos screenshots do QA, em 1280px e 360px; fechar o `docs/gates/G2-telas-com-previa.md` e criar a tag `v0.2`. A aprovação visual da T5.6b libera o back-end (G3, G4 e G5).
+
+### G3 — Esqueleto do back-end (antes E2; tag `v0.3`)
+
+| Tarefa | O quê | Equipe e agente | Revisores | Depende de |
+| --- | --- | --- | --- | --- |
+| T2.1 | Base Next.js (feito) | — | — | falta verificar o Docker: o QA da T2.2 fecha isso |
+| T2.2 | Schema Drizzle, migrações, RLS, índice único | Claude, `dev-backend` | X+M | T2.1 |
+| T2.3 | Supabase, Google OAuth, Vercel e variáveis | **você** | — | T2.1 |
+| T2.4 | Auth: login Google e guarda `OWNER_EMAIL` | Claude, `dev-backend` | X+M | T2.2, T2.3 |
+| T2.5 | Layout, navegação e tela Entrar (feita; conta no G2) | **Gemini**, `gemini-dev-frontend` | X | T2.1 |
+| T2.6 | Lançamento manual: repositório e serviço | Claude, `dev-backend` | X+M | T2.2, T1.3 |
+| T2.7 | Formulário e lista do lançamento manual | **Gemini**, `gemini-dev-frontend` | X | T2.5, T2.6 (contrato) |
+| T2.8 | Testes de integração com Postgres em Docker | Claude, `qa` | X | T2.4, T2.6 |
+| T2.9 | Deploy na Vercel e teste de fumaça | **você** + Claude, `dev-backend` | X+M | T2.4, T2.7 |
+| T2.10a | README de instalação | **Gemini**, `gemini-fixer` | X | qualquer momento |
+| T2.10b | `.env.example` sincronizado | `cto` | X | qualquer momento |
+| T2.11 | Gate G3 | `cto` + **você** | — | tudo acima |
+
+### G4 — Regras de relatório (antes E1 parte B; tag `v0.4`; precisa fechar antes do G7)
+
+| Tarefa | O quê | Equipe e agente | Revisores | Depende de |
+| --- | --- | --- | --- | --- |
+| T1.5 | Casos de teste das Tarefas 5, 6 e 7 | `cto`, **você aprova** | — | T1.2 |
+| T1.6 | Gastos do período (`spendingForPeriod`) | Claude, `dev-backend` | X+M | T1.5, T1.3 |
+| T1.7 | Transferências internas | Claude, `dev-backend` | X+M | T1.5, T1.3 |
+| T1.8 | Categorizador | Claude, `dev-backend` | X+M | T1.5, T1.2 |
+| T1.9 | Verificação independente | Claude, `qa` | — | T1.6 a T1.8 |
+| T1.9r | Revisão de T1.6 a T1.8 | `revisor` **e** `gemini-revisor` | — | T1.9 |
+| T1.10 | Gate G4 | `cto` + **você** | — | tudo acima |
+
+### G5 — Sondagem Pluggy (antes E1b; sem tag; anda junto com o G3 e o G4)
 
 | Tarefa | O quê | Equipe e agente | Revisores | Depende de |
 | --- | --- | --- | --- | --- |
@@ -132,40 +175,11 @@ Legenda dos revisores: **X** = revisor da outra equipe (sempre); **X+M** = os do
 
 Nenhum agente lê `private/` nem `.env.local`. Eles só veem o relatório de estrutura e as fixtures sintéticas.
 
-### E2: esqueleto vertical (tag `v0.2`)
+### G6 — Ingestão Pluggy (antes E3; tag `v0.5`)
 
 | Tarefa | O quê | Equipe e agente | Revisores | Depende de |
 | --- | --- | --- | --- | --- |
-| T2.1 | Base Next.js (feito) | — | — | falta verificar o Docker: o QA da T2.2 fecha isso |
-| T2.2 | Schema Drizzle, migrações, RLS, índice único | Claude, `dev-backend` | X+M | T2.1 |
-| T2.3 | Supabase, Google OAuth, Vercel e variáveis | **você** | — | T2.1 |
-| T2.4 | Auth: login Google e guarda `OWNER_EMAIL` | Claude, `dev-backend` | X+M | T2.2, T2.3 |
-| T2.5 | Layout, navegação e tela Entrar | **Gemini**, `gemini-dev-frontend` | X | T2.1; o cartão fixa a rota de login que o botão chama |
-| T2.6 | Lançamento manual: repositório e serviço | Claude, `dev-backend` | X+M | T2.2, T1.3 |
-| T2.7 | Formulário e lista do lançamento manual | **Gemini**, `gemini-dev-frontend` | X | T2.5, T2.6 (contrato) |
-| T2.8 | Testes de integração com Postgres em Docker | Claude, `qa` | X | T2.4, T2.6 |
-| T2.9 | Deploy na Vercel e teste de fumaça | **você** + Claude, `dev-backend` | X+M | T2.4, T2.7 |
-| T2.10a | README de instalação | **Gemini**, `gemini-fixer` | X | qualquer momento |
-| T2.10b | `.env.example` sincronizado | `cto` | X | qualquer momento |
-| T2.11 | Gate E2 | `cto` + **você** | — | tudo acima |
-
-### E1 parte B: regras de relatório (tag `v0.1.1`; precisa fechar antes do E4)
-
-| Tarefa | O quê | Equipe e agente | Revisores | Depende de |
-| --- | --- | --- | --- | --- |
-| T1.5 | Casos de teste das Tarefas 5, 6 e 7 | `cto`, **você aprova** | — | T1.2 |
-| T1.6 | Gastos do período (`spendingForPeriod`) | Claude, `dev-backend` | X+M | T1.5, T1.3 |
-| T1.7 | Transferências internas | Claude, `dev-backend` | X+M | T1.5, T1.3 |
-| T1.8 | Categorizador | Claude, `dev-backend` | X+M | T1.5, T1.2 |
-| T1.9 | Verificação independente | Claude, `qa` | — | T1.6 a T1.8 |
-| T1.9r | Revisão de T1.6 a T1.8 | `revisor` **e** `gemini-revisor` | — | T1.9 |
-| T1.10 | Gate E1 parte B | `cto` + **você** | — | tudo acima |
-
-### E3: ingestão Pluggy (tag `v0.3`)
-
-| Tarefa | O quê | Equipe e agente | Revisores | Depende de |
-| --- | --- | --- | --- | --- |
-| T3.1 | Decidir Q15 (sincronização), ADR | `cto` + **você** | — | gate E2, E1b |
+| T3.1 | Decidir Q15 (sincronização), ADR | `cto` + **você** | — | G3, G5 |
 | T3.2 | Cliente Pluggy com mocks | Claude, `dev-backend` | X+M | T3.1 |
 | T3.3 | Mapper para `NormalizedTransaction` | Claude, `dev-backend` | X+M | T3.2, T1.2 |
 | T3.4 | `SyncService` com lock e `assignIdentities` | Claude, `dev-backend` | X+M | T3.3, T1.3 |
@@ -174,13 +188,13 @@ Nenhum agente lê `private/` nem `.env.local`. Eles só veem o relatório de est
 | T3.7 | Tela Contas e status no cabeçalho | **Gemini**, `gemini-dev-frontend` | X | T3.5, T3.6 (contrato) |
 | T3.8 | Testes de sincronização | Claude, `qa` | X | T3.4 a T3.6 |
 | T3.9 | Primeira sincronização real; conferir saldos | **você** | — | T3.8 |
-| T3.10 | Gate E3 | `cto` + **você** | — | tudo acima |
+| T3.10 | Gate G6 | `cto` + **você** | — | tudo acima |
 
-### E4: painel e relatórios (tag `v0.4`)
+### G7 — Painel e relatórios com dados reais (antes E4; tag `v0.6`)
 
 | Tarefa | O quê | Equipe e agente | Revisores | Depende de |
 | --- | --- | --- | --- | --- |
-| T4.1 | Consultas do painel (só `spendingForPeriod`) | Claude, `dev-backend` | X+M | gate E3, `v0.1.1` |
+| T4.1 | Consultas do painel (só `spendingForPeriod`) | Claude, `dev-backend` | X+M | G6, G4 |
 | T4.2 | Categorização integrada e `merchant_rules` | Claude, `dev-backend` | X+M | T4.1 |
 | T4.3 | Painel | **Gemini**, `gemini-dev-frontend` | X | T4.1 (contrato) |
 | T4.4 | Transações: filtros, busca e recategorização | **Gemini**, `gemini-dev-frontend` | X | T4.2 (contrato) |
@@ -188,14 +202,14 @@ Nenhum agente lê `private/` nem `.env.local`. Eles só veem o relatório de est
 | T4.5b | Testes de componentes e checklist de acessibilidade | **Gemini**, `gemini-qa` | X | T4.3, T4.4 |
 | T4.6 | Conferir um mês fechado ao centavo | **você** | — | T4.3 |
 | T4.7 | Textos e estados vazios | **Gemini**, `gemini-fixer` | X | T4.3 |
-| T4.8 | Gate E4 | `cto` + **você** | — | tudo acima |
+| T4.8 | Gate G7 | `cto` + **você** | — | tudo acima |
 
-### E5: Caju por prints (tag `v0.5`; começa logo após o gate E2, em paralelo ao E3 e ao E4)
+### G8 — Caju por prints (antes E5; tag `v0.7`; começa depois do G3, em paralelo ao G6 e ao G7)
 
 | Tarefa | O quê | Equipe e agente | Revisores | Depende de |
 | --- | --- | --- | --- | --- |
 | T5.0 | Um print do Caju por semana, anonimizado, fora do Git | **você** | — | **comece já** |
-| T5.1 | Decidir Q14 e Q16; casos do parser | `cto` + **você** | — | T5.0, gate E2 |
+| T5.1 | Decidir Q14 e Q16; casos do parser | `cto` + **você** | — | T5.0, G3 |
 | T5.2 | Parser em `domain/caju/` | Claude, `dev-backend` | X+M | T5.1 |
 | T5.3 | `ExtractionProvider` e script de avaliação | Claude, `dev-backend` | X+M | T5.1 |
 | T5.4 | Mesclador de prints e âncora | `cto` desenha, **você aprova**, Claude `dev-backend` faz | X+M | T5.1, T1.3 |
@@ -204,17 +218,17 @@ Nenhum agente lê `private/` nem `.env.local`. Eles só veem o relatório de est
 | T5.7a | Testes do fluxo por API | Claude, `qa` | X | T5.5 |
 | T5.7b | Testes das telas (saldo que não fecha bloqueia) | **Gemini**, `gemini-qa` | X | T5.6 |
 | T5.8 | Medir a taxa de correção (4 semanas ou mais) | **você** + Claude, `dev-backend` | X | T5.7a, T5.7b |
-| T5.9 | Gate E5 | `cto` + **você** | — | tudo acima |
+| T5.9 | Gate G8 | `cto` + **você** | — | tudo acima |
 
-### E6: fechamento (tag `v1.0`)
+### G9 — Fechamento (antes E6; tag `v1.0`)
 
 | Tarefa | O quê | Equipe e agente | Revisores | Depende de |
 | --- | --- | --- | --- | --- |
-| T6.1 | Exportação JSON e CSV | Claude, `dev-backend` | X+M | gate E4 |
+| T6.1 | Exportação JSON e CSV | Claude, `dev-backend` | X+M | G7 |
 | T6.2 | Dump e restauração num banco vazio | **você** + Claude, `qa` | — | T6.1 |
 | T6.3 | Seguir o README do zero num ambiente limpo | **Gemini**, `gemini-qa` (correções: `gemini-fixer`) | X | — |
 | T6.4 | gitleaks no histórico inteiro e `LICENSE` | Claude, `qa` + `cto` | X | — |
-| T6.5 | Gate E6 e revisão final | `cto` + **você** | — | tudo acima |
+| T6.5 | Gate G9 e revisão final | `cto` + **você** | — | tudo acima |
 
 As tarefas que viraram "a" e "b" (T2.10, T4.5, T5.7) foram divididas porque cada metade cai na pasta de uma equipe (ADR-0023). O `cto` escreve um cartão para cada metade.
 
@@ -226,17 +240,17 @@ Cada onda pode andar em paralelo, respeitando o limite de 3 agentes escrevendo. 
 
 | Onda | Equipe Claude | Equipe Gemini | Você |
 | --- | --- | --- | --- |
-| **1 (agora)** | T1.3 | T2.5 (o `cto` escreve o cartão antes) | aprovar T1.3 e ADR-0022; T1b.1; T5.0; T2.3; checklist 1.4 |
-| 2 | T1.4 → T1.4r; T2.2 | T2.10a (README); revisão cruzada da T1.3 | gate E1 parte A (`v0.1`) |
-| 3 | T2.4; T2.6; T1b.2 | revisão cruzada de T2.2, T2.4 e T2.6 | T1b.3; aprovar os casos da T1.5 |
-| 4 | T2.8; T1b.4 → T1b.5; T1.6 | T2.7 | revisar as fixtures; T2.9 (deploy) |
-| 5 | T1.7; T1.8 → T1.9 → T1.9r | revisão cruzada | gate E2 (`v0.2`); T1b.6; gate E1 parte B (`v0.1.1`) |
-| 6 | T3.1 → T3.2 → T3.3; T5.1 → T5.2 | revisão cruzada | decidir Q15, Q14 e Q16 |
+| **1 (agora)** | conferir T1.4 e T1.4r | T4.4a; T3.7a | aprovar a ADR-0028; gate G1 (`v0.1`); T5.0 (já) |
+| 2 | revisão cruzada das telas | T5.6a; T5.6b | aprovar as seis telas; gate G2 (`v0.2`); T2.3; T1b.1 |
+| 3 | T2.2; T1b.2 | T2.10a (README); revisão cruzada da T2.2 | T1b.3; aprovar os casos da T1.5 |
+| 4 | T2.4; T2.6; T1.6; T1b.4 → T1b.5 | revisão cruzada de T2.4 e T2.6 | revisar as fixtures |
+| 5 | T2.8; T1.7; T1.8 → T1.9 → T1.9r | T2.7 | T2.9 (deploy); gate G3 (`v0.3`) |
+| 6 | T3.1 → T3.2 → T3.3; T5.1 → T5.2 | revisão cruzada | gate G4 (`v0.4`); T1b.6 e gate G5; decidir Q15, Q14 e Q16 |
 | 7 | T3.4 → T3.5, T3.6; T5.3; T5.4 | revisão cruzada | aprovar o desenho do mesclador |
-| 8 | T3.8; T5.5 → T5.7a | T3.7 | T3.9 (saldos reais); gate E3 (`v0.3`) |
+| 8 | T3.8; T5.5 → T5.7a | T3.7 | T3.9 (saldos reais); gate G6 (`v0.5`) |
 | 9 | T4.1 → T4.2 → T4.5a | T5.6 → T5.7b; T4.3 | T5.8 (medição) |
-| 10 | T6.1 | T4.4 → T4.5b; T4.7 | T4.6; gates E4 (`v0.4`) e E5 (`v0.5`) |
-| 11 | T6.2; T6.4 | T6.3 | gate E6 (`v1.0`) |
+| 10 | T6.1 | T4.4 → T4.5b; T4.7 | T4.6; gates G7 (`v0.6`) e G8 (`v0.7`) |
+| 11 | T6.2; T6.4 | T6.3 | gate G9 (`v1.0`) |
 
 Onde há seta (→), a ordem é obrigatória. Onde há ponto e vírgula (;), as tarefas podem andar juntas.
 
@@ -244,11 +258,11 @@ Onde há seta (→), a ordem é obrigatória. Onde há ponto e vírgula (;), as 
 
 ## 5. Como fechar um gate
 
-1. Peça ao `cto`: _"Prepare o gate E{n}."_ Ele preenche `docs/gates/E{n}.md` com a evidência de cada item: PR, teste e comando.
+1. Peça ao `cto`: _"Prepare o gate G{n}."_ Ele preenche `docs/gates/G{n}-*.md` com a evidência de cada item: PR, teste e comando. A ordem e o estado de todos os gates estão em `docs/gates/README.md`.
 2. Para cada pergunta de explicação do gate, estude com o tutor e escreva a resposta **com as suas palavras**. Isso é a prova de que você entende o que está aprovando.
 3. Itens que só você confere (saldos, mês fechado, restauração do dump): faça e anote o resultado, **sem valores reais** no arquivo.
-4. Marque o gate como fechado, faça o merge do PR do gate (branch `cto/`) e crie a tag (`git tag v0.{n}` e `git push --tags`).
-5. Só depois disso o estágio seguinte começa.
+4. Marque o gate como fechado, faça o merge do PR do gate (branch `cto/`) e crie a tag da tabela de `docs/gates/README.md` (`git tag v0.{n}` e `git push --tags`).
+5. Os gates fecham na ordem dos números (ADR-0030); o trabalho do gate seguinte pode já estar andando.
 
 ---
 
