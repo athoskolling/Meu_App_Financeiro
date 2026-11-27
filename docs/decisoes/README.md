@@ -27,6 +27,7 @@ Cada decisão relevante vira um arquivo `NNNN-titulo.md` com contexto, decisão 
 | 0023 | Duas equipes divididas por área (Claude: `domain/`, `lib/`, `drizzle/`, `app/api/`; Gemini: telas e README); só o `cto` Claude planeja; uma branch por tarefa (`equipe-claude/T{nn}`, `equipe-gemini/T{nn}`); revisão cruzada sempre, dupla em regra; `main` protegida | `0023-divisao-das-equipes.md` |
 | 0024 | Equivalência de modelos: Neon = Opus (líder) e = Sonnet (back-end e revisor); Hydrogen xhigh = Sonnet (front-end); Hydrogen high = Haiku (QA, fixer, tutor); esforço do Hydrogen fixado pelo swarm | `0024-modelos-da-equipe-gemini.md` |
 | 0025 | Limites das branches (`equipe-claude/T{id}`, `equipe-gemini/T{id}`, `cto/{assunto}`), checados pelo job `limites`; o revisor cruzado abre o PR; o `cto` faz o merge das tarefas; o dono faz o merge de `cto/` e `claude/`, fecha gates e veta com `dono-segura` | `0025-branches-pr-e-merge.md` |
+| 0026 | Modo unificado em Gemini 4 enquanto o Claude estiver pausado (CTO em Carbon Medium/High, back-end em Neon Medium, UI e QA em Hydrogen XHigh, revisor único em Neon XHigh, fixer e tutor em Hydrogen High via `swarm`); `equipe-gemini/T{id}` aceita as duas áreas de código e `.claude/` + `equipe-claude/` seguem prontos para retomada imediata | `0026-operacao-unificada-gemini.md` |
 
 ## Propostas (aguardam o dono)
 
