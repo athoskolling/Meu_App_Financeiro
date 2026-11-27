@@ -45,18 +45,21 @@ describe('SeloConferencia', () => {
       texto: 'Aguardando',
       classes: ['border-dashed', 'border-texto-suave', 'text-texto-medio'],
     },
-  ])('renderiza estado $estado com texto e tokens corretos sem hex', ({ estado, texto, classes }) => {
-    const html = renderToStaticMarkup(<SeloConferencia estado={estado} />);
+  ])(
+    'renderiza estado $estado com texto e tokens corretos sem hex',
+    ({ estado, texto, classes }) => {
+      const html = renderToStaticMarkup(<SeloConferencia estado={estado} />);
 
-    expect(html).toContain(texto);
-    expect(html).not.toMatch(/#[0-9a-fA-F]{3,8}/);
-    for (const classe of classes) {
-      expect(html).toContain(classe);
-    }
-    if (estado === 'aguardando') {
-      expect(html).not.toContain('-rotate-3');
-    }
-  });
+      expect(html).toContain(texto);
+      expect(html).not.toMatch(/#[0-9a-fA-F]{3,8}/);
+      for (const classe of classes) {
+        expect(html).toContain(classe);
+      }
+      if (estado === 'aguardando') {
+        expect(html).not.toContain('-rotate-3');
+      }
+    },
+  );
 });
 
 describe('FaixaPrevia', () => {
