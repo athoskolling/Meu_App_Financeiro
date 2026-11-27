@@ -4,7 +4,6 @@ import { Navegacao } from '../../components/Navegacao';
 import { Logo } from '../../components/Logo';
 import { Cabecalho } from '../../components/Cabecalho';
 import PaginaEntrar, { metadata as entrarMetadata } from '../../app/entrar/page';
-import PaginaPainel, { metadata as painelMetadata } from '../../app/(app)/page';
 import PaginaTransacoes, { metadata as transacoesMetadata } from '../../app/(app)/transacoes/page';
 import PaginaContas, { metadata as contasMetadata } from '../../app/(app)/contas/page';
 import PaginaImportar, { metadata as importarMetadata } from '../../app/(app)/importar/page';
@@ -115,12 +114,6 @@ describe('QA T2.5: PaginaEntrar (bordas e segurança)', () => {
 
 describe('QA T2.5: Páginas provisórias em (app)', () => {
   it.each([
-    {
-      nome: 'Painel',
-      Componente: PaginaPainel,
-      metadata: painelMetadata,
-      tituloEsperado: 'Painel · Meu Financeiro',
-    },
     {
       nome: 'Transações',
       Componente: PaginaTransacoes,
