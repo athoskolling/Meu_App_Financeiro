@@ -1,6 +1,6 @@
 # Guia de execução até a v1.0 (duas equipes)
 
-Este é o passo a passo para levar o projeto do ponto atual até a v1.0, com as equipes Claude e Gemini trabalhando juntas. Ele **não substitui** nada: o plano é o `ROADMAP.md`, as regras de equipe são a ADR-0023, os modelos são as ADRs 0024 e 0026, e cada tarefa continua precisando de um cartão em `docs/tasks/`. Este guia junta tudo numa ordem que você segue de cima para baixo.
+Este é o passo a passo para levar o projeto do ponto atual até a v1.0, com as equipes Claude e Gemini trabalhando juntas. Ele **não substitui** nada: o plano é o `docs/ROADMAP.md`, as regras de equipe são a ADR-0023, os modelos são as ADRs 0024 e 0026, e cada tarefa continua precisando de um cartão em `docs/tasks/`. Este guia junta tudo numa ordem que você segue de cima para baixo.
 
 > **Nota — Modo unificado em Gemini 4 (ADR-0026, ativo desde 24/11/2026 enquanto o Claude estiver pausado):** para poupar a cota do Claude, o `gemini-cto` (**Carbon Medium**, subindo a **Carbon High** em decisões difíceis) assume o papel de CTO completo e delega pelo `swarm` para `gemini-dev-backend` (**Neon Medium**), `gemini-dev-frontend` (**Hydrogen XHigh**), `gemini-qa` (**Hydrogen XHigh**), `gemini-revisor` único (**Neon XHigh**, que abre o PR) e `gemini-fixer` (**Hydrogen High**), usando branches `equipe-gemini/T{id}` (e `cto/{assunto}` para docs/ADRs/cartões). Tudo em `.claude/` e `equipe-claude/T{id}` segue intacto: basta abrir o Claude quando quiser retomar o fluxo de duas equipes abaixo.
 

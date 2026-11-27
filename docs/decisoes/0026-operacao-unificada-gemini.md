@@ -50,4 +50,4 @@ O Hydrogen (`gemini-dev-frontend`, `gemini-qa`, `gemini-fixer`) continua **nunca
 - O projeto avança sem depender da cota semanal do Claude, mantendo separação estrita de papéis (`Carbon` coordena e fecha; `Neon Medium` implementa domínio/back-end; `Hydrogen XHigh` implementa UI e faz QA; `Neon XHigh` revisa sem editar; `Hydrogen High` faz consertos pequenos e tutoria).
 - Durante o modo unificado, perde-se temporariamente a revisão por outra família de modelo (Anthropic × Google), compensada pelo `gemini-revisor` dedicado em `Neon XHigh` e pela revisão final em `Carbon`.
 - Nenhuma configuração do Claude é removida ou quebrada: retomar os agentes do Claude exige apenas abrir a sessão do Claude normalmente.
-- Atualizados junto com esta ADR: `docs/decisoes/README.md`, `tools/ci/limites.ts`, `tests/ci/limites.test.ts`, `GEMINI.md`, `.agents/agents/*`, `CLAUDE.md` e `docs/GUIA_ATE_V1.md`.
+- Atualizados junto com esta ADR: `docs/decisoes/README.md`, `tools/ci/limites.ts`, `tests/ci/limites.test.ts`, `GEMINI.md`, `.agents/agents/*`, `CLAUDE.md` e `docs/equipes/GUIA_ATE_V1.md`.

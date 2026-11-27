@@ -2,7 +2,7 @@
 
 - **Status:** proposta (aguarda aprovação/merge do dono; alinhada ao plano `ui_first_plan.md` aprovado pelo dono em 26/11/2026)
 - **Estágio:** transversal (E2/E3/E4/E5 — camada visual)
-- **Atualiza em parte:** ordem de execução do `ROADMAP.md` e `docs/GUIA_ATE_V1.md` (sem alterar escopo funcional, segurança nem regras financeiras)
+- **Atualiza em parte:** ordem de execução do `docs/ROADMAP.md` e `docs/equipes/GUIA_ATE_V1.md` (sem alterar escopo funcional, segurança nem regras financeiras)
 
 ## Contexto
 
@@ -43,7 +43,7 @@ Para manter total compatibilidade com o job `limites` da ADR-0025 (`equipe-gemin
 | V5 | `equipe-gemini/T5.6a` | `docs/tasks/E5/T5.6a.md` | Tela **Enviar print do Caju** (`/importar`) | `Enviar.dc.html` |
 | V6 | `equipe-gemini/T5.6b` | `docs/tasks/E5/T5.6b.md` | Tela **Revisar print do Caju** (`/importar/revisar`) | `Revisar.dc.html` |
 
-As tarefas funcionais (`T1.3`, `T2.2`, `T2.4`, `T2.6`, `T2.7`, `E1b`, `E3`, `E1-B`, `E4`, `E5`, `E6`) continuam preservadas no `ROADMAP.md` e no GitHub Issues, e entram imediatamente após a conclusão e aprovação visual de `T5.6b`.
+As tarefas funcionais (`T1.3`, `T2.2`, `T2.4`, `T2.6`, `T2.7`, `E1b`, `E3`, `E1-B`, `E4`, `E5`, `E6`) continuam preservadas no `docs/ROADMAP.md` e no GitHub Issues, e entram imediatamente após a conclusão e aprovação visual de `T5.6b`.
 
 ## Consequências
 

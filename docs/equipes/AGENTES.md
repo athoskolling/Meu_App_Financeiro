@@ -1,10 +1,10 @@
 # Desenvolvimento multiagente — guia
 
-Este guia explica como funciona, quem faz o quê e como rodar. O plano de tarefas está em `ROADMAP.md`. As definições dos agentes estão em `.claude/agents/`.
+Este guia explica como funciona, quem faz o quê e como rodar. O plano de tarefas está em `docs/ROADMAP.md`. As definições dos agentes estão em `.claude/agents/`.
 
 > **Atualização de 19/11/2026 (ADR-0023):** agora há duas equipes, Claude (`.claude/agents/`) e Gemini (`.agents/agents/`, ver `GEMINI.md`), **divididas por área**. Claude: `domain/`, `lib/`, `drizzle/`, `app/api/`, `scripts/`. Gemini: `app/` (fora de `app/api/`), `components/`, estilos, `README.md`. Só o `cto` Claude planeja. Cada tarefa tem **uma branch** (`equipe-claude/T{nn}` ou `equipe-gemini/T{nn}`), onde o dev e o QA fazem commit. A **revisão é cruzada**: a outra equipe sempre revisa, e em regra financeira, banco, auth, sincronização e segurança os dois revisores olham. A `main` é protegida no GitHub. Onde este guia disser outra coisa, vale a ADR-0023.
 
-> **Atualização de 23/11/2026 (ADR-0024):** modelos da equipe Gemini: Neon no `gemini-cto`, `gemini-dev-backend` e `gemini-revisor`; Hydrogen xhigh no `gemini-dev-frontend`; Hydrogen high no `gemini-qa`, `gemini-fixer` e `gemini-tutor`. Qual equipe faz cada tarefa, até a v1.0: `docs/GUIA_ATE_V1.md`.
+> **Atualização de 23/11/2026 (ADR-0024):** modelos da equipe Gemini: Neon no `gemini-cto`, `gemini-dev-backend` e `gemini-revisor`; Hydrogen xhigh no `gemini-dev-frontend`; Hydrogen high no `gemini-qa`, `gemini-fixer` e `gemini-tutor`. Qual equipe faz cada tarefa, até a v1.0: `docs/equipes/GUIA_ATE_V1.md`.
 
 > **Atualização de 23/11/2026 (ADR-0025):** cada branch tem limites (o job `limites` do CI confere). O dev e o QA só fazem push; **o revisor cruzado abre o PR**; o **`cto` faz o merge** com CI verde e os pareceres APROVADO. O dono aprova cartões, faz o merge dos PRs `cto/` e `claude/`, fecha gates e pode vetar com o rótulo `dono-segura`. Onde este guia disser que o dono faz o merge de tarefa, vale a ADR-0025.
 
@@ -79,7 +79,7 @@ Pré-requisitos: Claude Code **v2.1.293 ou mais novo** (o alias `haiku` só apon
    claude --agent cto --model opus --effort medium
    ```
 
-   O `initialPrompt` do CTO faz ele ler `CLAUDE.md`, este guia e o `ROADMAP.md`, dizer em que estágio estamos e propor os cartões.
+   O `initialPrompt` do CTO faz ele ler `CLAUDE.md`, este guia e o `docs/ROADMAP.md`, dizer em que estágio estamos e propor os cartões.
 
 2. Confira os agentes carregados com `/agents`. Devem aparecer `cto`, `dev-backend`, `dev-frontend`, `fixer`, `qa`, `revisor` e `tutor`.
 
@@ -101,7 +101,7 @@ claude --agent tutor --model haiku --effort high
 
 Assim o tutor não bloqueia a sessão do CTO e você pode perguntar enquanto os agentes trabalham. Exemplos: "o que é um worktree?", "explica o relatório da T1.3", "por que dinheiro é inteiro em centavos?", "o que o revisor encontrou e o que isso significa?".
 
-O tutor só lê (`Read`, `Glob`, `Grep`). Ele enxerga `ROADMAP.md`, os cartões e relatórios em `docs/tasks/`, os gates, a spec e o código, mas **não roda comandos**: se precisar do `git log` ou do resultado de testes, ele pede que você cole. Ele não decide, não edita e não avalia o trabalho dos outros agentes. Ao ensinar para um gate, ele explica o conceito e pede que **você** explique com as suas palavras.
+O tutor só lê (`Read`, `Glob`, `Grep`). Ele enxerga `docs/ROADMAP.md`, os cartões e relatórios em `docs/tasks/`, os gates, a spec e o código, mas **não roda comandos**: se precisar do `git log` ou do resultado de testes, ele pede que você cole. Ele não decide, não edita e não avalia o trabalho dos outros agentes. Ao ensinar para um gate, ele explica o conceito e pede que **você** explique com as suas palavras.
 
 Também dá para chamá-lo dentro da sessão do CTO com `@agent-tutor`, mas isso ocupa a conversa até ele responder; a segunda janela é melhor.
 
